@@ -3,15 +3,20 @@ import logging
 import os
 #Azure Imports
 from azure.cosmos import CosmosClient
+import NoContainerSpecifiedException
 
 #Set up connections to CosmosDB
 DB = CosmosClient(os.environ['URL'], os.environ['KEY'])
 DBProxy = DB.get_database_client(os.environ['Database'])
 
-def query_items(query, params, container):
+def query_items(query, parameters=[], container=None):
+
+    if container is None:
+        raise NoContainerSpecifiedException
+    
     logging.info("Query Database")
     #Run Query, return results as list
-    return list(container.query_items(query=query, parameters=params, enable_cross_partition_query=True))
+    return list(container.query_items(query=query, parameters=parameters, enable_cross_partition_query=True))
 
 def create_item(data, container):
     logging.info("Insert Data into Database")

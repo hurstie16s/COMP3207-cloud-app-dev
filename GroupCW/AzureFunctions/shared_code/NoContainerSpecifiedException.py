@@ -1,0 +1,2 @@
+class NoContainerSpecifiedException(Exception):
+    pass

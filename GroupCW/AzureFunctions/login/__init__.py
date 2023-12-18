@@ -21,7 +21,11 @@ def main(req: HttpRequest) -> HttpResponse:
     params = [{"name": "@emailOrUsername", "value": emailOrUsername}]
 
     # Can garuntee only 1 result returned, at most
-    result = DBFunctions.query_items(query, params, AzureData.containerUsers)
+    result = DBFunctions.query_items(
+        query=query, 
+        parameters=params, 
+        container=AzureData.containerUsers
+        )
 
     if (len(result) == 0):
         # Email or Username incorrect
