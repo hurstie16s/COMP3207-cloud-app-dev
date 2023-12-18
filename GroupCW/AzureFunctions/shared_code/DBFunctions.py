@@ -1,19 +1,17 @@
 #System Imports
 import logging
 import os
-#Azure Imports
+# Azure Imports
 from azure.cosmos import CosmosClient
-import GroupCW.AzureFunctions.shared_code.CustomExceptions.NoContainerSpecifiedException as NoContainerSpecifiedException
-
-#Set up connections to CosmosDB
-DB = CosmosClient(os.environ['URL'], os.environ['KEY'])
-DBProxy = DB.get_database_client(os.environ['Database'])
+# Code base imports
+# TODO: import NoContainerSpecifiedException - fix import
 
 def query_items(query, parameters=[], container=None):
 
     # Ensures container is specified
     if container is None:
-        raise NoContainerSpecifiedException
+        #raise NoContainerSpecifiedException
+        pass
     
     logging.info("Query Database")
     #Run Query, return results as list
@@ -23,7 +21,8 @@ def create_item(data, container=None):
 
     # Ensures container is specified
     if container is None:
-        raise NoContainerSpecifiedException
+        #raise NoContainerSpecifiedException
+        pass
 
     logging.info("Insert Data into Database")
     #Run insert
@@ -34,7 +33,8 @@ def upsert_item(data, container=None):
 
     # Ensures container is specified
     if container is None:
-        raise NoContainerSpecifiedException
+        #raise NoContainerSpecifiedException
+        pass
 
     logging.info("Update Data in Database")
     #Run update
@@ -45,7 +45,8 @@ def delete_item(id, container=None):
 
     # Ensures container is specified
     if container is None:
-        raise NoContainerSpecifiedException
+        #raise NoContainerSpecifiedException
+        pass
 
     logging.info("Delete Data from Database")
     #Run delete
