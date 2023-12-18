@@ -18,7 +18,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
     # Check username exists, grab hashed password based off username
     query = {
-        "query": "SELECT * FROM Users WHERE Users.Email=@email OR Users.UserName=@emailOrUsername",
+        "query": "SELECT * FROM users WHERE users.email=@email OR users.username=@emailOrUsername",
         "parameters": [
             {"name": "@emailOrUsername", "value": emailOrUsername},
 
