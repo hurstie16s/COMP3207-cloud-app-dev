@@ -1,13 +1,20 @@
 :root {
+    --background-darker-1: 18, 19, 26;
+    --background: 28, 29, 38;
+    --background-lighter-1: 38, 39, 50;
     --white: 250, 250, 245;
     --black: 33, 34, 35;
     --header-font: 'Montserrat', sans-serif;
     --body-font: 'Noto Sans', sans-serif;
     --monospace-font: 'Source Code Pro', monospace;
-    --border: 1px solid rgba(5, 0, 5, 0.2);
+    --border: 1px solid rgb(var(--white));
     --border-radius: 0.5em;
-    --theme: 23, 77, 227;
-    --error: 204, 0, 0
+    --theme: 71, 68, 235;
+    --theme-lighter-5: 80, 77, 236;
+    --theme-lighter-10: 89, 87, 237;
+    --theme-lighter-25: 117, 115, 240;
+    --error: 242, 64, 67;
+    --text: 228, 229, 232;
 }
 
 * {
@@ -20,13 +27,15 @@ body {
     flex-direction: column;
     overflow-y: scroll;
     font-family: var(--body-font);
-    background-color: rgb(var(--white));
+    background-color: rgb(var(--background));
+    color: rgb(var(--text));
 }
 
 body>header {
     width: 100%;
     height: 100px;
-    background-color: rgb(var(--theme));
+    background-color: rgb(var(--background-darker-1));
+    color: rgb(var(--text));
 }
 
 body>main {
@@ -45,7 +54,10 @@ h1,h2,h3,h4,h5,h6 {
 /* Common Styles */
 
 .bordered {
-    border: var(--border);
+    border: var(--border);   
+}
+
+.rounded {
     border-radius: var(--border-radius);
 }
 
@@ -64,12 +76,12 @@ button {
     transition: 0.2s;
     font-family: inherit;
     background-color: rgb(var(--theme));
-    color: rgb(var(--white));
+    color: rgb(var(--text));
     user-select: none;
 }
 
 button:hover {
-    background-color: rgba(var(--theme), 0.9);
+    background-color: rgb(var(--theme-lighter-5))
     
 }
 
@@ -80,7 +92,7 @@ input {
 }
 
 a {
-    color: rgb(56, 124, 232);
+    color: rgb(47, 129, 247);
 }
 
 .left-aligned {
@@ -100,11 +112,11 @@ a {
     margin: 1em 0.25em;
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 100%;;
 }
 
 .input-error>span {
-    margin: 0 0.2em 0 0.35em;
+    margin: 0 0.35em 0 0.35em;
 }
 
 .input {
@@ -116,15 +128,16 @@ a {
     position: relative;
     margin: 0.5em 0;
     transition: 0.2s;
-    color: rgba(5, 0, 5, 0.6);
+    color: rgb(var(--text));
+    display: block;
 }
 
 .input:focus-within {
-    border-color: rgb(var(--theme));
+    border-color: rgb(var(--theme-lighter-25));
 }
 
 .input:focus-within span {
-    color: rgb(var(--theme));
+    color: rgb(var(--theme-lighter-25));
 }
 
 .input>.label {
@@ -132,7 +145,7 @@ a {
     top: -0.65em;
     left: 2.5em;
     padding: 0 0.3em;
-    background-color: rgb(var(--white));
+    background-color: rgb(var(--background-lighter-1));
     font-weight: 600;
     user-select: none;
 }
@@ -148,6 +161,7 @@ a {
     width: 90%;
     font-size: 1em;
     font-family: var(--header-font);
+    color: rgb(var(--text));
 }
 
 /* input {
@@ -167,14 +181,13 @@ a {
     padding: 2em 1.5em 1em 1.5em;
     font-family: var(--header-font);
     row-gap: 1.2em;
-    /* background-color: rgba(var(--black), 0.01); */
+    background-color: rgb(var(--background-lighter-1))
 }
 
 .sign-in>.item1, .sign-up>.item1, .reset-password>.item1 {
-    color: rgb(var(--theme));
+    color: rgb(var(--text));
     font-size: 3em;
     padding: 0 0 0.15em 0;
-    border-bottom: 0.1em solid rgb(var(--theme));
     grid-column: span 2;
     margin: 0.5em 0;
 }
@@ -217,15 +230,14 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0.5em 3em;
-    color: rgb(var(--white));
+    color: rgb(var(--background));
     font-family: var(--header-font);
 }
 
 .logo {
     letter-spacing: 0.2ch;
     font-family: var(--header-font);
-    font-weight: 800;
-    
+    font-weight: 700;
 }
 
 header > nav {
