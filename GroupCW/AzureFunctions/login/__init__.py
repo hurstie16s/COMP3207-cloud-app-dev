@@ -7,6 +7,8 @@ from azure.functions import HttpRequest, HttpResponse
 from shared_code import PasswordFunctions, DBFunctions
 import AzureData
 
+# TODO: Check how requests should come in and how they should be sent out
+
 def main(req: HttpRequest) -> HttpResponse:
     
     logging.info('Python HTTP trigger function processed a request.')
