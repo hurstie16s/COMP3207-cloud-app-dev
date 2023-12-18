@@ -1,9 +1,7 @@
 <!doctype html>
 <html lang="en">
+
 <%- include('header'); -%>
-
-
-<div id="VueApp">
 
     <div v-if="page === 'sign-up'">
         <%- include('sign-up'); -%>
@@ -15,8 +13,6 @@
         <%- include('reset-password'); -%>
     </div>
 
-</div>
+    <%- include('footer'); -%>
 
-
-<%- include('footer'); -%>
 </html>
