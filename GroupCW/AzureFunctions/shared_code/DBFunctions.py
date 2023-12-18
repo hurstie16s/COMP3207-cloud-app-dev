@@ -3,7 +3,7 @@ import logging
 import os
 #Azure Imports
 from azure.cosmos import CosmosClient
-import NoContainerSpecifiedException
+import GroupCW.AzureFunctions.shared_code.CustomExceptions.NoContainerSpecifiedException as NoContainerSpecifiedException
 
 #Set up connections to CosmosDB
 DB = CosmosClient(os.environ['URL'], os.environ['KEY'])

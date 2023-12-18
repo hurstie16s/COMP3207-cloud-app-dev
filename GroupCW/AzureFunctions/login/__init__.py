@@ -5,6 +5,7 @@ import json
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
 from shared_code import PasswordFunctions, DBFunctions
+from shared_code.CustomExceptions import NoContainerSpecifiedException
 import AzureData
 
 # TODO: Check how requests should come in and how they should be sent out
