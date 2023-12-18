@@ -1,0 +1,33 @@
+<section class="sign-in shadowed">
+    <span class="item1 logo">REHEARSAL</span>
+    <h2 class="item2 left-aligned">Sign In</h2>
+    <p class="item3 right-aligned">or <a @click="nav('sign-up')">create an account</a></p>
+    <div class="item4">
+        <div class="input">
+            <span class="label">Username</span>
+            <div>
+                <span class="material-symbols-rounded">person</span>
+                <input type="text">
+            </div>
+        </div>
+        <p class="input-error error hidden">
+            <span class="material-symbols-rounded">error</span>
+            <span id="sign-in-username-error">Username Error</span>
+        </p>
+    </div>
+    <div class="item5">
+        <div class="input">
+            <span class="label">Password</span>
+            <div>
+                <span class="material-symbols-rounded">lock</span>
+                <input type="text">
+            </div>
+        </div>
+        <p class="input-error error hidden">
+            <span class="material-symbols-rounded">error</span>
+            <span id="sign-in-password-error">Password Error</span>
+        </p>
+    </div>
+    <p class="item6 left-aligned"><a @click="nav('reset-password')">Forgot your password?</a></p>
+    <button class="item7 right-aligned">Sign In</button>
+</section>
