@@ -29,7 +29,7 @@ def main(req: HttpRequest) -> HttpResponse:
     result = DBFunctions.query_items(query, AzureData.containerUsers)
 
     if (len(result) == 0):
-        # Email or password incorrect
+        # Email or Username incorrect
         # Auth Fail
         output = {"result": False, "msg": "User not found"}
         
