@@ -8,10 +8,10 @@ from azure.cosmos import CosmosClient
 DB = CosmosClient(os.environ['URL'], os.environ['KEY'])
 DBProxy = DB.get_database_client(os.environ['Database'])
 
-def query_items(query, container):
+def query_items(query, params, container):
     logging.info("Query Database")
     #Run Query, return results as list
-    return list(container.query_items(query=query,enable_cross_partition_query=True))
+    return list(container.query_items(query=query, parameters=params, enable_cross_partition_query=True))
 
 def create_item(data, container):
     logging.info("Insert Data into Database")

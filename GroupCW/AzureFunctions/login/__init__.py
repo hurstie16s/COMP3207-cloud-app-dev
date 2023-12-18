@@ -17,16 +17,11 @@ def main(req: HttpRequest) -> HttpResponse:
     password = input.get("password")
 
     # Check username exists, grab hashed password based off username
-    query = {
-        "query": "SELECT * FROM users WHERE users.email=@email OR users.username=@emailOrUsername",
-        "parameters": [
-            {"name": "@emailOrUsername", "value": emailOrUsername},
-
-        ]
-    }
+    query = "SELECT * FROM users WHERE users.email=@email OR users.username=@emailOrUsername"
+    params = [{"name": "@emailOrUsername", "value": emailOrUsername}]
 
     # Can garuntee only 1 result returned, at most
-    result = DBFunctions.query_items(query, AzureData.containerUsers)
+    result = DBFunctions.query_items(query, params, AzureData.containerUsers)
 
     if (len(result) == 0):
         # Email or Username incorrect
