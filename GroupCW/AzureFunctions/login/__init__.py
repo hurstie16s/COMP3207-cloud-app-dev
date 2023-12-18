@@ -13,14 +13,15 @@ def main(req: HttpRequest) -> HttpResponse:
 
     #Get data from JSON doc
     input = req.get_json()
-    email = input.get("username")
+    emailOrUsername = input.get("username")
     password = input.get("password")
 
     # Check username exists, grab hashed password based off username
     query = {
-        "query": "SELECT * FROM users WHERE users.email=@email",
+        "query": "SELECT * FROM users WHERE users.email=@email OR users.username=@emailOrUsername",
         "parameters": [
-            {"name": "@email", "value": email}
+            {"name": "@emailOrUsername", "value": emailOrUsername},
+
         ]
     }
 
