@@ -581,6 +581,8 @@ hr {
 .response-meta>.timestamp {
     font-size: 0.8rem;
     color: rgba(var(--text), 0.6);
+    margin-top: 0.3rem;
+    margin-left: 0.3rem;
 }
 
 .your-responses {
@@ -613,7 +615,7 @@ hr {
     background-color: rgb(var(--background-lighter-10));
 }
 
-.comment-username {
+.comment-username, .username {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -621,7 +623,7 @@ hr {
     cursor: pointer;
 }
 
-.comment-username>span {
+.comment-username>span ,.username>span{
     font-size: 1.4em;
     border-radius: 100%;
     background-color: rgb(var(--background));
