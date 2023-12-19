@@ -1,16 +1,19 @@
 #System Imports
 import logging
-import os
 # Azure Imports
-from azure.cosmos import CosmosClient
+## NONE
 # Code base imports
-from shared_code import NoContainerSpecifiedException
+from shared_code.Exceptions import NoContainerSpecifiedException, EmptyQueryException
+
+def validate(container):
+    # Ensure Container is specified
+    if container is None:
+        raise NoContainerSpecifiedException
 
 def query_items(query, parameters=[], container=None):
 
-    # Ensures container is specified
-    if container is None:
-        raise NoContainerSpecifiedException
+    # Fault tolerance for development
+    validate(container)
     
     logging.info("Query Database")
     #Run Query, return results as list
@@ -18,9 +21,8 @@ def query_items(query, parameters=[], container=None):
 
 def create_item(data, container=None):
 
-    # Ensures container is specified
-    if container is None:
-        raise NoContainerSpecifiedException
+    # Fault tolerance for development
+    validate(container)
 
     logging.info("Insert Data into Database")
     #Run insert
@@ -29,9 +31,8 @@ def create_item(data, container=None):
 
 def upsert_item(data, container=None):
 
-    # Ensures container is specified
-    if container is None:
-        raise NoContainerSpecifiedException
+    # Fault tolerance for development
+    validate(container)
 
     logging.info("Update Data in Database")
     #Run update
@@ -40,9 +41,8 @@ def upsert_item(data, container=None):
 
 def delete_item(id, container=None):
 
-    # Ensures container is specified
-    if container is None:
-        raise NoContainerSpecifiedException
+    # Fault tolerance for development
+    validate(container)
 
     logging.info("Delete Data from Database")
     #Run delete
