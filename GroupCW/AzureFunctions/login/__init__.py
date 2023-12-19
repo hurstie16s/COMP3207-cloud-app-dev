@@ -5,7 +5,7 @@ import json
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
 from shared_code import PasswordFunctions, DBFunctions
-import AzureData
+import AzureData.AzureData as azureData
 
 # TODO: Check how requests should come in and how they should be sent out
 
@@ -26,7 +26,7 @@ def main(req: HttpRequest) -> HttpResponse:
     result = DBFunctions.query_items(
         query=query, 
         parameters=params, 
-        container=AzureData.containerUsers
+        container=azureData.containerUsers
         )
 
     if (len(result) == 0):
