@@ -21,7 +21,7 @@
     --red-lighter-10: 243, 83, 86;
     --red-lighter-15: 244, 93, 95;
     --text: 202, 203, 207;
-    --transition: 0.2s;
+    --transition: 0.2s ease-in-out;
 }
 
 * {
@@ -69,7 +69,7 @@ ul {
 }
 
 li {
-    margin-bottom: 1em;
+    margin-bottom: .5em;
 }
 
 /* Common Styles */
@@ -251,12 +251,12 @@ a {
     width: 100%;
 }
 
-.sign-up>.item4, .sign-up>.item5, .sign-up>.item6 {
+.sign-up>.item4, .sign-up>.item5, .sign-up>.item6, .sign-up>.item7 {
     grid-column: span 2;
     width: 100%;
 }
 
-.sign-up>.item7 {
+.sign-up>.item8 {
     grid-column: span 2;
     margin: 1em 0;
 }
@@ -346,6 +346,8 @@ header>nav>a {
 .question-text {
     font-family: var(--header-font);
     flex-grow: 100;
+    margin: 0;
+    font-style: italic;
 }
 
 
@@ -556,7 +558,7 @@ hr {
 }
 
 .response-transcript, .response-comments {
-    grid-column: span 2;
+    grid-column: span 3;
     margin-top: 2.5em;
 }
 
@@ -585,7 +587,8 @@ hr {
 
 .response {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 3fr 3fr;
+    
     justify-content: space-between;
     align-items: center;
     border: 2px solid transparent;
@@ -597,7 +600,7 @@ hr {
 }
 
 .response>.response-timeline {
-    grid-column: span 2;
+    grid-column: span 3;
     margin: 2rem 0;
 }
 
@@ -607,6 +610,10 @@ hr {
     justify-content: flex-end;
     align-items: center;
     /* width: min-content */
+}
+
+.response>.response-controls {
+    grid-column: span 2;
 }
 
 .response>.response-controls>button {
@@ -627,6 +634,10 @@ hr {
     color: rgba(var(--text), 0.6);
     margin-top: 0.3rem;
     margin-left: 0.3rem;
+}
+
+.question-page .response-options {
+    grid-column: 3;
 }
 
 .your-responses {
@@ -772,4 +783,75 @@ option {
 
 .search .question {
     margin-top: 2rem;
+}
+
+.toggle:checked + .toggle-label {
+    background-color: rgb(var(--theme));
+    transition: var(--transition);
+}
+
+.toggle:checked + .toggle-label > .toggle-on {
+    opacity: 1;
+    transform: translateX(1.4em);
+}
+
+.toggle:checked + .toggle-label > .toggle-off {
+    opacity: 0;
+    transform: translateX(1.4em);
+}
+
+.toggle:not(checked) + .toggle-label > .toggle-on {
+    opacity: 0;
+    transform: translateX(0);
+}
+
+.toggle:not(checked) + .toggle-label > .toggle-off {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+.toggle-on, .toggle-off {
+    padding: 0.26em;
+    
+    background-color: rgb(var(--background));
+    border-radius: 100%;
+    width: 1.5em;
+    height: 1.5em;
+    transition: var(--transition);
+    position: absolute;
+    top: 0.1em;
+}
+
+.toggle-label {
+    position: relative;
+    width: 4.6em;
+    height: 2.5em;
+    background-color: rgb(var(--background-lighter-10));
+    padding: 0.1em;
+    border-radius: 1000em;
+    cursor: pointer;
+}
+
+.strikethrough::after {
+    content: "";
+    height: 0.1em;
+    width: 1.2em;
+    background-color: rgb(var(--text));
+    display: block;
+    transform: rotate(45deg) translateY(-0.3em) translateX(-0.45em);
+    box-shadow: 0 -0.06em 0 0.02em rgb(var(--background));;
+    border-radius: 100em;
+}
+
+.account-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.account-page .star-filled.inline-adjusted {
+    transform: translateY(0.22em);
 }
