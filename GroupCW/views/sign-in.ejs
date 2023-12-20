@@ -1,7 +1,7 @@
 <section class="sign-in rounded">
     <span class="item1 logo">REHEARSAL</span>
     <h2 class="item2 left-aligned">Sign In</h2>
-    <p class="item3 right-aligned">or <a href="sign-up.html">create an account</a></p>
+    <p class="item3 right-aligned">or <a @click="nav('sign-up')">create an account</a></p>
     <div class="item4">
         <label class="input" for="sign-in-username-input">
             <span class="label">Username</span>
@@ -28,6 +28,6 @@
             <span id="sign-in-password-error">Password Error</span>
         </p>
     </div>
-    <p class="item6 left-aligned"><a href="reset-password.html">Forgot your password?</a></p>
+    <p class="item6 left-aligned"><a @click="nav('reset-password')">Forgot your password?</a></p>
     <button class="item7 right-aligned">Sign In</button>
 </section>

@@ -370,12 +370,12 @@ header>nav>a {
     font-size: inherit;
 }
 
-.question-meta>div {
+.question-meta > div {
     display: flex;
     gap: 2rem;
-}
+} 
 
-.question-meta>div>div {
+.question-meta > div > div {
     display: flex;
     gap: 0.75rem;
 }
@@ -519,7 +519,7 @@ hr {
 }
 
 
-
+   
 
 .question-page {
     display: grid;
@@ -568,13 +568,13 @@ hr {
     color: #e0970d;
     transition: var(--transition);
     cursor: pointer;
-
+    
 }
 
-.star:hover, .star:hover~.star {
+.star:hover, .star:hover ~ .star {
     font-variation-settings:
-        'FILL'1,
-        'wght'300;
+    'FILL'1,
+    'wght'300;
     transform: scale(1.2) rotate(4deg);
 }
 
@@ -582,13 +582,13 @@ hr {
     font-variation-settings:
         'FILL'1,
         'wght'300;
-    color: #e0970d;
+        color: #e0970d;
 }
 
 .response {
     display: grid;
     grid-template-columns: 2fr 3fr 3fr;
-
+    
     justify-content: space-between;
     align-items: center;
     border: 2px solid transparent;
@@ -678,7 +678,7 @@ hr {
     cursor: pointer;
 }
 
-.comment-username>span, .username>span {
+.comment-username>span ,.username>span{
     font-size: 1.4em;
     border-radius: 100%;
     background-color: rgb(var(--background));
@@ -699,7 +699,7 @@ hr {
     padding: 0 0.3em;
 }
 
-.new-comment>textarea.input {
+.new-comment > textarea.input {
     margin: 0;
     font-size: 1em;
     font-family: var(--header-font);
@@ -708,12 +708,11 @@ hr {
     word-break: break-word;
     padding: 0.7em;
     border: 2px solid rgb(var(--background-lighter-15));
-    min-height: 2.9em;
-    ;
+    min-height: 2.9em;;
     font-family: var(--body-font);
 }
 
-.new-comment>textarea.input:focus {
+.new-comment > textarea.input:focus {
     border: 2px solid rgb(var(--theme-lighter-25));
 }
 
@@ -756,7 +755,7 @@ option {
     color: rgb(var(--text));
 }
 
-.filter>input:checked+label {
+.filter > input:checked + label {
     box-shadow: unset;
 }
 
@@ -786,27 +785,27 @@ option {
     margin-top: 2rem;
 }
 
-.toggle:checked+.toggle-label {
+.toggle:checked + .toggle-label {
     background-color: rgb(var(--theme));
     transition: var(--transition);
 }
 
-.toggle:checked+.toggle-label>.toggle-on {
+.toggle:checked + .toggle-label > .toggle-on {
     opacity: 1;
     transform: translateX(1.4em);
 }
 
-.toggle:checked+.toggle-label>.toggle-off {
+.toggle:checked + .toggle-label > .toggle-off {
     opacity: 0;
     transform: translateX(1.4em);
 }
 
-.toggle:not(checked)+.toggle-label>.toggle-on {
+.toggle:not(checked) + .toggle-label > .toggle-on {
     opacity: 0;
     transform: translateX(0);
 }
 
-.toggle:not(checked)+.toggle-label>.toggle-off {
+.toggle:not(checked) + .toggle-label > .toggle-off {
     opacity: 1;
     transform: translateX(0);
 }
@@ -814,7 +813,7 @@ option {
 
 .toggle-on, .toggle-off {
     padding: 0.26em;
-
+    
     background-color: rgb(var(--background));
     border-radius: 100%;
     width: 1.5em;
@@ -841,8 +840,7 @@ option {
     background-color: rgb(var(--text));
     display: block;
     transform: rotate(45deg) translateY(-0.3em) translateX(-0.45em);
-    box-shadow: 0 -0.06em 0 0.02em rgb(var(--background));
-    ;
+    box-shadow: 0 -0.06em 0 0.02em rgb(var(--background));;
     border-radius: 100em;
 }
 

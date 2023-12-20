@@ -15,6 +15,11 @@ var app = new Vue({
     methods: {
         nav(page) {
           app.page = page;
+        },
+
+        logout() {
+          app.user = null;
+          this.nav('sign-in');
         }
     },
     //FrontEnd methods here:
