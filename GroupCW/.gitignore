@@ -15,4 +15,4 @@ docker-compose.yml
 /[Aa]zure[Ff]unctions/.venv
 /[Aa]zure[Ff]unctions/.vscode
 
-
+**/__pycache__
