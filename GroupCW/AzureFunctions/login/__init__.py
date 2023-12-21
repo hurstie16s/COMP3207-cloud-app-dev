@@ -41,10 +41,11 @@ def main(req: HttpRequest) -> HttpResponse:
         if (verified):
             # AuthSuccess
             output = {"result": True, "msg": "AuthSuccess"}
-            return
+            code = 200
         else :
             # AuthFail
             output = {"result": False, "msg": "Password Incorrect"}
+            code = 401
 
     # Return HttpResponse
-    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=200)
+    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)

@@ -4,8 +4,8 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
-from AzureData import AzureData
 from shared_code import DBFunctions
+from AzureData import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
     
@@ -17,6 +17,7 @@ def main(req: HttpRequest) -> HttpResponse:
     # Check question is unique
     if checkQuestion(question):
         output = {"result": False, "msg": "Question already exists"}
+        code = 403
     else:
         # Insert question into db
         data = {"interviewQuestion": question}
@@ -25,9 +26,10 @@ def main(req: HttpRequest) -> HttpResponse:
             container=AzureData.containerInterviewQuestions
         )
         output = {"result": True, "msg": "Question submitted"}
+        code = 201
 
     # Return HttpResponse
-    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=200)
+    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
 def checkQuestion(question: str) -> bool:
 
