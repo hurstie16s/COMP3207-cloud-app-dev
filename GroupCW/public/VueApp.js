@@ -6,7 +6,10 @@ var app = new Vue({
       user: null,
 
       username: '',
-      password: ''
+      password: '',
+      usernameError: '',
+      passwordError: ''
+      
     },
     /*
     //On Awake methods here:
@@ -16,6 +19,11 @@ var app = new Vue({
     */
     //Js Methods here:
     methods: {
+        resets() {
+          app.usernameError = '';
+          app.passwordError = '';
+        },
+
         nav(page) {
           app.page = page;
         },
@@ -26,19 +34,29 @@ var app = new Vue({
         },
 
         login() {
-          if (this.username === "") { //empty username
-            //username error
-          } else if (this.password === "") { //empty password
-            //password error
-          } else {
-            const response = handleSignIn(this.username, this.password);
-            if (response.status === 'OK') {
+          this.resets();
+
+          //handles empty fields
+          if (!this.username) {app.usernameError = 'Username Required';}
+          if (!this.password) {app.passwordError = 'Password Required';}
+
+          //only calls api if fields if both username and password have values
+          if (this.username && this.password) {
+            const response = handleLogin(this.username, this.password);
+            if (response.result === true) {
               app.user = this.username;
               this.nav('explore');
-            } else {
-              //reponse.msg error
+            } else { //stupid long winded nested if for to classify errors into username and password
+              if (response.msg.toLowerCase().includes("username")) {
+                app.usernameError = response.msg;
+              } else if (response.msg.toLowerCase().includes("password")) {
+                app.passwordError = response.msg;
+              } else { //error not standardised
+                alert(response.msg);
+              }
             }
           }
+          
           app.username = '';
           app.password = '';
         }
@@ -51,6 +69,17 @@ var app = new Vue({
 
 
 //any functions outside of vue here:
+function getHelper(data, endpoint) {
+
+}
+
+function postHelper(data, endpoint) {
+
+}
+
+function putHelper(data, endpoint) {
+
+}
 
 
 //---------------------------------------------------------
@@ -60,12 +89,15 @@ userMap.set('user1', 'password');
 userMap.set('user2', 'password');
 userMap.set('user3', 'password');
 
-function handleSignIn(username, password) {
+function handleLogin(username, password) { //call api here
   if (userMap.has(username)) {
-    if (password === userMap.get(username));
-    return {status: 'OK', msg: ''};
+    if (password === userMap.get(username)) {
+      return {result: true, msg: 'OK'};
+    } else {
+      return {result: false, msg: 'Password is incorrect'}
+    }
   } else {
-    return {status: 'error', msg: 'error msg'};
+    return {result: false, msg: 'Username does not exist'};
   }
 }
 

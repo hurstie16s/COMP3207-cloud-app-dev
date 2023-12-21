@@ -10,9 +10,9 @@
                 <input type="text" id="sign-in-username-input" v-model="username">
             </div>
         </label>
-        <p class="input-error error hidden">
+        <p v-if="usernameError" class="input-error error">
             <span class="material-symbols-rounded">error</span>
-            <span id="sign-in-username-error">Username Error</span>
+            <span id="sign-in-username-error">{{usernameError}}</span>
         </p>
     </div>
     <div class="item5">
@@ -23,9 +23,9 @@
                 <input type="password" id="sign-in-password-input" v-model="password">
             </div>
         </label>
-        <p class="input-error error hidden">
+        <p v-if="passwordError" class="input-error error">
             <span class="material-symbols-rounded">error</span>
-            <span id="sign-in-password-error">Password Error</span>
+            <span id="sign-in-password-error">{{passwordError}}</span>
         </p>
     </div>
     <p class="item6 left-aligned"><a @click="nav('reset-password')">Forgot your password?</a></p>
