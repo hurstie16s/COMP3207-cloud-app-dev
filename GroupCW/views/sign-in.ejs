@@ -7,7 +7,7 @@
             <span class="label">Username</span>
             <div>
                 <span class="material-symbols-rounded">person</span>
-                <input type="text" id="sign-in-username-input">
+                <input type="text" id="sign-in-username-input" v-model="username">
             </div>
         </label>
         <p class="input-error error hidden">
@@ -20,7 +20,7 @@
             <span class="label">Password</span>
             <div>
                 <span class="material-symbols-rounded">lock</span>
-                <input type="password" id="sign-in-password-input">
+                <input type="password" id="sign-in-password-input" v-model="password">
             </div>
         </label>
         <p class="input-error error hidden">
@@ -29,5 +29,5 @@
         </p>
     </div>
     <p class="item6 left-aligned"><a @click="nav('reset-password')">Forgot your password?</a></p>
-    <button class="item7 right-aligned">Sign In</button>
+    <button class="item7 right-aligned" @click="login">Sign In</button>
 </section>

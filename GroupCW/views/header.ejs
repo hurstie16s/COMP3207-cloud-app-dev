@@ -17,9 +17,13 @@
 <div id="VueApp">
     <header>
         <h1 class="logo">REHEARSAL</h1>
-        <nav>
-            <a @click="nav('explore')">Home</a>
+        <nav v-if="user === null">
             <a @click="nav('sign-in')">Sign In</a>
+        </nav>
+        <nav v-else>
+            <a @click="nav('explore')">Home</a>
+            <a @click="nav('account')">{{user}}</a>
+            <a @click="logout">Log Out</a>
         </nav>
     </header>
 
