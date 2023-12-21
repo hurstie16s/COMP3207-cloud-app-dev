@@ -7,12 +7,12 @@
             <span class="label">Email</span>
             <div>
                 <span class="material-symbols-rounded">email</span>
-                <input type="text">
+                <input type="text" v-model="email">
             </div>
         </div>
-        <p class="input-error error hidden">
+        <p v-if="emailError" class="input-error error">
             <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-email-error">Email Error</span>
+            <span id="sign-up-email-error">{{emailError}}</span>
         </p>
     </div>
     <div class="item5">
@@ -20,12 +20,12 @@
             <span class="label">Username</span>
             <div>
                 <span class="material-symbols-rounded">person</span>
-                <input type="text">
+                <input type="text" v-model="username">
             </div>
         </div>
-        <p class="input-error error hidden">
+        <p v-if="usernameError" class="input-error error">
             <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-username-error">Username Error</span>
+            <span id="sign-up-username-error">{{usernameError}}</span>
         </p>
     </div>
     <div class="item6">
@@ -33,13 +33,13 @@
             <span class="label">Password</span>
             <div>
                 <span class="material-symbols-rounded">lock</span>
-                <input type="text">
+                <input type="text" v-model="password">
             </div>
         </div>
-        <p class="input-error error hidden">
+        <p v-if="passwordError" class="input-error error">
             <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-password-error">Password Error</span>
+            <span id="sign-up-password-error">{{passwordError}}</span>
         </p>
     </div>
-    <button class="item7 right-aligned">Sign Up</button>
+    <button class="item7 right-aligned" @click="register">Sign Up</button>
 </section>

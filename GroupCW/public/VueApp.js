@@ -7,8 +7,10 @@ var app = new Vue({
 
       username: '',
       password: '',
+      email: '',
       usernameError: '',
-      passwordError: ''
+      passwordError: '',
+      emailError: ''
       
     },
     /*
@@ -19,12 +21,21 @@ var app = new Vue({
     */
     //Js Methods here:
     methods: {
-        resets() {
+        resetErrors() {
           app.usernameError = '';
           app.passwordError = '';
+          app.emailError = '';
+        },
+
+        resetFields() {
+          app.username = '';
+          app.password = '';
+          app.email = '';
         },
 
         nav(page) {
+          this.resetErrors();
+          this.resetFields();
           app.page = page;
         },
 
@@ -34,7 +45,7 @@ var app = new Vue({
         },
 
         login() {
-          this.resets();
+          this.resetErrors();
 
           //handles empty fields
           if (!this.username) {app.usernameError = 'Username Required';}
@@ -46,7 +57,7 @@ var app = new Vue({
             if (response.result === true) {
               app.user = this.username;
               this.nav('explore');
-            } else { //stupid long winded nested if for to classify errors into username and password
+            } else { //long winded nested if for to classify errors into username and password
               if (response.msg.toLowerCase().includes("username")) {
                 app.usernameError = response.msg;
               } else if (response.msg.toLowerCase().includes("password")) {
@@ -57,9 +68,53 @@ var app = new Vue({
             }
           }
           
-          app.username = '';
-          app.password = '';
+          this.resetFields();
+        },
+
+        register() {
+          this.resetErrors();
+
+          //handles empty fields
+          if (!this.username) {app.usernameError = 'Username Required';}
+          if (!this.password) {app.passwordError = 'Password Required';}
+          if (!this.email) {app.emailError = 'Email Required';}
+
+          //only calls api if fields if both username and password have values
+          if (this.username && this.password && this.email) {
+            const response = handleRegister(this.username, this.password);
+            if (response.result === true) { // successful register logs you in straight away
+              app.user = this.username;
+              this.nav('explore');
+            } else { //long winded nested if for to classify errors into username and password
+              if (response.msg.toLowerCase().includes("username")) {
+                app.usernameError = response.msg;
+              } else if (response.msg.toLowerCase().includes("password")) {
+                app.passwordError = response.msg;
+              } else if (response.msg.toLowerCase().includes("password")){ 
+                app.emailError = response.msg;
+              } else { //error not standardised
+                alert(response.msg);
+              }
+            }
+          }
+          
+          this.resetFields();
+        },
+
+        resetPassword() {
+          this.resetErrors();
+          if (app.email) {
+            const response = handlePasswordReset();
+            if (response.result === true) { // successful register logs you in straight away
+              app.user = this.username;
+              this.nav('explore');
+            } else {
+              app.emailError = response.msg;
+            }
+          } else {app.emailError = 'Email Required';}
+          this.resetFields();
         }
+
     },
     //FrontEnd methods here:
     computed: {
@@ -90,6 +145,9 @@ userMap.set('user2', 'password');
 userMap.set('user3', 'password');
 
 function handleLogin(username, password) { //call api here
+  if (username === 'test') {
+    return {result: false, msg: 'error message'}
+  }
   if (userMap.has(username)) {
     if (password === userMap.get(username)) {
       return {result: true, msg: 'OK'};
@@ -99,6 +157,16 @@ function handleLogin(username, password) { //call api here
   } else {
     return {result: false, msg: 'Username does not exist'};
   }
+}
+
+function handleRegister() {
+  //call api
+  return {result: true, msg: 'OK'}
+}
+
+function handlePasswordReset() {
+  //call api
+  return {result: false, msg: 'Email does not exist'}
 }
 
 
