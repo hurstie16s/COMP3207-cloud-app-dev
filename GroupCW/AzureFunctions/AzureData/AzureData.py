@@ -5,33 +5,64 @@ from azure.cosmos import CosmosClient
 
 import json
 import os
+import uuid
+
 
 URL = 'https://interviewsystem-cosmosdb.documents.azure.com:443'
 KEY = 'BXNLFntJdiwBLmWL25zDXmj6NINyLt88BHkbENeSL4Yf04pXMKsFphnubDNjHojUmvl4t6WZ5sOZACDb2GSpzA=='
 DATABASE = 'InterviewDB'
 CONTAINER_InterviewQuestions = 'InterviewQuestions'
 CONTAINER_Users = 'Users'
-CONTAINER_Interviews = 'Interviews'
 CONTAINER_InterviewData = 'InterviewData'
+
 
 client = CosmosClient(URL, credential=KEY)
 
 #To access these variables import AzureData and then write AzureData.(name of variable)
 
-global database 
 database = client.get_database_client(DATABASE)
 
-global containerInterviewQuestions
 containerInterviewQuestions = database.get_container_client(CONTAINER_InterviewQuestions)
 
-global containerUsers
+
 containerUsers = database.get_container_client(CONTAINER_Users)
 
-global containerInterviews
-containerInterviews = database.get_container_client(CONTAINER_Interviews)
 
-global containerInterviewData
 containerInterviewData = database.get_container_client(CONTAINER_InterviewData)
 
+#Extra services
 
-#Todo: return functions
+#Speech
+speech_url = 'https://uksouth.api.cognitive.microsoft.com/'
+speech_key= '1c275238685a4c0da6063fc8b65652da'
+speechPath = speech_url + speech_key
+
+#translation
+translation_url = 'https://api.cognitive.microsofttranslator.com/'
+translation_key = 'c350c6f6ba1345c0a24699cdf8a22338'
+path = '/translate'
+translationPath = translation_url + path
+
+
+
+#service region
+region = "uksouth"
+
+#extra data for translation
+supportedLanguages = ['en', 'es', 'it', 'sv', 'ru', 'zh' ]
+
+params = {
+    'api-version': '3.0',
+    'to': supportedLanguages
+}
+
+headers = {
+    'Ocp-Apim-Subscription-Key': translation_key,
+    # location required if you're using a multi-service or regional (not global) resource.
+    'Ocp-Apim-Subscription-Region': region,
+    'Content-type': 'application/json',
+    'X-ClientTraceId': str(uuid.uuid4())
+}
+
+
+# TODO: return functions

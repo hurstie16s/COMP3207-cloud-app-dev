@@ -11,5 +11,8 @@ npm-debug.log
 Dockerfile
 docker-compose.yml
 
+# VS
+/[Aa]zure[Ff]unctions/.venv
+/[Aa]zure[Ff]unctions/.vscode
 
-
+**/__pycache__
