@@ -1,8 +1,6 @@
 # System Imports
 import logging
 import json
-import logging
-import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
