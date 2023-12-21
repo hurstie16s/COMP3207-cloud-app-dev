@@ -1,9 +1,11 @@
+import AudioRecorder from './audio.js';
+
 var app = new Vue({
     el: '#question',
     //All data here
     data: {
       user: null,
-
+      isRecording: false,
     },
     //On Awake methods here:
     mounted: function() {
@@ -28,6 +30,17 @@ var app = new Vue({
           }
         }
       },
+
+      startRecording() {
+        app.isRecording = true
+        AudioRecorder.start();
+      },
+
+      async stopRecording() {
+        app.isRecording = false;
+        const blob = await AudioRecorder.stop();
+        const audioURL = window.URL.createObjectURL(blob);
+      }
 
     },
     //FrontEnd methods here:
