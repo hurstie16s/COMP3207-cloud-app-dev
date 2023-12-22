@@ -9,7 +9,7 @@
         "methods": [
           "post"
         ],
-        "route": "register"
+        "route": "interview/data/send"
       },
       {
         "type": "http",
