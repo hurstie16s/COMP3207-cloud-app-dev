@@ -1,5 +1,5 @@
 var app = new Vue({
-    el: '#explore',
+    el: '#landing',
     //All data here
     data: {
       user: null,
@@ -14,7 +14,7 @@ var app = new Vue({
       logout() {
         document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
         this.user = null; //change to cookie
-        window.location.href = '/';
+        window.location.href = '/landing';
       },
 
       getUserCookie() {
@@ -36,9 +36,3 @@ var app = new Vue({
       }
 });
 
-
-//any functions outside of vue here:
-
-
-//---------------------------------------------------------
-// Dummies

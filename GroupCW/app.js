@@ -28,8 +28,7 @@ app.use('/static', express.static('public'));
 
 //Handle client interface on /
 app.get('/', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.redirect('explore') : res.redirect('sign-in');
+  res.render('landing')
 });
 
 app.get('/sign-in', (req, res) => {
