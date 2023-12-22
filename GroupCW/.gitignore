@@ -11,5 +11,10 @@ npm-debug.log
 Dockerfile
 docker-compose.yml
 
-
+# Python
+**/__pycache__
+**/pyvenv.cfg
+AzureFunctions/bin
+**/lib
+**/lib64
 
