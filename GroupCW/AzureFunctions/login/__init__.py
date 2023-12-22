@@ -10,6 +10,23 @@ from AzureData import AzureData
 # TODO: Check how requests should come in and how they should be sent out
 
 def main(req: HttpRequest) -> HttpResponse:
+
+    """
+    Login Function:
+    input: {username: string, password: string}
+    output: {result: bool, msg: string}
+
+    AuthFail:
+        - user not found
+        - username/email or password incorrect
+        code = 401
+        result = false
+    AuthSuccess:
+        result = true
+        code = 200
+    
+    Endpoint: /login
+    """
     
     logging.info('Python HTTP trigger function processed a request.')
 
@@ -33,6 +50,7 @@ def main(req: HttpRequest) -> HttpResponse:
         # Email or Username incorrect
         # Auth Fail
         output = {"result": False, "msg": "User not found"}
+        code = 401
         
     else:
         # Verify Password
@@ -41,10 +59,11 @@ def main(req: HttpRequest) -> HttpResponse:
         if (verified):
             # AuthSuccess
             output = {"result": True, "msg": "AuthSuccess"}
-            return
+            code = 200
         else :
             # AuthFail
-            output = {"result": False, "msg": "Password Incorrect"}
+            output = {"result": False, "msg": "Invalid Login"}
+            code = 401
 
     # Return HttpResponse
-    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=200)
+    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
