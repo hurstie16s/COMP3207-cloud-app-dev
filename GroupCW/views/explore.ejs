@@ -1,3 +1,12 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('header'); -%>
+
+<body>
+    <div id="explore">
+        <%- include('navbar'); -%>
+
 <section class="explore">
     <section class="card top-questions rounded shadowed">
         <h2 class="underlined">Top Questions</h2>
@@ -9,7 +18,7 @@
                         class="material-symbols-rounded">sticky_note_2</span> 432
                     Responses</p>
                 <button class="material-symbols-rounded icon-button"
-                    onclick="location.href='question.html'">chevron_right</button>
+                    onclick="location.href='/question'">chevron_right</button>
             </div>
         </div>
         <div class="question rounded">
@@ -79,7 +88,7 @@
                     </div>
                 </div>
                 <button class="material-symbols-rounded icon-button"
-                    onclick="location.href='question.html'">chevron_right</button>
+                    onclick="location.href='/question'">chevron_right</button>
             </div>
         </div>
         <div class="question rounded">
@@ -117,3 +126,15 @@
         </div>
     </section>
 </section>
+
+</main>
+</div>
+<!-- VueJS -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<!-- Application Javascript -->
+<script src="/static/explore.js"></script>
+
+</body>
+
+</html>
