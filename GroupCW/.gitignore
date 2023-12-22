@@ -11,5 +11,9 @@ npm-debug.log
 Dockerfile
 docker-compose.yml
 
+#vs
+/[Aa]zure[Ff]unctions/.venv
+/[Aa]zure[Ff]unctions/.vscode
+
 
 

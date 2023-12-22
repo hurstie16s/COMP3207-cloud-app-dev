@@ -7,17 +7,57 @@ import time
 import AzureData.AzureData as azureData
 import logging
 import requests
+<<<<<<< Updated upstream
 
 #need to properly implement all available audio files and return appropiate error messages
 def main(req: HttpRequest) -> HttpResponse:
     
     speech_config = speechsdk.SpeechConfig(subscription=azureData.speech_key, region=azureData.region)
     
+=======
+import json
+import AzureData as AzureData
+from pydub import AudioSegment
+import io
+
+#need to properly implement all available audio files and return appropiate error messages
+def main(req: HttpRequest) -> HttpResponse:
+         
+    #'''
+    # JsonInput
+    jsonInput = req.get_json()
+    
+    username = jsonInput["username"] #input("what is your username? : ") req.params.get('username')
+    interviewTitle = jsonInput["interviewTitle"] #input("what do you want your prompt to be? : ") req.params.get('text')
+    interviewQuestion = jsonInput["interviewQuestion"] #input("what do you want your prompt to be? : ") req.params.get('text')
+    audioFile = jsonInput["audioFile"]
+    private = jsonInput["private"]
+    #'''
+    
+    '''
+    #python input
+    username = input("what is your username? : ")
+    interviewTitle = input("what is the interview title? : ")
+    interviewQuestion = input("what is your interview question? : ")
+    privateChoice = input("should this be private? : yes or no?")
+    private = False
+    if(privateChoice == "yes"): private = True
+    elif (privateChoice == "no"): private = False
+    else: private = True 
+    '''
+    
+    #Audio Data
+>>>>>>> Stashed changes
     channels = 1
     bits_per_sample = 16
     samples_per_second = 16000
 
+<<<<<<< Updated upstream
     # Create audio configuration using the push stream
+=======
+    #Azure Speech SDK
+    speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
+>>>>>>> Stashed changes
     wave_format = speechsdk.audio.AudioStreamFormat(samples_per_second, bits_per_sample, channels)
     stream = speechsdk.audio.PushAudioInputStream(stream_format=wave_format)
     audio_config = speechsdk.audio.AudioConfig(stream=stream)
@@ -40,6 +80,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
     # Subscribe to the events fired by the conversation transcriber
     transcriber.transcribed.connect(transcribed_cb)
+<<<<<<< Updated upstream
     #transcriber.session_started.connect(lambda evt: print('SESSION STARTED: {}'.format(evt)))
     #transcriber.session_stopped.connect(lambda evt: print('SESSION STOPPED {}'.format(evt)))
     #transcriber.canceled.connect(lambda evt: print('CANCELED {}'.format(evt)))
@@ -54,6 +95,23 @@ def main(req: HttpRequest) -> HttpResponse:
     # Read the whole wave files at once and stream it to sdk
     _, wav_data = wavfile.read("./test.wav")
     stream.write(wav_data.tobytes())
+=======
+    transcriber.session_stopped.connect(stop_cb)
+    transcriber.canceled.connect(stop_cb)
+    
+    webm_bytes_io = io.BytesIO(audioFile)
+
+    # Load the WebM data using pydub
+    audio = AudioSegment.from_file(webm_bytes_io, format="webm")
+
+    # Export the audio to bytes
+    audio_bytes = audio.raw_data
+    
+    
+    transcriber.start_transcribing_async()
+   
+    stream.write(audio_bytes)
+>>>>>>> Stashed changes
     stream.close()
     while not done:
         time.sleep(.5)
@@ -70,11 +128,40 @@ def main(req: HttpRequest) -> HttpResponse:
     jsonText = [{
             'text': transcriptText
     }]
+<<<<<<< Updated upstream
         
     request = requests.post(azureData.translationPath, params=azureData.params, headers=azureData.headers, json=jsonText)
     response = request.json()
     
 
+=======
+    request = requests.post(AzureData.translationPath, params=AzureData.translation_params, headers=AzureData.translation_headers, json=jsonText)
+    response = request.json()[0]
+    
+    if(response['detectedLanguage']["score"] < 0.3):
+        return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with language translation, translation not reliable enough."}),mimetype="application/json")
+    
+    
+    jsonBody = json.dumps(
+        {
+            "username": username,
+            "private": private,
+            "interviewTitle": interviewTitle,
+            "interviewQuestion": interviewQuestion,
+            "interviewBlop": "",
+            "interviewLanguage": response['detectedLanguage']["language"],
+            "trasncript": response['translations'],
+            "comments": [],
+            "rating": 0,
+            "flags": [],
+        })
+    try:
+        AzureData.containerInterviewData.create_item(jsonBody, enable_automatic_id_generation=True)
+        return HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}),mimetype="application/json")
+    except Exception as e:
+        return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with submitting data to container"}),mimetype="application/json")
+  
+>>>>>>> Stashed changes
 
 if __name__ == '__main__': 
     main('test')
