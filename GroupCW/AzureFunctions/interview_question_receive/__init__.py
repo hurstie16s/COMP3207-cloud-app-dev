@@ -8,7 +8,6 @@ from shared_code import DBFunctions
 from AzureData import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
-    
 
     logging.info('Python HTTP trigger function processed a request.')
 
@@ -22,7 +21,12 @@ def main(req: HttpRequest) -> HttpResponse:
 
     questions=[]
     for question in questionsResult :
-        questions.append(question.get("interviewQuestion"))
+        questionDict = {
+            "question" : question.get("interviewQuestion"),
+            "difficulty": question.get("difficulty"),
+            "regularity": question.get("regularity")
+        }
+        questions.append(questionDict)
 
     output = {"questions": questions}
 
