@@ -22,7 +22,11 @@ def main(req: HttpRequest) -> HttpResponse:
         code = 403
     else:
         # Insert question into db
-        data = {"interviewQuestion": question}
+        data = {
+            "interviewQuestion": question,
+            "difficulty": difficulty,
+            "regularity": regularity
+        }
         DBFunctions.create_item(
             data=data,
             container=AzureData.containerInterviewQuestions
