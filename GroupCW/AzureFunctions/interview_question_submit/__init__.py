@@ -13,6 +13,8 @@ def main(req: HttpRequest) -> HttpResponse:
 
     input = req.get_json()
     question = input.get("question")
+    difficulty = input.get("difficulty")
+    regularity = input.get("regularity")
 
     # Check question is unique
     if checkQuestion(question):
