@@ -10,7 +10,7 @@
     --header-font: 'Montserrat', sans-serif;
     --body-font: 'Noto Sans', sans-serif;
     --monospace-font: 'Source Code Pro', monospace;
-    --border: 2px solid rgb(var(--white));
+    --border: 2px solid rgb(var(--background-lighter-15));
     --border-radius: 0.5em;
     --theme: 71, 68, 235;
     --theme-lighter-5: 80, 77, 236;
@@ -35,6 +35,7 @@ body {
     overflow-y: scroll;
     font-family: var(--body-font);
     background-color: rgb(var(--background));
+    
     color: rgb(var(--text));
 }
 
@@ -43,14 +44,21 @@ body>div>header, body>header {
     height: 100px;
     background-color: rgb(var(--background-darker-1));
     color: rgb(var(--text));
+    z-index: 1;
+    position: fixed;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 0.15em 0.2em;
 }
 
 body>div>main, body>main {
+    position: relative;
+    top: 100px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 2em 2em;
+    min-height: calc(100vh - 100px);
+    height: min-content;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -231,16 +239,18 @@ a {
     width: 100%;
 } */
 
+
 .sign-in, .sign-up, .reset-password {
-    width: 420px;
+    /* width: 420px; */
     /* height: 520px; */
     display: grid;
     grid-template-columns: auto auto;
     place-items: center;
-    padding: 2em 1.5em 1em 1.5em;
+    /* padding: 2em 1.5em 1em 1.5em; */
     font-family: var(--header-font);
     row-gap: 1.2em;
-    background-color: rgb(var(--background-lighter-1))
+    /* background-color: rgb(var(--background-lighter-1)); */
+
 }
 
 .sign-in>.item1, .sign-up>.item1, .reset-password>.item1 {
@@ -263,7 +273,6 @@ a {
 
 .sign-up>.item8 {
     grid-column: span 2;
-    margin: 1em 0;
 }
 
 .reset-password>.item4 {
@@ -330,7 +339,7 @@ header>nav>a {
     background-color: rgba(var(--background-lighter-5), 0.5);
     /* background-color: rgb(33, 34, 43); */
     padding: 2rem 2rem;
-    width: 100%;
+    /* width: 100%; */
 }
 
 .question {
@@ -877,6 +886,7 @@ option {
     transition: var(--transition);
     position: absolute;
     top: 0.1em;
+
 }
 
 .toggle-label {
