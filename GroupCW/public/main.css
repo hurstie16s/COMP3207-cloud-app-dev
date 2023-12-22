@@ -590,6 +590,7 @@ hr {
         color: #e0970d;
 }
 
+
 .response {
     display: grid;
     grid-template-columns: 2fr 3fr 3fr;
@@ -664,15 +665,66 @@ hr {
 }
 
 .comment {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr min-content min-content;
+    grid-template-rows: auto auto;
     padding: 0.25em;
     transition: var(--transition);
     margin-top: 0.9em;
+    width: 100%;
+    max-width: 100%;
 }
 
 .comment:hover {
     background-color: rgb(var(--background-lighter-10));
+}
+
+.comment-username {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.like-count {
+    grid-column: 2;
+    grid-row: 1;
+    margin-right: 1em;
+}
+
+
+.dislike-count {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.like-count, .dislike-count {
+    justify-self: flex-end;
+    align-self: center;
+    min-width: max-content; 
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    
+}
+
+.like-count > span, .dislike-count > span {
+    background-color: rgb(var(--background-lighter-15));
+    font-family: var(--header-font);
+    font-size: 14px;
+    margin: 0 0.25em;
+    min-width: 3ch;
+    text-align: center;
+    border-radius: var(--border-radius);
+}
+
+.disliked, .liked, .filled {
+    font-variation-settings:
+        'FILL'1;
+}
+
+.comment-text {
+    grid-column: span 3;
+    grid-row: 2;
+
 }
 
 .comment-username, .username {
@@ -692,8 +744,7 @@ hr {
 }
 
 .comment-text {
-    margin-left: 0.3em;
-    margin-top: 0.3em;
+    margin: 0.3em;
 }
 
 .new-comment {
@@ -713,7 +764,7 @@ hr {
     word-break: break-word;
     padding: 0.7em;
     border: 2px solid rgb(var(--background-lighter-15));
-    min-height: 2.9em;;
+    min-height: 3.1em;;
     font-family: var(--body-font);
 }
 
@@ -859,4 +910,8 @@ option {
 
 .account-page .star-filled.inline-adjusted {
     transform: translateY(0.22em);
+}
+
+.header-margin {
+    margin-bottom: 0.6em;
 }
