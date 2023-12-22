@@ -56,7 +56,7 @@ body>div>main, body>main {
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--header-font);
     margin: 0;
-    margin-bottom: 0.6em;
+    /* margin-bottom: 0.6em; */
 
 }
 
@@ -70,6 +70,10 @@ ul {
 
 li {
     margin-bottom: .5em;
+}
+
+a {
+    cursor: pointer;
 }
 
 /* Common Styles */
@@ -202,6 +206,7 @@ a {
     background-color: rgb(var(--background-lighter-1));
     font-weight: 600;
     user-select: none;
+    font-family: var(--header-font);
 }
 
 .input>div {

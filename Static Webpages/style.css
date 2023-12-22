@@ -72,6 +72,10 @@ li {
     margin-bottom: .5em;
 }
 
+a {
+    cursor: pointer;
+}
+
 /* Common Styles */
 
 .underlined {
@@ -202,6 +206,7 @@ a {
     background-color: rgb(var(--background-lighter-1));
     font-weight: 600;
     user-select: none;
+    font-family: var(--header-font);
 }
 
 .input>div {

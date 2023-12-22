@@ -16,6 +16,19 @@
         </p>
     </div>
     <div class="item5">
+        <label class="input" for="sign-up-name-input">
+            <span class="label">Name</span>
+            <div>
+                <span class="material-symbols-rounded">badge</span>
+                <input type="text" id="sign-up-name-input">
+            </div>
+        </label>
+        <p class="input-error error hidden">
+            <span class="material-symbols-rounded">error</span>
+            <span id="sign-up-name-error">Name Error</span>
+        </p>
+    </div>
+    <div class="item6">
         <div class="input">
             <span class="label">Username</span>
             <div>
@@ -28,7 +41,7 @@
             <span id="sign-up-username-error">{{usernameError}}</span>
         </p>
     </div>
-    <div class="item6">
+    <div class="item7">
         <div class="input">
             <span class="label">Password</span>
             <div>
@@ -41,5 +54,5 @@
             <span id="sign-up-password-error">{{passwordError}}</span>
         </p>
     </div>
-    <button class="item7 right-aligned" @click="register">Sign Up</button>
+    <button class="item8 right-aligned" @click="register">Sign Up</button>
 </section>
