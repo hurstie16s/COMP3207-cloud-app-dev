@@ -40,7 +40,8 @@ speechPath = speech_url + speech_key
 #translation
 translation_url = 'https://api.cognitive.microsofttranslator.com/'
 translation_key = 'c350c6f6ba1345c0a24699cdf8a22338'
-translationPath = translation_url + translation_key
+path = '/translate'
+translationPath = translation_url + path
 
 
 
