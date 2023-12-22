@@ -35,7 +35,6 @@ body {
     overflow-y: scroll;
     font-family: var(--body-font);
     background-color: rgb(var(--background));
-    
     color: rgb(var(--text));
 }
 
@@ -924,4 +923,39 @@ option {
 
 .header-margin {
     margin-bottom: 0.6em;
+}
+
+.landing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    cursor: default;
+    gap: 3rem;
+    justify-items: center;
+    align-items: center;
+}
+
+
+
+.landing-text h1 {
+    font-size: 5rem;
+    font-weight: 600;
+    text-align: right;
+}
+
+.landing-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2rem;
+    font-family: var(--header-font);
+}
+
+.landing-text button {
+    font-size: 1.2rem;
+}
+
+.landing img {
+    max-width:80%;
 }
