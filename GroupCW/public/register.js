@@ -7,9 +7,11 @@ var app = new Vue({
       username: '',
       password: '',
       email: '',
+      name: '',
       usernameError: '',
       passwordError: '',
-      emailError: ''
+      emailError: '',
+      nameError: ''
       
     },
     //On Awake methods here:
@@ -26,6 +28,7 @@ var app = new Vue({
           if (!this.username) {app.usernameError = 'Username Required';}
           if (!this.password) {app.passwordError = 'Password Required';}
           if (!this.email) {app.emailError = 'Email Required';}
+          if (!this.name) {app.nameError = 'Name Required';}
 
           //only calls api if fields if both username and password have values
           if (this.username && this.password && this.email) {
@@ -41,7 +44,7 @@ var app = new Vue({
                 app.passwordError = response.msg;
               } else if (response.msg.toLowerCase().includes("password")){ 
                 app.emailError = response.msg;
-              } else { //error not standardised
+              } else { //error not standardised or name error!
                 alert(response.msg);
               }
             }

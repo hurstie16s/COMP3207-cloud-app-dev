@@ -29,12 +29,12 @@
             <span class="label">Name</span>
             <div>
                 <span class="material-symbols-rounded">badge</span>
-                <input type="text" id="sign-up-name-input">
+                <input type="text" id="sign-up-name-input" v-model="name">
             </div>
         </label>
-        <p class="input-error error hidden">
+        <p v-if="nameError" class="input-error error">
             <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-name-error">Name Error</span>
+            <span id="sign-up-name-error">{{nameError}}</span>
         </p>
     </div>
     <div class="item6">
