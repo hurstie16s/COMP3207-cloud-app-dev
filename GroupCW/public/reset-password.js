@@ -21,7 +21,8 @@ var app = new Vue({
         },
 
         resetPassword() {
-          this.resetErrors();
+          app.emailError = '';
+
           if (app.email) {
             const response = handlePasswordReset();
             if (response.result === true) {

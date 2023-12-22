@@ -21,6 +21,9 @@ var app = new Vue({
     //Js Methods here:
     methods: {
         login() {
+          app.usernameError = '';
+          app.passwordError = '';
+
           //handles empty fields
           if (!this.username) {app.usernameError = 'Username Required';}
           if (!this.password) {app.passwordError = 'Password Required';}
