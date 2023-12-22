@@ -24,6 +24,10 @@ var app = new Vue({
     //Js Methods here:
     methods: {
         register() {
+          app.usernameError = '';
+          app.passwordError = '';
+          app.nameError = '';
+          app.emailError = '';
           //handles empty fields
           if (!this.username) {app.usernameError = 'Username Required';}
           if (!this.password) {app.passwordError = 'Password Required';}
