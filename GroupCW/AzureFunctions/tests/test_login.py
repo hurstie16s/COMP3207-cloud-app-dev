@@ -1,4 +1,3 @@
-'''
 #System Imports
 import unittest
 import requests
@@ -60,7 +59,4 @@ class TestAddUserFunction(unittest.TestCase):
         )
         
 if __name__ == '__main__':
-    print(dir(AzureData))
-    print("test")
     unittest.main()
-'''
