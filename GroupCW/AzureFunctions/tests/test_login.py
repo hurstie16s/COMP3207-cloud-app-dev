@@ -6,7 +6,7 @@ import json
 #Azure Imports
 #Code base Imports
 import AzureData
-from shared_code import DBFunctions
+from shared_code import DBFunctions, PasswordFunctions
 
 class TestAddUserFunction(unittest.TestCase):
     TEST_URL = "http://localhost:7071/login"
@@ -16,11 +16,12 @@ class TestAddUserFunction(unittest.TestCase):
         self.testUsername = str(uuid.uuid1().hex)
         self.testEmail = self.testUsername+"@test.co.uk"
         self.testPassword = self.testUsername
+        self.testPasswordHashed = PasswordFunctions.hash_password(self.testPassword)
 
         data = {
             "username": self.testUsername,
             "email": self.testEmail,
-            "password": self.testPassword
+            "password": self.testPasswordHashed
         }
 
         DBFunctions.create_item(
@@ -37,8 +38,8 @@ class TestAddUserFunction(unittest.TestCase):
         data = json.dumps({"username": username, "password": password})
 
         response = requests.get(url=self.TEST_URL, data=data)
-        result = response.status_code == 401 and response.content == {"result": False, "msg": "User not found"}
-        self.assertTrue(result)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, b'{"result": false, "msg": "User not found"}')
 
     def test_password_incorrect(self):
 
@@ -48,8 +49,8 @@ class TestAddUserFunction(unittest.TestCase):
         data = json.dumps({"username": self.testUsername, "password": password})
 
         response = requests.get(url=self.TEST_URL, data=data)
-        result = response.status_code == 401 and response.content == {"result": False, "msg": "Invalid Login"}
-        self.assertTrue(result)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, b'{"result": false, "msg": "Invalid Login"}')
 
     def test_login_success(self):
 
