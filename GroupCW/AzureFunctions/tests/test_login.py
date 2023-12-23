@@ -4,7 +4,7 @@ import requests
 import uuid
 #Azure Imports
 #Code base Imports
-from AzureData import AzureData
+import AzureData
 from shared_code import DBFunctions
 
 class TestAddUserFunction(unittest.TestCase):

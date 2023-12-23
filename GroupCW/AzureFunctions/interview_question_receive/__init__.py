@@ -5,7 +5,7 @@ import json
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
 from shared_code import DBFunctions
-from AzureData import AzureData
+import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
 

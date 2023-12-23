@@ -4,7 +4,7 @@ import asyncio
 import uuid
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
-from AzureData import AzureData
+import AzureData
 from shared_code.PasswordFunctions import hash_password
 import re
 

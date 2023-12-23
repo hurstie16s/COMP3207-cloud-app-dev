@@ -4,7 +4,6 @@ from azure.functions import HttpRequest, HttpResponse
 import azure.cognitiveservices.speech as speechsdk
 from scipy.io import wavfile
 import time
-import AzureData.AzureData as azureData
 import logging
 import requests
 import json
