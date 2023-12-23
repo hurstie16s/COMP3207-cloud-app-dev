@@ -49,14 +49,14 @@ translationPath = translation_url + path
 region = "uksouth"
 
 #extra data for translation
-supportedLanguages = ['en', 'es', 'it', 'sv', 'ru', 'zh' ]
+supportedLanguages = ['en', 'cy', 'ga', 'fr', 'pl']
 
-params = {
+translation_params = {
     'api-version': '3.0',
     'to': supportedLanguages
 }
 
-headers = {
+translation_headers = {
     'Ocp-Apim-Subscription-Key': translation_key,
     # location required if you're using a multi-service or regional (not global) resource.
     'Ocp-Apim-Subscription-Region': region,
