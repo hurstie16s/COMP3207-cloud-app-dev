@@ -21,5 +21,3 @@ class TestLoginUserFunction(unittest.TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(b'OK', response.content)
         
-if __name__ == '__main__':
-    unittest.main()

@@ -58,5 +58,3 @@ class TestAddUserFunction(unittest.TestCase):
             container=AzureData.containerUsers
         )
         
-if __name__ == '__main__':
-    unittest.main()
