@@ -1,4 +1,3 @@
-'''
 #System Imports
 import unittest
 import requests
@@ -63,4 +62,3 @@ if __name__ == '__main__':
     print(dir(AzureData))
     print("test")
     unittest.main()
-'''
