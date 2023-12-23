@@ -2,6 +2,7 @@
 import unittest
 import requests
 import uuid
+import json
 #Azure Imports
 #Code base Imports
 import AzureData
@@ -33,7 +34,9 @@ class TestAddUserFunction(unittest.TestCase):
         username = "false User"
         password = "false Password"
 
-        response = requests.get(url=self.TEST_URL, data={"username": username, "password": password})
+        data = json.dumps({"username": username, "password": password})
+
+        response = requests.get(url=self.TEST_URL, data=data)
         result = response.status_code == 401 and response.content == {"result": False, "msg": "User not found"}
         self.assertTrue(result)
 
@@ -42,13 +45,17 @@ class TestAddUserFunction(unittest.TestCase):
         # Incorrect Password
         password = "false Password"
 
-        response = requests.get(url=self.TEST_URL, data={"username": self.testUsername, "password": password})
+        data = json.dumps({"username": self.testUsername, "password": password})
+
+        response = requests.get(url=self.TEST_URL, data=data)
         result = response.status_code == 401 and response.content == {"result": False, "msg": "Invalid Login"}
         self.assertTrue(result)
 
     def test_login_success(self):
 
-        response = requests.get(url=self.TEST_URL, data={"username": self.testUsername, "password": self.testPassword})
+        data = json.dumps({"username": self.testUsername, "password": self.testPassword})
+
+        response = requests.get(url=self.TEST_URL, data=data)
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
