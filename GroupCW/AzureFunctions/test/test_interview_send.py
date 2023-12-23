@@ -3,13 +3,15 @@ import requests
 import json
 from azure.cosmos.exceptions import CosmosHttpResponseError, CosmosResourceExistsError, CosmosResourceNotFoundError
 from azure.cosmos import CosmosClient
+import base64
 
 class TestLoginUserFunction(unittest.TestCase):  
     
-    #still need to finish
+    LOCAL_DEV_URL="http://localhost:7071/api/prompt/create"
+    
     def test_sending_interview(self):
         with open("./meme.webm", 'rb') as file:
-            webm_content = file.read()
+            webm_content = base64.b64encode(file.read()).decode('utf-8')
         
         validPrompt = json.dumps({"username":"Moonzyyy",
                                   "interviewTitle":"About me",
