@@ -1,3 +1,4 @@
+'''
 #System Imports
 import unittest
 import requests
@@ -52,7 +53,14 @@ class TestAddUserFunction(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
+        print("test")
         DBFunctions.delete_item(
             id=self.testUsername, 
             container=AzureData.containerUsers
         )
+        
+if __name__ == '__main__':
+    print(dir(AzureData))
+    print("test")
+    unittest.main()
+'''
