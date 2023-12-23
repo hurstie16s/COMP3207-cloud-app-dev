@@ -60,9 +60,19 @@ class TestAddUserFunction(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
-        print("test")
+        
+        # Get User id
+        query = "SELECT * FROM Users WHERE Users.username = @username"
+        params = [{"name": "@username", "value": self.testUsername}]
+        result = DBFunctions.query_items(
+            query=query,
+            parameters=params,
+            container=AzureData.containerUsers
+        )
+        id = result[0].get("id")
+
         DBFunctions.delete_item(
-            id=self.testUsername, 
+            id=id, 
             container=AzureData.containerUsers
         )
         
