@@ -13,6 +13,8 @@ def main(req: HttpRequest) -> HttpResponse:
 
     input = req.get_json()
     question = input.get("question")
+    difficulty = input.get("difficulty")
+    regularity = input.get("regularity")
 
     # Check question is unique
     if checkQuestion(question):
@@ -20,7 +22,11 @@ def main(req: HttpRequest) -> HttpResponse:
         code = 403
     else:
         # Insert question into db
-        data = {"interviewQuestion": question}
+        data = {
+            "interviewQuestion": question,
+            "difficulty": difficulty,
+            "regularity": regularity
+        }
         DBFunctions.create_item(
             data=data,
             container=AzureData.containerInterviewQuestions
