@@ -16,4 +16,6 @@ docker-compose.yml
 /[Aa]zure[Ff]unctions/.vscode
 
 
-
+# __pycache__
+__pycache__
+.pyc
