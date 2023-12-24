@@ -16,8 +16,11 @@ def main(req: HttpRequest) -> HttpResponse:
     difficulty = input.get("difficulty")
     regularity = input.get("regularity")
 
+    if question is None or difficulty is None or regularity is None:
+        output = {"result": False, "msg": "Submission Failure"}
+        output = 400
     # Check question is unique
-    if checkQuestion(question):
+    elif checkQuestion(question):
         output = {"result": False, "msg": "Question already exists"}
         code = 403
     else:
