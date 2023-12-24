@@ -4,7 +4,7 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
-from shared_code import DBFunctions
+from shared_code import DBFunctions, FaultCheckers
 import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
@@ -16,7 +16,7 @@ def main(req: HttpRequest) -> HttpResponse:
     difficulty = input.get("difficulty")
     regularity = input.get("regularity")
 
-    if question is None or difficulty is None or regularity is None:
+    if FaultCheckers.checkParams([question, difficulty, regularity]):
         output = {"result": False, "msg": "Submission Failure"}
         output = 400
     # Check question is unique

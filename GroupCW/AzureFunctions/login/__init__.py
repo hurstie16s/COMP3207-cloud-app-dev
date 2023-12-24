@@ -4,7 +4,7 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
-from shared_code import PasswordFunctions, DBFunctions
+from shared_code import PasswordFunctions, DBFunctions, FaultCheckers
 import AzureData
 
 # TODO: Check how requests should come in and how they should be sent out
@@ -34,6 +34,11 @@ def main(req: HttpRequest) -> HttpResponse:
     input = req.get_json()
     emailOrUsername = input.get("username")
     password = input.get("password")
+
+    if FaultCheckers.checkParams([emailOrUsername, password]):
+        output = {"result": False, "msg": "AuthFail"}
+        code = 400
+        return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
     # Check username exists, grab hashed password based off username
     query = "SELECT * FROM Users WHERE Users.email=@emailOrUsername OR Users.username=@emailOrUsername"
