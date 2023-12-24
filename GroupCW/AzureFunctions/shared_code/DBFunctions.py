@@ -16,7 +16,7 @@ def query_items(query, parameters=[], container=None):
     validate(container)
     
     logging.info("Query Database")
-    #Run Query, return results as list
+    # Run Query, return results as list
     return list(container.query_items(query=query, parameters=parameters, enable_cross_partition_query=True))
 
 def create_item(data, container=None):
@@ -25,7 +25,7 @@ def create_item(data, container=None):
     validate(container)
 
     logging.info("Insert Data into Database")
-    #Run insert
+    # Run insert
     container.create_item(data, enable_automatic_id_generation = True)
     return
 
@@ -35,7 +35,7 @@ def upsert_item(data, container=None):
     validate(container)
 
     logging.info("Update Data in Database")
-    #Run update
+    # Run update
     container.upsert_item(data)
     return
 
@@ -45,6 +45,7 @@ def delete_item(id, container=None):
     validate(container)
 
     logging.info("Delete Data from Database")
-    #Run delete
+    # Run delete - not working
+    # Entity with the specified id does not exist in the system
     container.delete_item(item=id, partition_key=id)
     return

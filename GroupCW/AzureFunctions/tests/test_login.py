@@ -3,6 +3,7 @@ import unittest
 import requests
 import uuid
 import json
+import logging
 #Azure Imports
 #Code base Imports
 import AzureData
@@ -70,7 +71,7 @@ class TestAddUserFunction(unittest.TestCase):
             container=AzureData.containerUsers
         )
         id = result[0].get("id")
-
+        
         DBFunctions.delete_item(
             id=id, 
             container=AzureData.containerUsers
