@@ -6,24 +6,27 @@ from azure.cosmos import CosmosClient
 import base64
 import AzureData
 
+#need to improve this test
 class TestLoginUserFunction(unittest.TestCase):  
     
-    LOCAL_DEV_URL="http://localhost:7071/api/prompt/create"
+    TEST_URL="http://localhost:7071/interview/data/send"
     
     def test_sending_interview(self):
-        print(dir(AzureData))
-        print(AzureData.containerUsers)
-        with open("./meme.webm", 'rb') as file:
-            webm_content = base64.b64encode(file.read()).decode('utf-8')
+         with open("./test.webm", 'rb') as file:
+            files = {'webmFile': ('meme.webm', file, 'video/webm')}
         
-        validPrompt = json.dumps({"username":"Moonzyyy",
-                                  "interviewTitle":"About me",
-                                  "interviewQeustion":"Tell us about yourself",
-                                  "audioFile": webm_content,
-                                  "private": False,})
-        response = requests.post(self.TEST_URL,data=validPrompt)
-        self.assertEqual(200, response.status_code)
-        self.assertEqual(b'OK', response.content)
+            jsonData = {
+                "username": "Moonzyyy",
+                "industry": "IT",
+                "interviewTitle": "About me",
+                "interviewQuestion": "Tell us about yourself",
+                "private": False,
+            }
+        
+            response = requests.post(self.TEST_URL, data=jsonData, files=files)
+        
+            self.assertEqual(200, response.status_code)
+            self.assertEqual(b'{"result": true, "msg": "OK"}', response.content)
         
 if __name__ == '__main__':
     unittest.main()
