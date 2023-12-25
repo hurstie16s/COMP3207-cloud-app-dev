@@ -15,17 +15,23 @@ Group Courework Documentation Link: https://www.overleaf.com/9943653534vjkzsrdmn
 
 
 Current Teams:
+Backend:
+Sam
+Alyssa
+Apishan
+Lele
 
-Backend
-
-
-FrontEnd
-
+FrontEnd:
+Josh
+Ryan
+Will
 
 Css
 - Josh
 
-Writing Documentation
+Writing Documentation:
+Alyssa
+Lele
 
 Proof Reader:
 - Josh
