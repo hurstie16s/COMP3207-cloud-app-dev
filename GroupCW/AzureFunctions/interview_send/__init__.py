@@ -4,29 +4,13 @@ from azure.functions import HttpRequest, HttpResponse
 import azure.cognitiveservices.speech as speechsdk
 from scipy.io import wavfile
 import time
-import logging
 import requests
 import json
 import AzureData as AzureData
 import os
 import uuid
-import subprocess
-from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
-import ffmpeg
 from moviepy.editor import VideoFileClip
 
-
-# Replace these values with your actual account details
-account_name = "interviewstorage"
-account_key = "5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ=="
-connection_string = "DefaultEndpointsProtocol=https;AccountName=interviewstorage;AccountKey=5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ==;EndpointSuffix=core.windows.net"
-container_name = "interview-blop"
-
-# Create a BlobServiceClient
-blob_service_client = BlobServiceClient(account_url=f"https://{account_name}.blob.core.windows.net", credential=account_key)
-
-# Create a ContainerClient
-container_client = blob_service_client.get_container_client(container_name)
 
 translation_params = {
     'api-version': '3.0',
@@ -51,7 +35,7 @@ def main(req: HttpRequest) -> HttpResponse:
     interviewQuestion = req.form.get("interviewQuestion") #input("what do you want your prompt to be? : ") req.params.get('text')
     private = req.form.get("private")
     webmFile = req.files["webmFile"]
-    
+    video_clip = None
     #setting up the file names
     webm_file_name = username + str(uuid.uuid4()) + ".webm"
     wav_file_name = username + str(uuid.uuid4()) + ".wav"
@@ -91,7 +75,6 @@ def main(req: HttpRequest) -> HttpResponse:
             def transcribed_cb(evt: speechsdk.ConnectionEventArgs):
                 """Callback for handling transcribed events"""
                 result_text = evt.result.text
-                print("HELLO")
                 print(evt.result.reason)
                 #if evt.result.reason == speechsdk.ResultReason.RecognizedSpeech:
                     #print("Recognized: {}".format(evt.text))
@@ -116,7 +99,7 @@ def main(req: HttpRequest) -> HttpResponse:
             transcriber.stop_transcribing_async()
             
             with open(webm_file_name, "rb") as data:
-                bob_client = container_client.upload_blob(name=webm_file_name, data=data)
+                bob_client = AzureData.blob_container.upload_blob(name=webm_file_name, data=data)
             
             transcription = ""
             for text in transcriptions:
@@ -153,8 +136,7 @@ def main(req: HttpRequest) -> HttpResponse:
             AzureData.containerInterviewData.create_item(jsonBody, enable_automatic_id_generation=True)
         except:
             raise ExceptionWithStoringToCosmosDB
-        
-        
+            
         #cleanup
         if video_clip:
             video_clip.close()
@@ -171,9 +153,9 @@ def main(req: HttpRequest) -> HttpResponse:
             video_clip.close()
             if(os.path.exists(webm_file_name)): os.remove(webm_file_name)
             if(os.path.exists(wav_file_name)): os.remove(wav_file_name)
-            blob_client = container_client.get_blob_client(webm_file_name)
-            blob_exists = blob_client.exists()
-            if(blob_exists): container_client.delete_blob(name=webm_file_name)
+            blob_file = AzureData.blob_service_client.get_blob_client(container=AzureData.container_name, blob=webm_file_name)
+            blob_exists = blob_file.exists()
+            if(blob_exists): blob_file.delete_blob()
         
         #custom error messages
         if isinstance(e, ExceptionWithStoringToCosmosDB):

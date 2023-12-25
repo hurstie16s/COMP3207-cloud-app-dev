@@ -2,7 +2,7 @@ import logging
 
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient 
-
+from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import json
 import os
 import uuid
@@ -19,7 +19,7 @@ CONTAINER_InterviewData = 'InterviewData'
 client = CosmosClient(URL, credential=KEY)
 
 #To access these variables import AzureData and then write AzureData.(name of variable)
-
+#CosmosDB Containers
 database = client.get_database_client(DATABASE)
 
 containerInterviewQuestions = database.get_container_client(CONTAINER_InterviewQuestions)
@@ -27,6 +27,21 @@ containerInterviewQuestions = database.get_container_client(CONTAINER_InterviewQ
 global containerUsers
 containerUsers = database.get_container_client(CONTAINER_Users)
 containerInterviewData = database.get_container_client(CONTAINER_InterviewData)
+
+
+#DataStorage (blop) container
+# Replace these values with your actual account details
+account_name = "interviewstorage"
+account_key = "5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ=="
+connection_string = "DefaultEndpointsProtocol=https;AccountName=interviewstorage;AccountKey=5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ==;EndpointSuffix=core.windows.net"
+container_name = "interview-blop"
+
+# Create a BlobServiceClient
+blob_service_client = BlobServiceClient(account_url=f"https://{account_name}.blob.core.windows.net", credential=account_key)
+
+# Create a ContainerClient
+blob_container = blob_service_client.get_container_client(container_name)
+
 
 #Extra services
 
