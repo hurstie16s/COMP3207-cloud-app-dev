@@ -15,6 +15,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 import ffmpeg
 from moviepy.editor import VideoFileClip
 
+
 # Replace these values with your actual account details
 account_name = "interviewstorage"
 account_key = "5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ=="
@@ -42,131 +43,159 @@ translation_headers = {
 
 #need to properly implement all available audio files and return appropiate error messages
 def main(req: HttpRequest) -> HttpResponse:
-         
-    #'''
-    # JsonInput
+    
+    #Json inputs from body
     username = req.form.get("username") #input("what is your username? : ") req.params.get('username')
+    industry = req.form.get("industry")
     interviewTitle = req.form.get("interviewTitle") #input("what do you want your prompt to be? : ") req.params.get('text')
     interviewQuestion = req.form.get("interviewQuestion") #input("what do you want your prompt to be? : ") req.params.get('text')
     private = req.form.get("private")
     webmFile = req.files["webmFile"]
-    #'''
-
-    file_path = os.path.join(os.getcwd(), webmFile.filename)
-    webmFile.save(file_path)
     
-    logging.info(file_path)
-    logging.info(webmFile.name)
-    
-    webm_file_name = "test.webm"
-    wav_file_name = "output.wav"
-    
-    video_clip = VideoFileClip(webm_file_name)
-    audio_clip = video_clip.audio
-    audio_clip.write_audiofile(wav_file_name, codec='pcm_s16le', ffmpeg_params=['-ar', '16000'])
-    
-    channels = 1
-    bits_per_sample = 16
-    samples_per_second = 16000
-
-    #Azure Speech SDK
-    speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
-    wave_format = speechsdk.audio.AudioStreamFormat(samples_per_second, bits_per_sample, channels)
-    stream = speechsdk.audio.PushAudioInputStream(stream_format=wave_format)
-    audio_config = speechsdk.audio.AudioConfig(stream=stream)
-    transcriber = speechsdk.transcription.ConversationTranscriber(speech_config, audio_config)
-    
-    error = False
-    done = False
-    transcription = ''
-    
-    def stop_cb(evt: speechsdk.SessionEventArgs):
-            """callback that signals to stop continuous transcription upon receiving an event `evt`"""
-            print('CLOSING {}'.format(evt))
-            nonlocal error
-            nonlocal done
-            if(not done):
-                error = True
-                done = True
-            
-    def transcribed_cb(evt: speechsdk.ConnectionEventArgs):
-        """Callback for handling transcribed events"""
-        print('TRANSCRIBED: {}'.format(evt))
-        result_text = evt.result.text
-        nonlocal transcription
-        transcription = result_text
-        nonlocal done
-        done = True
-
-    # Subscribe to the events fired by the conversation transcriber
-    transcriber.transcribed.connect(transcribed_cb)
-    transcriber.session_stopped.connect(stop_cb)
-    transcriber.canceled.connect(stop_cb)
-    
-    
-    
-    transcriber.start_transcribing_async()
-    _, wav_data = wavfile.read(wav_file_name)
-    stream.write(wav_data.tobytes())
-    stream.close()
-    while not done:
-        time.sleep(.5)
-        if(error and not done):
-            return HttpResponse(body=json.dumps({"result": False , "msg" : "Error while creating transcription"}),mimetype="application/json")
-    transcriber.stop_transcribing_async()
-    
-    with open(file_path, "rb") as data:
-        bob_client = container_client.upload_blob(name=webmFile.filename, data=data)
-    
-    jsonText = [{
-            'text': transcription
-    }]
-    request = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
-    response = request.json()[0]
-    
-    jsonBody = {
-            "username": username,
-            "private": private,
-            "interviewTitle": interviewTitle,
-            "interviewQuestion": interviewQuestion,
-            "interviewBlopURL": bob_client.url,
-            "interviewLanguage": response['detectedLanguage']["language"],
-            "trasncript": response['translations'],
-            "comments": [],
-            "rating": 0,
-            "flags": [],
-        }
+    #setting up the file names
+    webm_file_name = username + str(uuid.uuid4()) + ".webm"
+    wav_file_name = username + str(uuid.uuid4()) + ".wav"
     try:
-        AzureData.containerInterviewData.create_item(jsonBody, enable_automatic_id_generation=True)
+        
+        try:
+            webmFile.save(webm_file_name)
+            video_clip = VideoFileClip(webm_file_name)
+            audio_clip = video_clip.audio
+            audio_clip.write_audiofile(wav_file_name, codec='pcm_s16le', ffmpeg_params=['-ar', '16000'])
+        except:
+            raise ExceptionWithCreatingFiles
+
+        
+        try:
+            channels = 1
+            bits_per_sample = 16
+            samples_per_second = 16000
+
+            #Azure Speech SDK
+            speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
+            wave_format = speechsdk.audio.AudioStreamFormat(samples_per_second, bits_per_sample, channels)
+            stream = speechsdk.audio.PushAudioInputStream(stream_format=wave_format)
+            audio_config = speechsdk.audio.AudioConfig(stream=stream)
+            transcriber = speechsdk.transcription.ConversationTranscriber(speech_config, audio_config)
+        
+
+            done = False
+            transcriptions = []
+        
+            def stop_cb(evt: speechsdk.SessionEventArgs):
+                """callback that signals to stop continuous transcription upon receiving an event `evt`"""
+                print('CLOSING {}'.format(evt))
+                nonlocal done
+                done = True
+                
+            def transcribed_cb(evt: speechsdk.ConnectionEventArgs):
+                """Callback for handling transcribed events"""
+                result_text = evt.result.text
+                print("HELLO")
+                print(evt.result.reason)
+                #if evt.result.reason == speechsdk.ResultReason.RecognizedSpeech:
+                    #print("Recognized: {}".format(evt.text))
+                #elif evt.result.reason == speechsdk.ResultReason.NoMatch:
+                # print("No speech could be recognized: {}".format(evt.no_match_details))
+                nonlocal transcriptions
+                transcriptions.append(result_text)
+
+            # Subscribe to the events fired by the conversation transcriber
+            transcriber.transcribed.connect(transcribed_cb)
+            transcriber.session_stopped.connect(stop_cb)
+            transcriber.canceled.connect(stop_cb)
+            
+            
+            
+            transcriber.start_transcribing_async()
+            _, wav_data = wavfile.read(wav_file_name)
+            stream.write(wav_data.tobytes())
+            stream.close()
+            while not done:
+                time.sleep(.5)
+            transcriber.stop_transcribing_async()
+            
+            with open(webm_file_name, "rb") as data:
+                bob_client = container_client.upload_blob(name=webm_file_name, data=data)
+            
+            transcription = ""
+            for text in transcriptions:
+                transcription += text
+        except:
+            raise
+        
+        #Translation
+        try:
+            jsonText = [{
+                'text': transcription
+            }]
+            
+            request = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
+            response = request.json()[0]
+        except:
+            raise ExceptionWithTranslation
+        
+        #Json data to store to cosmosDB
+        jsonBody = {
+                "username": username,
+                "industry": industry,
+                "interviewTitle": interviewTitle,
+                "interviewQuestion": interviewQuestion,
+                "interviewBlopURL": bob_client.url,
+                "interviewLanguage": response['detectedLanguage']["language"],
+                "trasncript": response['translations'],
+                "comments": [],
+                "rating": [],
+                "flags": [],
+                "private": private
+            }
+        try:
+            AzureData.containerInterviewData.create_item(jsonBody, enable_automatic_id_generation=True)
+        except:
+            raise ExceptionWithStoringToCosmosDB
+        
+        
+        #cleanup
+        if video_clip:
+            video_clip.close()
+            if(os.path.exists(webm_file_name)): os.remove(webm_file_name)
+            if(os.path.exists(wav_file_name)): os.remove(wav_file_name)
+        
         return HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}),mimetype="application/json")
+            
+        
     except Exception as e:
-        logging.error(e)
-        return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with submitting data to container"}),mimetype="application/json")
-  
-if __name__ == '__main__': 
-    main('test')
-    
-class BinaryFileReaderCallback(speechsdk.audio.PullAudioInputStreamCallback):
-        def __init__(self, filename: str):
-            super().__init__()
-            self._file_h = open(filename, "rb")
+        
+        #Check if files exists and delete them
+        if video_clip:
+            video_clip.close()
+            if(os.path.exists(webm_file_name)): os.remove(webm_file_name)
+            if(os.path.exists(wav_file_name)): os.remove(wav_file_name)
+            blob_client = container_client.get_blob_client(webm_file_name)
+            blob_exists = blob_client.exists()
+            if(blob_exists): container_client.delete_blob(name=webm_file_name)
+        
+        #custom error messages
+        if isinstance(e, ExceptionWithStoringToCosmosDB):
+            print(f"Caught a Storing To CosmosDB exception: {e}")
+            return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with submitting data to CosmosDB, please try again."}),mimetype="application/json")
+        elif isinstance(e, ExceptionWithTranslation):
+            return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with translating the transcription, please try again."}),mimetype="application/json")
+        elif isinstance(e, ExceptionWithTranslation):
+            return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with creation of files, please try again."}),mimetype="application/json")
+        elif isinstance(e, ExceptionWithTranscription):
+            return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with the creation of transcription, please try again."}),mimetype="application/json")
+        else:
+            return HttpResponse(body=json.dumps({"result": False , "msg" : "Unknown error, please try again."}),mimetype="application/json")       
+            
+class ExceptionWithStoringToCosmosDB(Exception):
+    pass
 
-        def read(self, buffer: memoryview) -> int:
-            try:
-                size = buffer.nbytes
-                frames = self._file_h.read(size)
+class ExceptionWithTranslation(Exception):
+    pass
 
-                buffer[:len(frames)] = frames
+class ExceptionWithCreatingFiles(Exception):
+    pass
 
-                return len(frames)
-            except Exception as ex:
-                print('Exception in `read`: {}'.format(ex))
-                raise
-
-        def close(self) -> None:
-            print('closing file')
-            try:
-                self._file_h.close()
-            except Exception as ex:
-                print('Exception in `close`: {}'.format(ex))
-                raise
+class ExceptionWithTranscription(Exception):
+    pass
