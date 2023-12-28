@@ -10,6 +10,7 @@ import AzureData as AzureData
 import os
 import uuid
 from moviepy.editor import VideoFileClip
+from interview_review.__init__ import send_to_ai
 
 
 translation_params = {
@@ -106,7 +107,18 @@ def main(req: HttpRequest) -> HttpResponse:
                 transcription += text
         except:
             raise
-        
+
+        # ChatGPT Part
+        # Call function with question + transcript as parameters
+        # Store the return value (interview feedback)
+        try:
+            output_feedback = send_to_ai(interviewQuestion, transcription)
+            # Need to sort out language part
+            language = 'en'
+        except:
+            raise
+
+
         #Translation
         try:
             jsonText = [{
@@ -126,10 +138,15 @@ def main(req: HttpRequest) -> HttpResponse:
                 "interviewQuestion": interviewQuestion,
                 "interviewBlopURL": bob_client.url,
                 "interviewLanguage": response['detectedLanguage']["language"],
-                "trasncript": response['translations'],
+                "transcript": response['translations'],
                 "comments": [],
                 "rating": [],
-                "flags": [],
+                "tips": [ 
+                    {
+                        "language": language,
+                        "ChatGPTResponse": output_feedback
+                    }
+                ],
                 "private": private
             }
         try:
