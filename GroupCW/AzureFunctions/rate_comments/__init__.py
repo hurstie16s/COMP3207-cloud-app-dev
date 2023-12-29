@@ -8,23 +8,47 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request to rate a comment.')
 
     try:
-        # Extracting data from the request
         req_body = req.get_json()
         comment_id = req_body.get('comment_id')
+        username = req_body.get('username')  
         rate_action = req_body.get('rate_action')  # 'like' for thumbs up, 'dislike' for thumbs down
 
-        # Retrieve the comment data
-        comment_item = AzureData.containerInterviewData.read_item(item=comment_id, partition_key=comment_id)
-        
+        # Retrieve the interview data that contains the comment
+        interview_data_query = f"SELECT * FROM c WHERE ARRAY_CONTAINS(c.comments, {{'id': '{comment_id}'}}, true)"
+        interview_data_list = list(AzureData.containerInterviewData.query_items(
+            query=interview_data_query,
+            enable_cross_partition_query=True
+        ))
+
+        if not interview_data_list:
+            return HttpResponse("No interview data found for the provided comment ID", status_code=404)
+
+        interview_data = interview_data_list[0]  
+        comments_list = interview_data.get('comments', [])
+
+        # Find the specific comment to rate
+        comment_to_rate = next((comment for comment in comments_list if comment['id'] == comment_id), None)
+        if not comment_to_rate:
+            return HttpResponse("Comment not found", status_code=404)
+
+        # Check if the user has already rated this comment
+        if username in comment_to_rate.get('thumbs_up', []) or username in comment_to_rate.get('thumbs_down', []):
+            return HttpResponse("You have already rated this comment", status_code=400)
+
+        # Apply the rating
         if rate_action == 'like':
-            comment_item['thumbs_up'] += 1
+            comment_to_rate.setdefault('thumbs_up', []).append(username)
         elif rate_action == 'dislike':
-            comment_item['thumbs_down'] += 1
+            comment_to_rate.setdefault('thumbs_down', []).append(username)
         else:
             return HttpResponse("Invalid rate action", status_code=400)
 
-        # Update the comment item in the database
-        AzureData.containerInterviewData.replace_item(item=comment_id, body=comment_item)
+        for i, comment in enumerate(comments_list):
+            if comment['id'] == comment_id:
+                comments_list[i] = comment_to_rate
+                break
+
+        AzureData.containerInterviewData.replace_item(item=interview_data['id'], body=interview_data)
 
         return HttpResponse("Comment rated successfully", status_code=200)
 
