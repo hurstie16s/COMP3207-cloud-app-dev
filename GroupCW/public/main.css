@@ -239,7 +239,7 @@ a {
 } */
 
 
-.sign-in, .sign-up, .reset-password {
+.sign-in, .sign-up, .reset-password, .new-password {
     /* width: 420px; */
     /* height: 520px; */
     display: grid;
@@ -252,7 +252,7 @@ a {
 
 }
 
-.sign-in>.item1, .sign-up>.item1, .reset-password>.item1 {
+.sign-in>.item1, .sign-up>.item1, .reset-password>.item1, .new-password>.item1 {
     color: rgb(var(--text));
     font-size: 3em;
     padding: 0 0 0.15em 0;
@@ -270,6 +270,11 @@ a {
     width: 100%;
 }
 
+.new-password>.item4, .new-password>.item5 {
+    grid-column: span 2;
+    width: 100%;
+}
+
 .sign-up>.item8 {
     grid-column: span 2;
 }
@@ -280,7 +285,7 @@ a {
     margin: 1em 0;
 }
 
-.reset-password>.item5 {
+.reset-password>.item5, .new-password>.item6 {
     grid-column: span 2;
 }
 
