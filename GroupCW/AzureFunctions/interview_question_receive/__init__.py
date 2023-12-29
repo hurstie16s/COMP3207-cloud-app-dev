@@ -22,6 +22,7 @@ def main(req: HttpRequest) -> HttpResponse:
     questions=[]
     for question in questionsResult :
         questionDict = {
+            "id" : question.get("id"),
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
             "regularity": question.get("regularity")
