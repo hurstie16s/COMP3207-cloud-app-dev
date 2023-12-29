@@ -51,11 +51,13 @@ class TestAddUserFunction(unittest.TestCase):
         response = requests.get(url=self.TEST_URL, data={"username": self.testUsername, "password": self.testPassword})
         self.assertEqual(response.status_code, 200)
 
+    """
     def tearDown(self):
         DBFunctions.delete_item(
             id=self.testUsername, 
             container=AzureData.containerUsers
         )
+    """
         
 if __name__ == '__main__':
     unittest.main()
