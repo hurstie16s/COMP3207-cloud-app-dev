@@ -84,14 +84,3 @@ function handleLogin(username, password) { //call api here
   }
 }
 
-function getHelper(data, endpoint) {
-
-}
-
-function postHelper(data, endpoint) {
-
-}
-
-function putHelper(data, endpoint) {
-
-}

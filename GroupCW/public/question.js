@@ -23,10 +23,3 @@ var app = new Vue({
       }
 });
 
-
-//any functions outside of vue here:
-
-
-
-//---------------------------------------------------------
-// Dummies
