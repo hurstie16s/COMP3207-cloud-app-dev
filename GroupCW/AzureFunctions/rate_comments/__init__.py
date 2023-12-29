@@ -1,6 +1,7 @@
 import logging
 import json
 import AzureData
+
 from azure.functions import HttpRequest, HttpResponse
 
 
@@ -29,6 +30,7 @@ def main(req: HttpRequest) -> HttpResponse:
         comment_to_rate = next((comment for comment in comments_list if comment['id'] == comment_id), None)
         if not comment_to_rate:
             return HttpResponse("Comment not found", status_code=404)
+
 
         # Initialize lists if they don't exist
         comment_to_rate.setdefault('thumbs_up', [])
