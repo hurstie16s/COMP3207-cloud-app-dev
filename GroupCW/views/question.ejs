@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('header'); -%>
+
+<body>
+    <div id="question">
+        <%- include('navbar'); -%>
+
+<section class="question-page">
+    <section class="question-main card rounded shadowed">
+        <div class="question-main-header">
+            <h2 class="underlined">Question</h2>
+            <div class="tags">
+                <span class="chip chip-regularity-standard"></span>
+                <span class="chip chip-difficulty-beginner"></span>
+            </div>
+        </div>
+        <h2 class="question-text">Tell me about yourself</h2>
+        <div class="recording">
+            <button class="material-symbols-rounded icon-button red-button">mic</button>
+            <button class="material-symbols-rounded icon-button red-button hidden">stop_circle</button>
+        </div>
+
+    </section>
+
+    <!-- <div class="playback_controls">
+        <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
+        <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
+        <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+    </div> -->
+    <section class="question-advice card rounded shadowed">
+        <h2 class="underlined">Advice</h2>
+        <ul>
+            <li>Start with a Strong Opening: Begin with a concise and compelling introduction that grabs the
+                interviewer's attention.</li>
+
+            <li>Provide a Brief Professional Overview: Share key aspects of your professional background, such
+                as your education, relevant experience, and current role.</li>
+
+            <li>Highlight Key Achievements: Mention notable accomplishments and projects to showcase your skills
+                and contributions.</li>
+
+            <li>Connect to the Job: Tailor your response by emphasizing experiences and skills that align with
+                the requirements of the position.</li>
+
+            <li>Showcase Soft Skills: Discuss interpersonal skills, teamwork, and adaptability to demonstrate
+                your overall fit for the company culture.</li>
+
+            <li>Express Passion and Motivation: Share your enthusiasm for the industry and the specific role,
+                conveying genuine interest in the opportunity.</li>
+
+            <li>Keep it Concise: Aim for a response that lasts around 2-3 minutes, focusing on the most relevant
+                and impactful information.</li>
+        </ul>
+    </section>
+    <section class="your-responses card rounded shadowed">
+        <h2 class="underlined">Your Responses</h2>
+
+        <div class="response card rounded shadowed">
+            <div class="response-meta">
+                <p class="username"><span class="material-symbols-rounded">person</span>John Smith
+                </p>
+                <span class="timestamp">19/12/2023 at 13:45</span>
+            </div>
+
+
+            <div class="response-options">
+                <span class="avg-rating flex-center">4.2<span
+                        class="material-symbols-rounded star-filled">star_rate</span></span>
+                <input type="checkbox" id="visibility-toggle-1" class="toggle hidden">
+                <label class="toggle-label" for="visibility-toggle-1" title="Public visibility toggle">
+                    <span class="material-symbols-rounded toggle-on">visibility</span>
+                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
+                </label>
+                <input type="checkbox" id="transcript-toggle-1" class="toggle hidden">
+                <label class="toggle-label" for="transcript-toggle-1" title="Toggle transcript">
+                    <span class="material-symbols-rounded toggle-on">description</span>
+                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
+                </label>
+                <input type="checkbox" id="comments-toggle-1" class="toggle hidden">
+                <label class="toggle-label" for="comments-toggle-1" title="Toggle comments">
+                    <span class="material-symbols-rounded toggle-on">comment</span>
+                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
+                </label>
+                <button
+                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
+            </div>
+
+            <div class="response-timeline">
+                <hr>
+            </div>
+            <div class="response-controls">
+                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+            </div>
+            <div class="response-rating hidden">
+                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+            </div>
+            <div class="response-transcript">
+                <h3 class="underlined">Transcript</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis tellus ac congue
+                    tempus. Cras sed lectus sed massa dictum commodo eu in sapien. Nulla id bibendum magna, at
+                    porttitor dolor. Phasellus dapibus ligula erat, at suscipit arcu malesuada ut. Fusce egestas
+                    neque id felis dictum, eu consectetur leo sollicitudin. Curabitur tempor rhoncus nisi eu
+                    porta. Curabitur bibendum sollicitudin urna vel egestas. Duis augue massa, laoreet eu
+                    fermentum sed, rutrum sit amet ante. Pellentesque tincidunt ultricies vestibulum. Phasellus
+                    condimentum quam leo, ac bibendum libero efficitur id. In mauris urna, egestas in velit vel,
+                    scelerisque suscipit magna. Sed volutpat volutpat velit, vitae molestie nulla fringilla ut.
+                    Sed pellentesque lacus eget bibendum pulvinar.</p>
+            </div>
+            <div class="response-comments">
+                <h3 class="underlined">Comments</h3>
+                <div class="comment rounded">
+                    <p class="comment-username"><span class="material-symbols-rounded">person</span>Chris Doe
+                    </p>
+                    <p class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis tellus ac congue
+                        tempus. Cras sed lectus sed massa dictum commodo eu in sapien.</p>
+                    <div class="like-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button liked">thumb_up</button>
+                        <span>12</span>
+                    </div>
+                    <div class="dislike-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
+                        <span>2</span>
+                    </div>
+                </div>
+                <div class="comment rounded">
+                    <p class="comment-username"><span class="material-symbols-rounded">person</span>Penny Tool
+                    </p>
+                    <p class="comment-text">Nunc convallis tellus ac congue tempus.</p>
+                    <div class="like-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button">thumb_up</button>
+                        <span>4</span>
+                    </div>
+                    <div class="dislike-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button disliked">thumb_down</button>
+                        <span>1</span>
+                    </div>
+                </div>
+                <div class="comment rounded">
+                    <p class="comment-username"><span class="material-symbols-rounded">person</span>Theodore
+                        Handle</p>
+                    <p class="comment-text">Cras sed lectus sed massa dictum commodo eu in sapien.</p>
+                    <div class="like-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button">thumb_up</button>
+                        <span>17</span>
+                    </div>
+                    <div class="dislike-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
+                        <span>0</span>
+                    </div>
+                </div>
+                <div class="new-comment">
+                    <textarea class="input" placeholder="Add a comment..."></textarea>
+                    <button class="material-symbols-rounded icon-button">chevron_right</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="response card rounded shadowed">
+            <div class="response-meta">
+                <p class="username"><span class="material-symbols-rounded">person</span>John Smith
+                </p>
+                <span class="timestamp">19/12/2023 at 14:19</span>
+            </div>
+
+            <div class="response-options">
+                <span class="avg-rating flex-center">3.8<span
+                        class="material-symbols-rounded star-filled">star_rate</span></span>
+                <input type="checkbox" id="visibility-toggle-2" class="toggle hidden">
+                <label class="toggle-label" for="visibility-toggle-2">
+                    <span class="material-symbols-rounded toggle-on">visibility</span>
+                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
+                </label>
+                <input type="checkbox" id="transcript-toggle-2" class="toggle hidden">
+                <label class="toggle-label" for="transcript-toggle-2">
+                    <span class="material-symbols-rounded toggle-on">description</span>
+                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
+                </label>
+                <input type="checkbox" id="comments-toggle-2" class="toggle hidden">
+                <label class="toggle-label" for="comments-toggle-2">
+                    <span class="material-symbols-rounded toggle-on">comment</span>
+                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
+                </label>
+                <button
+                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
+            </div>
+
+            <div class="response-timeline">
+                <hr>
+            </div>
+            <div class="response-controls">
+                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+            </div>
+            <div class="response-rating hidden">
+                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+            </div>
+        </div>
+    </section>
+    <section class="community-responses card rounded shadowed">
+        <h2 class="underlined">Community Responses</h2>
+
+        <div class="filters">
+
+        </div>
+
+        <div class="response card rounded shadowed">
+            <div class="response-meta">
+                <p class="username"><span class="material-symbols-rounded">person</span>Jane Doe
+                </p>
+                <span class="timestamp">9/12/2023 at 19:00</span>
+            </div>
+
+            <div class="response-options">
+                <span class="avg-rating flex-center">4.9<span
+                        class="material-symbols-rounded star-filled">star_rate</span></span>
+                <input type="checkbox" id="transcript-toggle-3" class="toggle hidden">
+                <label class="toggle-label" for="transcript-toggle-3">
+                    <span class="material-symbols-rounded toggle-on">description</span>
+                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
+                </label>
+                <input type="checkbox" id="comments-toggle-3" class="toggle hidden">
+                <label class="toggle-label" for="comments-toggle-3">
+                    <span class="material-symbols-rounded toggle-on">comment</span>
+                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
+                </label>
+            </div>
+
+            <div class="response-timeline">
+                <hr>
+            </div>
+            <div class="response-controls">
+                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+            </div>
+            <div class="response-rating">
+                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+            </div>
+        </div>
+
+        <div class="response card rounded shadowed">
+            <div class="response-meta">
+                <p class="username"><span class="material-symbols-rounded">person</span>Jane Smith
+                </p>
+                <span class="timestamp">10/11/2023 at 12:15</span>
+            </div>
+
+            <div class="response-options">
+                <span class="avg-rating flex-center">4.2<span
+                        class="material-symbols-rounded star-filled">star_rate</span></span>
+                <input type="checkbox" id="transcript-toggle-4" class="toggle hidden">
+                <label class="toggle-label" for="transcript-toggle-4">
+                    <span class="material-symbols-rounded toggle-on">description</span>
+                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
+                </label>
+                <input type="checkbox" id="comments-toggle-4" class="toggle hidden">
+                <label class="toggle-label" for="comments-toggle-4">
+                    <span class="material-symbols-rounded toggle-on">comment</span>
+                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
+                </label>
+            </div>
+
+            <div class="response-timeline">
+                <hr>
+            </div>
+            <div class="response-controls">
+                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+            </div>
+            <div class="response-rating">
+                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star">star_rate</span>
+            </div>
+        </div>
+    </section>
+</section>
+
+</main>
+</div>
+
+<%- include('footer'); -%>
+
+<!-- Application Javascript -->
+<script defer src="/static/question.js"></script>
+
+</body>
+</html>

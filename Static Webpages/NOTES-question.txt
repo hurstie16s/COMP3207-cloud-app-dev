@@ -1,0 +1,18 @@
+Usernames, classes `.username` and `.comment-username` should be clickable and lead to the user's account page
+
+Document icon should toggle transcript section
+
+Speech bubble should toggle comments
+
+Star rating is an average of all ratings rounded to 1 d.p, set to hyphen if not rated yet
+
+Bin icon should only be visible to user's own responses, it should delete the post
+
+
+Horizontal line is placeholder for a waveform of the Speech
+
+When the recording microphone is clicked, it should hide and be replaced with the stop button.
+
+CLicking stop adds a new item to the your recordings section
+
+The tags 'standard', 'beginner', etc. will be clickable and take you to the interview search results with the tag applied as a filter
