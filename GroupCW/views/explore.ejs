@@ -47,81 +47,52 @@
         <h2 class="underlined header-margin">Filters</h2>
         <h3 class="underlined header-margin">Regularity</h3>
         <div class="filter regularity-filter tags">
-            <input type="radio" name="regualrity" id="regularity-all" checked>
+            <input type="radio" name="regularity" id="regularity-all" value="-1" v-model.number="filterRegularity" checked>
             <label for="regularity-all" class="chip chip-regularity-all"></label>
-            <input type="radio" name="regualrity" id="regularity-standard">
+            <input type="radio" name="regularity" id="regularity-standard" value="0" v-model.number="filterRegularity">
             <label for="regularity-standard" class="chip chip-regularity-standard"></label>
-            <input type="radio" name="regualrity" id="regularity-infrequent">
+            <input type="radio" name="regularity" id="regularity-infrequent" value="1" v-model.number="filterRegularity">
             <label for="regularity-infrequent" class="chip chip-regularity-infrequent"></label>
-            <input type="radio" name="regualrity" id="regularity-unusual">
+            <input type="radio" name="regularity" id="regularity-unusual" value="2" v-model.number="filterRegularity">
             <label for="regularity-unusual" class="chip chip-regularity-unusual"></label>
         </div>
         <h3 class="underlined header-margin">Difficulty</h3>
         <div class="filter difficulty-filter tags">
-            <input type="radio" name="difficulty" id="difficulty-all" checked>
+            <input type="radio" name="difficulty" id="difficulty-all" value="-1" v-model.number="filterDifficulty" checked>
             <label for="difficulty-all" class="chip chip-difficulty-all"></label>
-            <input type="radio" name="difficulty" id="difficulty-beginner">
+            <input type="radio" name="difficulty" id="difficulty-beginner" value="0" v-model.number="filterDifficulty">
             <label for="difficulty-beginner" class="chip chip-difficulty-beginner"></label>
-            <input type="radio" name="difficulty" id="difficulty-intermediate">
+            <input type="radio" name="difficulty" id="difficulty-intermediate" value="1" v-model.number="filterDifficulty">
             <label for="difficulty-intermediate" class="chip chip-difficulty-intermediate"></label>
-            <input type="radio" name="difficulty" id="difficulty-advanced">
+            <input type="radio" name="difficulty" id="difficulty-advanced" value="2" v-model.number="filterDifficulty">
             <label for="difficulty-advanced" class="chip chip-difficulty-advanced"></label>
         </div>
     </section>
     <section class="search rounded card shadowed bordered">
         <h2 class="underlined">Search</h2>
         <div class="search-container">
-            <input type="text" class="input" placeholder="Search...">
-            <button class="material-symbols-rounded icon-button">chevron_right</button>
+            <input type="text" class="input" placeholder="Search..." v-model="search">
         </div>
-        <div class="question rounded">
-            <p class="question-text">Tell me about yourself</p>
+        <div class="question rounded" v-for="question in filteredQuestions">
+            <p class="question-text">{{ question.question }}</p>
             <hr>
             <div class="question-meta">
                 <div>
                     <p class="question-response-count flex-center"><span
-                            class="material-symbols-rounded">sticky_note_2</span> 432
+                            class="material-symbols-rounded">sticky_note_2</span> ???
                         Responses</p>
                     <div>
-                        <span class="chip chip-regularity-standard"></span>
-                        <span class="chip chip-difficulty-beginner"></span>
+                        <span class="chip chip-regularity-standard" v-if="question.regularity === 0"></span>
+                        <span class="chip chip-regularity-infrequent" v-else-if="question.regularity === 1"></span>
+                        <span class="chip chip-regularity-unusual" v-else-if="question.regularity === 2"></span>
+                        
+                        <span class="chip chip-difficulty-beginner" v-if="question.difficulty === 0"></span>
+                        <span class="chip chip-difficulty-intermediate" v-else-if="question.difficulty === 1"></span>
+                        <span class="chip chip-difficulty-advanced" v-else-if="question.difficulty === 2"></span>
                     </div>
                 </div>
                 <button class="material-symbols-rounded icon-button"
                     onclick="location.href='/question'">chevron_right</button>
-            </div>
-        </div>
-        <div class="question rounded">
-            <p class="question-text">Why do you want to work at this company?</p>
-            <hr>
-            <div class="question-meta">
-                <div>
-                    <p class="question-response-count flex-center"><span
-                            class="material-symbols-rounded">sticky_note_2</span> 387
-                        Responses</p>
-                    <div>
-                        <span class="chip chip-regularity-standard"></span>
-                        <span class="chip chip-difficulty-beginner"></span>
-                    </div>
-                </div>
-                <button class="material-symbols-rounded icon-button">chevron_right</button>
-            </div>
-        </div>
-        <div class="question rounded">
-            <p class="question-text">Tell me about a time where you had to work as part of a team</p>
-            <hr>
-            <div class="question-meta">
-                <div>
-
-                    <p class="question-response-count flex-center"><span
-                            class="material-symbols-rounded">sticky_note_2</span> 210
-                        Responses</p>
-                        <div>
-                            <span class="chip chip-regularity-standard"></span>
-                            <span class="chip chip-difficulty-beginner"></span>
-                        </div>
-                </div>
-                <button class="material-symbols-rounded icon-button">chevron_right</button>
             </div>
         </div>
     </section>
