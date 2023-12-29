@@ -3,6 +3,7 @@ var app = new Vue({
     //All data here
     data: {
       user: null,
+      search: '',
       questions: [],
     },
     //On Awake methods here:
@@ -41,7 +42,11 @@ var app = new Vue({
     },
     //FrontEnd methods here:
     computed: {
-        
+      filteredQuestions() {
+        return this.questions.filter(question => {
+          return question.question.toLowerCase().includes(this.search.toLowerCase());
+        });
+      }
     },
     beforeMount() {
       this.loadQuestions();

@@ -71,10 +71,9 @@
     <section class="search rounded card shadowed bordered">
         <h2 class="underlined">Search</h2>
         <div class="search-container">
-            <input type="text" class="input" placeholder="Search...">
-            <button class="material-symbols-rounded icon-button">chevron_right</button>
+            <input type="text" class="input" placeholder="Search..." v-model="search">
         </div>
-        <div class="question rounded" v-for="question in questions">
+        <div class="question rounded" v-for="question in filteredQuestions">
             <p class="question-text">{{ question.question }}</p>
             <hr>
             <div class="question-meta">
