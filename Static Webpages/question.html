@@ -37,7 +37,22 @@
                 <h2 class="question-text">Tell me about yourself</h2>
                 <div class="recording">
                     <button class="material-symbols-rounded icon-button red-button">mic</button>
+                    <!-- Display stop_circle when mic is clicked -->
                     <button class="material-symbols-rounded icon-button red-button hidden">stop_circle</button>
+                    <!-- Display options to submit recording when stop_circle is clicked -->
+                    <div class="hidden recording-submission">
+                        <button class="red-button">Delete Recording</button>
+                        <div class="tooltip" tooltip-text="Select Industry">
+                            <select name="industry">
+                                <option>Computer Science</option>
+                                <option>Engineering</option>
+                                <option>Finance</option>
+                                <option>Law</option>
+                                <option>Retail</option>
+                            </select>
+                        </div>
+                        <button>Submit Recording</button>
+                    </div>
                 </div>
 
             </section>
@@ -73,8 +88,28 @@
                 </ul>
             </section>
             <section class="your-responses card rounded shadowed">
-                <h2 class="underlined">Your Responses</h2>
-
+                <div class="respones-header">
+                    <h2 class="underlined">My Responses</h2>
+                    <div>
+                        <div class="tooltip" tooltip-text="Filter by Industry">
+                            <select name="industry">
+                                <option>All Industries</option>
+                                <option>Computer Science</option>
+                                <option>Engineering</option>
+                                <option>Finance</option>
+                                <option>Law</option>
+                                <option>Retail</option>
+                            </select>
+                        </div>
+                        <div class="tooltip" tooltip-text="Sort By">
+                            <select name="industry">
+                                <option>Rating</option>
+                                <option>Date</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
                 <div class="response card rounded shadowed">
                     <div class="response-meta">
                         <p class="username"><span class="material-symbols-rounded">person</span>@JohnSmith
@@ -87,22 +122,22 @@
                         <span class="avg-rating flex-center">4.2<span
                                 class="material-symbols-rounded star-filled">star_rate</span></span>
                         <input type="checkbox" id="visibility-toggle-1" class="toggle hidden">
-                        <label class="toggle-label" for="visibility-toggle-1" title="Public visibility toggle">
+                        <label class="toggle-label tooltip" for="visibility-toggle-1" tooltip-text="Toggle Response Public/Private">
                             <span class="material-symbols-rounded toggle-on">visibility</span>
                             <span class="material-symbols-rounded toggle-off">visibility_off</span>
                         </label>
                         <input type="checkbox" id="transcript-toggle-1" class="toggle hidden">
-                        <label class="toggle-label" for="transcript-toggle-1" title="Toggle transcript">
+                        <label class="toggle-label tooltip" for="transcript-toggle-1" tooltip-text="Toggle Transcript">
                             <span class="material-symbols-rounded toggle-on">description</span>
                             <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                         </label>
                         <input type="checkbox" id="comments-toggle-1" class="toggle hidden">
-                        <label class="toggle-label" for="comments-toggle-1" title="Toggle comments">
+                        <label class="toggle-label tooltip" for="comments-toggle-1" tooltip-text="Toggle Comments">
                             <span class="material-symbols-rounded toggle-on">comment</span>
                             <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                         </label>
                         <button
-                            class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
+                            class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip" tooltip-text="Delete Response">delete</button>
                     </div>
 
                     <div class="response-timeline">
@@ -112,6 +147,7 @@
                         <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
                         <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                        <span class="response-timestamp">00:00</span>
                     </div>
                     <div class="response-rating hidden">
                         <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
@@ -136,47 +172,65 @@
                     <div class="response-comments">
                         <h3 class="underlined">Comments</h3>
                         <div class="comment rounded">
-                            <p class="comment-username"><span class="material-symbols-rounded">person</span>@ChrisDoe
-                            </p>
-                            <p class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis tellus ac congue
+                            <div class="response-meta">
+                                <p class="comment-username"><span
+                                        class="material-symbols-rounded">person</span>@ChrisDoe
+                                </p>
+                                <span class="timestamp">20/12/2023 at 16:45</span>
+                            </div>
+                            <p class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+                                convallis tellus ac congue
                                 tempus. Cras sed lectus sed massa dictum commodo eu in sapien.</p>
                             <div class="like-count rounded">
-                                <button class="icon-button material-symbols-rounded minimal-button liked">thumb_up</button>
+                                <button
+                                    class="icon-button material-symbols-rounded minimal-button liked">thumb_up</button>
                                 <span>12</span>
                             </div>
                             <div class="dislike-count rounded">
-                                <button class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
+                                <button
+                                    class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
                                 <span>2</span>
                             </div>
                         </div>
                         <div class="comment rounded">
-                            <p class="comment-username"><span class="material-symbols-rounded">person</span>@PennyTool
-                            </p>
+                            <div class="response-meta">
+                                <p class="comment-username"><span
+                                        class="material-symbols-rounded">person</span>@PennyTool
+                                </p>
+                                <span class="timestamp">20/12/2023 at 16:45</span>
+                            </div>
                             <p class="comment-text">Nunc convallis tellus ac congue tempus.</p>
+
                             <div class="like-count rounded">
                                 <button class="icon-button material-symbols-rounded minimal-button">thumb_up</button>
                                 <span>12</span>
                             </div>
                             <div class="dislike-count rounded">
-                                <button class="icon-button material-symbols-rounded minimal-button minimal-red-button disliked">thumb_down</button>
+                                <button
+                                    class="icon-button material-symbols-rounded minimal-button minimal-red-button disliked">thumb_down</button>
                                 <span>2</span>
                             </div>
                         </div>
                         <div class="comment rounded">
-                            <p class="comment-username"><span class="material-symbols-rounded">person</span>@TheodoreHandle</p>
+                            <div class="response-meta">
+                                <p class="comment-username"><span
+                                        class="material-symbols-rounded">person</span>@TheodoreHandle</p>
+                                <span class="timestamp">20/12/2023 at 16:45</span>
+                            </div>
                             <p class="comment-text">Cras sed lectus sed massa dictum commodo eu in sapien.</p>
                             <div class="like-count rounded">
                                 <button class="icon-button material-symbols-rounded minimal-button">thumb_up</button>
                                 <span>12</span>
                             </div>
                             <div class="dislike-count rounded">
-                                <button class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
+                                <button
+                                    class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
                                 <span>2</span>
                             </div>
                         </div>
                         <div class="new-comment">
                             <textarea class="input" placeholder="Add a comment..."></textarea>
-                            <button class="material-symbols-rounded icon-button">chevron_right</button>
+                            <button class="material-symbols-rounded icon-button tooltip" tooltip-text="Post Comment">chevron_right</button>
                         </div>
                     </div>
                 </div>
@@ -217,6 +271,7 @@
                         <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
                         <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                        <span class="response-timestamp">00:00</span>
                     </div>
                     <div class="response-rating hidden">
                         <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
@@ -229,7 +284,28 @@
                 </div>
             </section>
             <section class="community-responses card rounded shadowed">
-                <h2 class="underlined">Community Responses</h2>
+                <div class="respones-header">
+                    <h2 class="underlined">Community Responses</h2>
+                    <div>
+                        <div class="tooltip" tooltip-text="Filter by Industry">
+                            <select name="industry">
+                                <option>All Industries</option>
+                                <option>Computer Science</option>
+                                <option>Engineering</option>
+                                <option>Finance</option>
+                                <option>Law</option>
+                                <option>Retail</option>
+                            </select>
+                        </div>
+                        <div class="tooltip" tooltip-text="Sort By">
+                            <select name="industry">
+                                <option>Rating</option>
+                                <option>Date</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
 
                 <div class="filters">
 
@@ -264,6 +340,7 @@
                         <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
                         <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                        <span class="response-timestamp">00:00</span>
                     </div>
                     <div class="response-rating">
                         <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
@@ -304,6 +381,7 @@
                         <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
                         <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                        <span class="response-timestamp">00:00</span>
                     </div>
                     <div class="response-rating">
                         <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
