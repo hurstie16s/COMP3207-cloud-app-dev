@@ -43,15 +43,3 @@ function handlePasswordReset() {
   //call api
   return {result: false, msg: 'Email does not exist'}
 }
-
-function getHelper(data, endpoint) {
-
-}
-
-function postHelper(data, endpoint) {
-
-}
-
-function putHelper(data, endpoint) {
-
-}
