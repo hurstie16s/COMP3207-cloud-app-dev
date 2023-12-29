@@ -1,6 +1,9 @@
 # System Imports
 import logging
 import json
+import secrets
+import random
+import string
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
@@ -19,6 +22,32 @@ def main(req: HttpRequest) -> HttpResponse:
 
     userInfo = getUserData(username)
 
+    # Create random password
+    randomPassword = generateRandomPassword()
+
+    # Hash random password
+    randomPasswordHash = PasswordFunctions.hash_password(randomPassword)
+
+    # Update User info
+    newDict = {
+        "password": randomPasswordHash,
+        "change_password": True
+    }
+
+    userInfo.update(newDict)
+
+    # Update Database
+    DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
+
+    # Send Email
+    # TODO
+
+    # Return HttpResponse
+    output = {"result": True, "msg": "Password Reset"}
+    code = 203
+    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+
+
 
 
 
@@ -33,3 +62,13 @@ def getUserData(username: str):
     )
 
     return result[0]
+
+def generateRandomPassword():
+
+    length = random.randint(12,20)
+
+    password = ""
+    for i in range(length):
+        password += secrets.choice(string.ascii_letters+string.digits)
+
+    return password
