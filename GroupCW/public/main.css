@@ -964,3 +964,18 @@ option {
 .landing img {
     max-width:80%;
 }
+
+.spinner {
+    font-size: 4rem !important;
+    animation: spin 1.3s infinite linear;
+}
+
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
