@@ -10,7 +10,7 @@ var app = new Vue({
     },
     //On Awake methods here:
     mounted: function() {
-      this.getUserCookie();
+      
     },
     //Js Methods here:
     methods: {
@@ -41,6 +41,7 @@ var app = new Vue({
       }
     },
     beforeMount() {
+      this.user = getUserCookie();
       this.loadQuestions();
     }
 });

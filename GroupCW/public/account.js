@@ -7,7 +7,7 @@ var app = new Vue({
     },
     //On Awake methods here:
     mounted: function() {
-      this.user = getUserCookie();
+      
     },
     //Js Methods here:
     methods: {
@@ -20,6 +20,10 @@ var app = new Vue({
     //FrontEnd methods here:
     computed: {
         
-      }
+      },
+
+    beforeMount() {
+      this.user = getUserCookie();
+    }
 });
 
