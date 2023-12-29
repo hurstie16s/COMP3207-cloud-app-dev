@@ -43,6 +43,11 @@ app.get('/reset-password', (req, res) => {
   res.render('reset-password');
 });
 
+app.get('/set-new-password', (req, res) => {
+  const userCookie = req.cookies.user;
+  userCookie ? res.render('set-new-password') : res.redirect('sign-in');
+});
+
 app.get('/explore', (req, res) => {
   const userCookie = req.cookies.user;
   userCookie ? res.render('explore') : res.redirect('sign-in');
