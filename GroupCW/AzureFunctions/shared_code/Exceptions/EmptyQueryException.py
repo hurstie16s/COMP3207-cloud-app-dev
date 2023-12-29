@@ -1,0 +1,2 @@
+class EmptyQueryException(Exception):
+    pass

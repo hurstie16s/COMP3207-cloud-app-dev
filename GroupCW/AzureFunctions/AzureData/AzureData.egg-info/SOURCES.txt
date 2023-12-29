@@ -1,0 +1,6 @@
+AzureData.py
+setup.py
+AzureData.egg-info/PKG-INFO
+AzureData.egg-info/SOURCES.txt
+AzureData.egg-info/dependency_links.txt
+AzureData.egg-info/top_level.txt
