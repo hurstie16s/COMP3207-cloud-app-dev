@@ -49,20 +49,20 @@ def main(req: HttpRequest) -> HttpResponse:
         username = req_body.get('username')
         password = req_body.get('password')
     except ValueError:
-        return HttpResponse("Invalid request body", status_code=400)
+        return HttpResponse("Invalid request body", status_code=200)
 
     if not is_valid_email(email):
-        return HttpResponse("Invalid email format", status_code=400)
+        return HttpResponse("Invalid email format", status_code=200)
     
-    if not asyncio.run(is_email_unique(email)):
-        return HttpResponse("Email is already registered", status_code=400)
+    if not asyncio.run(is_email_unique(email))
+        return HttpResponse("Email is already registered", status_code=200)
 
     if not asyncio.run(is_username_unique(username)):
-        return HttpResponse("Username is already taken", status_code=400)
+        return HttpResponse("Username is already taken", status_code=200)
 
     password_issues = validate_password(password)
     if password_issues:  # If the list is not empty, report the issues
-        return HttpResponse(f"Password is invalid for the following reason(s): {'; '.join(password_issues)}", status_code=400)
+        return HttpResponse(f"Password is invalid for the following reason(s): {'; '.join(password_issues)}", status_code=200)
     hashed_password = hash_password(password)
 
     new_user = {

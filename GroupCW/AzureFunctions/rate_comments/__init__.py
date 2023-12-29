@@ -22,14 +22,14 @@ def main(req: HttpRequest) -> HttpResponse:
         ))
 
         if not interview_data_list:
-            return HttpResponse("No interview data found for the provided comment ID", status_code=404)
+            return HttpResponse("No interview data found for the provided comment ID", status_code=200)
 
         interview_data = interview_data_list[0]  
         comments_list = interview_data.get('comments', [])
 
         comment_to_rate = next((comment for comment in comments_list if comment['id'] == comment_id), None)
         if not comment_to_rate:
-            return HttpResponse("Comment not found", status_code=404)
+            return HttpResponse("Comment not found", status_code=200)
 
 
         # Initialize lists if they don't exist
@@ -52,7 +52,7 @@ def main(req: HttpRequest) -> HttpResponse:
                     comment_to_rate['thumbs_up'].remove(username)
                 comment_to_rate['thumbs_down'].append(username)
         else:
-            return HttpResponse("Invalid rate action", status_code=400)
+            return HttpResponse("Invalid rate action", status_code=200)
 
         # Update the comment in the list
         for i, comment in enumerate(comments_list):

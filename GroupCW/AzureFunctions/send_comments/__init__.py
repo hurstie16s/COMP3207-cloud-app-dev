@@ -25,7 +25,7 @@ def main(req: HttpRequest) -> HttpResponse:
             break
 
         if not interview_data:
-            return HttpResponse("Interview data not found for the provided question", status_code=404)
+            return HttpResponse("Interview data not found for the provided question", status_code=200)
 
         # Append the new comment to the 'comments' list
         comment_data = {
