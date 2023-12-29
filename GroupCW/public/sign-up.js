@@ -59,31 +59,9 @@ var app = new Vue({
       }
 });
 
-function setCookie(username) {
-  // Set the 'user' cookie with an expiration time of 1 hour
-  const expirationDate = new Date();
-  expirationDate.setTime(expirationDate.getTime() + (1 * 60 * 60 * 1000)); // 1 hour
-  document.cookie = `user=${username}; expires=${expirationDate.toUTCString()}; path=/`;
-}
-
 //---------------------------------------------------------
 // Dummies
 function handleRegister() {
   //call api
   return {result: true, msg: 'OK'}
-}
-
-
-
-
-function getHelper(data, endpoint) {
-
-}
-
-function postHelper(data, endpoint) {
-
-}
-
-function putHelper(data, endpoint) {
-
 }
