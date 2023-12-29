@@ -49,9 +49,12 @@ def main(req: HttpRequest) -> HttpResponse:
         # Hash new password
         newPasswordHash = PasswordFunctions.hash_password(password=newPassword)
 
-        newDict = {"password": newPasswordHash}
+        newDict = {
+            "password": newPasswordHash,
+            "change_password": False
+        }
 
-        # Update userInfo with new password
+        # Update userInfo with new password and ensure flag is false
         userInfo.update(newDict)
 
         # Update database
