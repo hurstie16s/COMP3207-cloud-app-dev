@@ -1,10 +1,11 @@
+let stream;
 let recorder = null;
 let chunks = [];
 
 export default {
     start: async function () {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
         recorder.start();
 
@@ -19,6 +20,10 @@ export default {
     stop: async function () {
       if (recorder === null) return;
       recorder.stop();
+
+      if (stream !== null) {
+        stream.getTracks().forEach(track => track.stop());
+      }
 
       return new Promise(resolve => {
         recorder.onstop = e => {
