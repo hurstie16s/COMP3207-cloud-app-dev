@@ -47,24 +47,24 @@
         <h2 class="underlined header-margin">Filters</h2>
         <h3 class="underlined header-margin">Regularity</h3>
         <div class="filter regularity-filter tags">
-            <input type="radio" name="regualrity" id="regularity-all" checked>
+            <input type="radio" name="regularity" id="regularity-all" value="-1" v-model.number="filterRegularity" checked>
             <label for="regularity-all" class="chip chip-regularity-all"></label>
-            <input type="radio" name="regualrity" id="regularity-standard">
+            <input type="radio" name="regularity" id="regularity-standard" value="0" v-model.number="filterRegularity">
             <label for="regularity-standard" class="chip chip-regularity-standard"></label>
-            <input type="radio" name="regualrity" id="regularity-infrequent">
+            <input type="radio" name="regularity" id="regularity-infrequent" value="1" v-model.number="filterRegularity">
             <label for="regularity-infrequent" class="chip chip-regularity-infrequent"></label>
-            <input type="radio" name="regualrity" id="regularity-unusual">
+            <input type="radio" name="regularity" id="regularity-unusual" value="2" v-model.number="filterRegularity">
             <label for="regularity-unusual" class="chip chip-regularity-unusual"></label>
         </div>
         <h3 class="underlined header-margin">Difficulty</h3>
         <div class="filter difficulty-filter tags">
-            <input type="radio" name="difficulty" id="difficulty-all" checked>
+            <input type="radio" name="difficulty" id="difficulty-all" value="-1" v-model.number="filterDifficulty" checked>
             <label for="difficulty-all" class="chip chip-difficulty-all"></label>
-            <input type="radio" name="difficulty" id="difficulty-beginner">
+            <input type="radio" name="difficulty" id="difficulty-beginner" value="0" v-model.number="filterDifficulty">
             <label for="difficulty-beginner" class="chip chip-difficulty-beginner"></label>
-            <input type="radio" name="difficulty" id="difficulty-intermediate">
+            <input type="radio" name="difficulty" id="difficulty-intermediate" value="1" v-model.number="filterDifficulty">
             <label for="difficulty-intermediate" class="chip chip-difficulty-intermediate"></label>
-            <input type="radio" name="difficulty" id="difficulty-advanced">
+            <input type="radio" name="difficulty" id="difficulty-advanced" value="2" v-model.number="filterDifficulty">
             <label for="difficulty-advanced" class="chip chip-difficulty-advanced"></label>
         </div>
     </section>

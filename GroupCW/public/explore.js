@@ -4,6 +4,8 @@ var app = new Vue({
     data: {
       user: null,
       search: '',
+      filterRegularity: -1, // -1 = all,
+      filterDifficulty: -1, // -1 = all,
       questions: [],
     },
     //On Awake methods here:
@@ -43,7 +45,11 @@ var app = new Vue({
     //FrontEnd methods here:
     computed: {
       filteredQuestions() {
-        return this.questions.filter(question => {
+        const questions = this.questions
+          .filter(question => this.filterRegularity === -1 || question.regularity === this.filterRegularity)
+          .filter(question => this.filterDifficulty === -1 || question.difficulty === this.filterDifficulty);
+
+        return questions.filter(question => {
           return question.question.toLowerCase().includes(this.search.toLowerCase());
         });
       }
