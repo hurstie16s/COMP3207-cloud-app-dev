@@ -15,5 +15,9 @@
     "TranslationKey": "c350c6f6ba1345c0a24699cdf8a22338",
     "SpeechEndPoint": "https://uksouth.api.cognitive.microsoft.com/",
     "SpeechKey": "1c275238685a4c0da6063fc8b65652da"
+  },
+  "Host": {
+    "LocalHttpPort": 7071,
+    "CORS": "*"
   }
 }
