@@ -4,6 +4,7 @@ import json
 import secrets
 import random
 import string
+import uuid
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 from azure.communication.email import EmailClient
@@ -37,15 +38,16 @@ def main(req: HttpRequest) -> HttpResponse:
     }
 
     userInfo.update(newDict)
+    ref = str(uuid.uuid1().hex)
 
     # Update Database
     DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
 
     # Send Email
-    # TODO
+    sendEmail(userInfo, randomPassword, ref)
 
     # Return HttpResponse
-    output = {"result": True, "msg": "Password Reset"}
+    output = {"result": True, "msg": "Password Reset", "ref": ref}
     code = 203
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
@@ -75,8 +77,34 @@ def generateRandomPassword():
 
     return password
 
-def sendEmail():
+def sendEmail(userInfo, randomPassword, ref):
 
     # To use Azure Active Directory Authentication (DefaultAzureCredential) make sure to have AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET as env variables.
     endpoint = "https://<resource-name>.communication.azure.com"
     client = EmailClient(endpoint, DefaultAzureCredential())
+
+    text = """
+Hello {}
+
+Here your temporary password: {}
+Login in with it and follow instructions
+""".format(userInfo.get("username"), randomPassword)
+
+    message = {
+        "content": {
+            "subject": "Password Rest, Reference:{}".format(ref),
+            "plaintext": text
+        },
+        "recepients": {
+            "to": [
+                {
+                    "address": userInfo.get("email"),
+                    "displayName": userInfo.get("username")
+                }
+            ]
+        },
+        "senderAddress": "sender@sending.send"
+    }
+
+    poller = client.begin_send(message)
+    return poller.result()
