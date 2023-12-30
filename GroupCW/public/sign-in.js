@@ -34,7 +34,7 @@ var app = new Vue({
               username: this.username,
               password: this.password 
             }
-            getHelper(data, '/login')
+            postHelper(data, '/login')
             .then(response => {
               if (response.status === 200) {
                 app.user = this.username;
