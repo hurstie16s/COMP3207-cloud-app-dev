@@ -34,14 +34,18 @@ var app = new Vue({
               username: this.username,
               password: this.password 
             }
-            getHelper(data, '/login')
+            postHelper(data, '/login')
             .then(response => {
-              if (response.result) {
+              if (response.status === 200) {
                 app.user = this.username;
                 setCookie(app.user);
                 window.location.href = '/explore'
+              } else if (response.status === 401) {
+                handleError(response.data.msg);
+              } else if (response.status === 203) {
+                //redirect to change password
               } else {
-                app.passwordError = response.msg;
+                alert(`${response.status}: ${response.statusText}`)
               }
             })
             .catch(error => {
@@ -59,25 +63,13 @@ var app = new Vue({
       }
 });
 
-//---------------------------------------------------------
-// Dummies
-let userMap = new Map();
-userMap.set('user1', 'password');
-userMap.set('user2', 'password');
-userMap.set('user3', 'password');
-
-function handleLogin(username, password) { //call api here
-  if (username === 'test') {
-    return {result: false, msg: 'error message'}
-  }
-  if (userMap.has(username)) {
-    if (password === userMap.get(username)) {
-      return {result: true, msg: 'OK'};
-    } else {
-      return {result: false, msg: 'Password is incorrect'}
-    }
+function handleError(error) {
+  if (error === 'User not found') {
+    app.usernameError = error;
+  } else if (error === 'Invalid Login') {
+    app.passwordError = error;
   } else {
-    return {result: false, msg: 'Username does not exist'};
+    alert(error);
   }
 }
 
