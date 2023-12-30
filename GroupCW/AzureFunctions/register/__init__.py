@@ -6,7 +6,9 @@ from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
 import AzureData
 from shared_code.PasswordFunctions import hash_password, validate_password
+from shared_code import auth
 import re
+import json
 
 # Helper function to check if the email is unique
 async def is_email_unique(email):
@@ -62,6 +64,7 @@ def main(req: HttpRequest) -> HttpResponse:
     
     try:
         AzureData.containerUsers.create_item(body=new_user)
-        return HttpResponse("User registered successfully", status_code=201)
+        token = auth.signJwt(username)
+        return HttpResponse(json.dumps({"result": True, "token": token}), status_code=201)
     except Exception as e:
-        return HttpResponse(f"Failed to create user: {str(e)}", status_code=500)
+        return HttpResponse(json.dumps({"result": False, "msg": f"Failed to create user: {str(e)}"}), status_code=500)
