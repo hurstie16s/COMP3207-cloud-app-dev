@@ -36,7 +36,7 @@ class TestAddUserFunction(unittest.TestCase):
 
         data = json.dumps({"username": username, "password": password})
 
-        response = requests.get(url=self.TEST_URL, data=data)
+        response = requests.post(url=self.TEST_URL, data=data)
         
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, b'{"result": false, "msg": "User not found"}')
@@ -48,7 +48,7 @@ class TestAddUserFunction(unittest.TestCase):
 
         data = json.dumps({"username": self.testUsername, "password": password})
 
-        response = requests.get(url=self.TEST_URL, data=data)
+        response = requests.post(url=self.TEST_URL, data=data)
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, b'{"result": false, "msg": "Invalid Login"}')
 
@@ -56,7 +56,7 @@ class TestAddUserFunction(unittest.TestCase):
 
         data = json.dumps({"username": self.testUsername, "password": self.testPassword})
 
-        response = requests.get(url=self.TEST_URL, data=data)
+        response = requests.post(url=self.TEST_URL, data=data)
         self.assertEqual(response.status_code, 200)
 
     """
