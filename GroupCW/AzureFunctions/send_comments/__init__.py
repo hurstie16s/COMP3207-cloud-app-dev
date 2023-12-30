@@ -25,7 +25,7 @@ def main(req: HttpRequest) -> HttpResponse:
             break
 
         if not interview_data:
-            return HttpResponse("Interview data not found for the provided question", status_code=200)
+            return HttpResponse(json.dumps({"result": False, "msg": "Interview data not found for the provided ID"}), status_code=400, mimetype="application/json")
 
         # Append the new comment to the 'comments' list
         comment_data = {
@@ -40,8 +40,8 @@ def main(req: HttpRequest) -> HttpResponse:
 
         # Update the interview data in the database
         AzureData.containerInterviewData.upsert_item(interview_data)
-        return HttpResponse("Comment added successfully", status_code=200)
+        return HttpResponse(json.dumps({"result": True, "msg": "Comment added successfully"}), status_code=200, mimetype="application/json")
 
     except Exception as e:
         logging.error(f"Error occurred: {str(e)}")
-        return HttpResponse(f"Failed to add comment: {str(e)}", status_code=500)
+        return HttpResponse(json.dumps({"result": False, "msg": f"Failed to add comment: {str(e)}"}), status_code=500, mimetype="application/json")

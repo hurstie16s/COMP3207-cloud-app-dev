@@ -22,14 +22,14 @@ def main(req: HttpRequest) -> HttpResponse:
         ))
 
         if not interview_data_list:
-            return HttpResponse("No interview data found for the provided comment ID", status_code=200)
+            return HttpResponse(json.dumps({"result": False, "msg": "No interview data found for the provided comment ID"}), status_code=400, mimetype="application/json")
 
         interview_data = interview_data_list[0]  
         comments_list = interview_data.get('comments', [])
 
         comment_to_rate = next((comment for comment in comments_list if comment['id'] == comment_id), None)
         if not comment_to_rate:
-            return HttpResponse("Comment not found", status_code=200)
+            return HttpResponse(json.dumps({"result": False, "msg": "Comment not found"}), status_code=400, mimetype="application/json")
 
 
         # Initialize lists if they don't exist
@@ -52,7 +52,7 @@ def main(req: HttpRequest) -> HttpResponse:
                     comment_to_rate['thumbs_up'].remove(username)
                 comment_to_rate['thumbs_down'].append(username)
         else:
-            return HttpResponse("Invalid rate action", status_code=200)
+            return HttpResponse(json.dumps({"result": False, "msg": "Invalid rate action"}), status_code=400, mimetype="application/json")
 
         # Update the comment in the list
         for i, comment in enumerate(comments_list):
@@ -62,9 +62,9 @@ def main(req: HttpRequest) -> HttpResponse:
 
         AzureData.containerInterviewData.replace_item(item=interview_data['id'], body=interview_data)
 
-        return HttpResponse("Comment rated successfully", status_code=200)
-
+        return HttpResponse(json.dumps({"result": True, "msg": "Comment rated successfully"}), status_code=200, mimetype="application/json")
+    
     except ValueError:
-        return HttpResponse("Invalid request body", status_code=400)
+        return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")
     except Exception as e:
-        return HttpResponse(f"Error processing request: {str(e)}", status_code=500)
+        return HttpResponse(json.dumps({"result": False, "msg": f"Error processing request: {str(e)}"}), status_code=500, mimetype="application/json")
