@@ -2,6 +2,7 @@
 import unittest
 import requests
 import uuid
+import time
 #Azure Imports
 #Code base Imports
 import AzureData
@@ -28,10 +29,40 @@ class TestAddUserFunction(unittest.TestCase):
         )
 
     def test_current_password_incorrect(self):
-        pass
+        
+        falsePassword = str(time.time_ns())
 
-    def test_new_password_confirm_match(self):
-        pass
+        data={
+            "username": self.testUsername,
+            "currentPassword": falsePassword,
+            "newPassword": falsePassword,
+            "newPasswordConfirm": falsePassword
+        }
+
+        response = requests.get(url=self.TEST_URL, data=data)
+
+        self.assertEqual(response.content, {"result": False, "msg": "AuthFail"})
+
+        self.assertEqual(response.status_code, 403)
+
+
+    def test_new_password_confirm_match_fail(self):
+        
+        newPassword = "newPassword"
+        newPasswordConfirm = "newPasswordConfirmFail"
+
+        data={
+            "username": self.testUsername,
+            "currentPassword": self.testPassword,
+            "newPassword": newPassword,
+            "newPasswordConfirm": newPasswordConfirm
+        }
+
+        response = requests.get(url=self.TEST_URL, data=data)
+
+        self.assertEqual(response.content, {"result": False, "msg": "Password does not match confirmation"})
+
+        self.assertEqual(response.status_code, 403)
 
     def test_password_change_success(self):
         pass
