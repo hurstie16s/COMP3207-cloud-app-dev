@@ -6,20 +6,25 @@
 <body>
     <div id="question">
         <%- include('navbar'); -%>
-
 <section class="question-page">
     <section class="question-main card rounded shadowed">
         <div class="question-main-header">
             <h2 class="underlined">Question</h2>
             <div class="tags">
-                <span class="chip chip-regularity-standard"></span>
-                <span class="chip chip-difficulty-beginner"></span>
+                <span class="chip chip-regularity-standard" v-if="question.regularity === 0"></span>
+                <span class="chip chip-regularity-infrequent" v-else-if="question.regularity === 1"></span>
+                <span class="chip chip-regularity-unusual" v-else-if="question.regularity === 2"></span>
+                
+                <span class="chip chip-difficulty-beginner" v-if="question.difficulty === 0"></span>
+                <span class="chip chip-difficulty-intermediate" v-else-if="question.difficulty === 1"></span>
+                <span class="chip chip-difficulty-advanced" v-else-if="question.difficulty === 2"></span>
+
             </div>
         </div>
-        <h2 class="question-text">Tell me about yourself</h2>
+        <h2 class="question-text">{{ question.question }}</h2>
         <div class="recording">
-            <button class="material-symbols-rounded icon-button red-button">mic</button>
-            <button class="material-symbols-rounded icon-button red-button hidden">stop_circle</button>
+            <button v-if="!isRecording" class="material-symbols-rounded icon-button red-button" @click="startRecording()">mic</button>
+            <button v-else class="material-symbols-rounded icon-button red-button" @click="stopRecording()">stop_circle</button>
         </div>
 
     </section>
@@ -303,10 +308,13 @@
 </main>
 </div>
 
+<script>const QUESTION_ID = '<%= id %>';</script>
+
+
 <%- include('footer'); -%>
 
 <!-- Application Javascript -->
-<script defer src="/static/question.js"></script>
+<script src="/static/question.js" type="module"></script>
 
 </body>
 </html>

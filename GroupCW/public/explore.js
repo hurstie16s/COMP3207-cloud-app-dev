@@ -26,6 +26,10 @@ var app = new Vue({
         }
       
         app.questions = res.data['questions'];
+      },
+
+      navToQuestion(questionId) {
+        window.location.href = `/question/${questionId}`;
       }
     },
     //FrontEnd methods here:
