@@ -50,7 +50,33 @@ var app = new Vue({
       async stopRecording() {
         app.isRecording = false;
         const blob = await AudioRecorder.stop();
-        const audioURL = window.URL.createObjectURL(blob);
+
+        const formData = new FormData();
+        formData.append('username', this.user);
+        formData.append('industry', 'TODO'); // TODO: Industry?
+        formData.append('interviewTitle', this.question.question);
+        formData.append('interviewQuestion', this.question.question);
+        formData.append('private', false); // TODO: Private?
+        formData.append('webmFile', blob);
+
+        const res = await axios({
+          method: 'post',
+          url: `${BACKEND_URL}/interview/data/send`,
+          data: formData,
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+
+        if (res.status !== 200) {
+          alert(`API returned non-200 status when sending audio: ${res.status}`);
+          return;
+        }
+
+        if (res.data.result !== true) {
+          alert(`API returned error when sending audio: ${res.data.msg}`);
+          return;
+        }
+
+        alert("upload success");
       }
     },
     //FrontEnd methods here:
