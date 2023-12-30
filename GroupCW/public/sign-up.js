@@ -66,6 +66,6 @@ function handleError(error) {
   } else if (error.toLowerCase().includes('username')) {
     app.usernameError = error;
   } else {
-    app.passwordError = error.replace(/:/g, ':\n').replace(/;/g, '\n \u2022 ');
+    app.passwordError = error.replace(/:/g, ':\n \u2022 ').replace(/;/g, '\n \u2022 ');
   }
 }
