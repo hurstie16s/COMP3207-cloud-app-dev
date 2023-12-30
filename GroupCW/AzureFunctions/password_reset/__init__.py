@@ -33,7 +33,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
     # Update User info
     newDict = {
-        "password": randomPasswordHash,
+        "hashed_password": randomPasswordHash,
         "change_password": True
     }
 
