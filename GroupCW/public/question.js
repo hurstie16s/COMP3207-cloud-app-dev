@@ -5,7 +5,7 @@ var app = new Vue({
     //All data here
     data: {
       user: null,
-      question: null,
+      question: {},
       isRecording: false,
     },
     //On Awake methods here:
