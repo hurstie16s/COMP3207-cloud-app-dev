@@ -1,0 +1,21 @@
+{
+  "name": "rehearsal",
+  "version": "1.0.0",
+  "description": "Interview Practice System",
+  "main": "app.js",
+  "engines": {
+    "node": "16.x"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Group A",
+  "license": "ECS",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "vue": "^3.3.12"
+  }
+}

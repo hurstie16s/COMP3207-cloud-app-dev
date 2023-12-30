@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('header'); -%>
+
+<body>
+    <div id="explore">
+        <%- include('navbar'); -%>
+
+<section class="explore">
+    <section class="card top-questions rounded shadowed">
+        <h2 class="underlined">Top Questions</h2>
+        <div class="question rounded">
+            <p class="question-text">Tell me about yourself</p>
+            <hr>
+            <div class="question-meta">
+                <p class="question-response-count flex-center"><span
+                        class="material-symbols-rounded">sticky_note_2</span> 432
+                    Responses</p>
+                <button class="material-symbols-rounded icon-button"
+                    onclick="location.href='/question'">chevron_right</button>
+            </div>
+        </div>
+        <div class="question rounded">
+            <p class="question-text">Why do you want to work at this company?</p>
+            <hr>
+            <div class="question-meta">
+                <p class="question-response-count flex-center"><span
+                        class="material-symbols-rounded">sticky_note_2</span> 387
+                    Responses</p>
+                <button class="material-symbols-rounded icon-button">chevron_right</button>
+            </div>
+        </div>
+        <div class="question rounded">
+            <p class="question-text">Tell me about a time where you had to work as part of a team</p>
+            <hr>
+            <div class="question-meta">
+                <p class="question-response-count flex-center"><span
+                        class="material-symbols-rounded">sticky_note_2</span> 210
+                    Responses</p>
+                <button class="material-symbols-rounded icon-button">chevron_right</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="filters rounded card shadowed bordered">
+        <h2 class="underlined header-margin">Filters</h2>
+        <h3 class="underlined header-margin">Regularity</h3>
+        <div class="filter regularity-filter tags">
+            <input type="radio" name="regualrity" id="regularity-all" checked>
+            <label for="regularity-all" class="chip chip-regularity-all"></label>
+            <input type="radio" name="regualrity" id="regularity-standard">
+            <label for="regularity-standard" class="chip chip-regularity-standard"></label>
+            <input type="radio" name="regualrity" id="regularity-infrequent">
+            <label for="regularity-infrequent" class="chip chip-regularity-infrequent"></label>
+            <input type="radio" name="regualrity" id="regularity-unusual">
+            <label for="regularity-unusual" class="chip chip-regularity-unusual"></label>
+        </div>
+        <h3 class="underlined header-margin">Difficulty</h3>
+        <div class="filter difficulty-filter tags">
+            <input type="radio" name="difficulty" id="difficulty-all" checked>
+            <label for="difficulty-all" class="chip chip-difficulty-all"></label>
+            <input type="radio" name="difficulty" id="difficulty-beginner">
+            <label for="difficulty-beginner" class="chip chip-difficulty-beginner"></label>
+            <input type="radio" name="difficulty" id="difficulty-intermediate">
+            <label for="difficulty-intermediate" class="chip chip-difficulty-intermediate"></label>
+            <input type="radio" name="difficulty" id="difficulty-advanced">
+            <label for="difficulty-advanced" class="chip chip-difficulty-advanced"></label>
+        </div>
+    </section>
+    <section class="search rounded card shadowed bordered">
+        <h2 class="underlined">Search</h2>
+        <div class="search-container">
+            <input type="text" class="input" placeholder="Search...">
+            <button class="material-symbols-rounded icon-button">chevron_right</button>
+        </div>
+        <div class="question rounded">
+            <p class="question-text">Tell me about yourself</p>
+            <hr>
+            <div class="question-meta">
+                <div>
+                    <p class="question-response-count flex-center"><span
+                            class="material-symbols-rounded">sticky_note_2</span> 432
+                        Responses</p>
+                    <div>
+                        <span class="chip chip-regularity-standard"></span>
+                        <span class="chip chip-difficulty-beginner"></span>
+                    </div>
+                </div>
+                <button class="material-symbols-rounded icon-button"
+                    onclick="location.href='/question'">chevron_right</button>
+            </div>
+        </div>
+        <div class="question rounded">
+            <p class="question-text">Why do you want to work at this company?</p>
+            <hr>
+            <div class="question-meta">
+                <div>
+                    <p class="question-response-count flex-center"><span
+                            class="material-symbols-rounded">sticky_note_2</span> 387
+                        Responses</p>
+                    <div>
+                        <span class="chip chip-regularity-standard"></span>
+                        <span class="chip chip-difficulty-beginner"></span>
+                    </div>
+                </div>
+                <button class="material-symbols-rounded icon-button">chevron_right</button>
+            </div>
+        </div>
+        <div class="question rounded">
+            <p class="question-text">Tell me about a time where you had to work as part of a team</p>
+            <hr>
+            <div class="question-meta">
+                <div>
+
+                    <p class="question-response-count flex-center"><span
+                            class="material-symbols-rounded">sticky_note_2</span> 210
+                        Responses</p>
+                        <div>
+                            <span class="chip chip-regularity-standard"></span>
+                            <span class="chip chip-difficulty-beginner"></span>
+                        </div>
+                </div>
+                <button class="material-symbols-rounded icon-button">chevron_right</button>
+            </div>
+        </div>
+    </section>
+</section>
+
+</main>
+</div>
+<!-- VueJS -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<!-- Application Javascript -->
+<script src="/static/explore.js"></script>
+
+</body>
+
+</html>
