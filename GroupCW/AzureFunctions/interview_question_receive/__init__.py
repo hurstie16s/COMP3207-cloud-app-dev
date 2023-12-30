@@ -11,6 +11,37 @@ def main(req: HttpRequest) -> HttpResponse:
 
     logging.info('Python HTTP trigger function processed a request.')
 
+    #Get data from JSON doc
+    input = req.get_json()
+    id = input.get("id")
+    if id is None:
+       output, code = getQuestionByID(id)
+    else:
+        output, code = getAllQuestions()
+
+    # Return HttpResponse
+    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+
+def getQuestionByID(id: str) -> (dict,int):
+    
+    # Get all interview questions
+    # Add checks
+    query = "SELECT * FROM InterviewQuestions WHERE InterviewQuestions.id = @id"
+    params = [{"name": "@id", "value": id}]
+    questionsResult = DBFunctions.query_items(
+        query=query,
+        parameters=params,
+        container=AzureData.containerInterviewQuestions
+    )
+
+    question = [questionsResult[0]]
+
+    output = {"questions": question}
+
+    return output, 200
+
+def getAllQuestions() -> (dict,int):
+    
     # Get all interview questions
     # Add checks
     query = "SELECT * FROM InterviewQuestions"
@@ -30,5 +61,4 @@ def main(req: HttpRequest) -> HttpResponse:
 
     output = {"questions": questions}
 
-    # Return HttpResponse
-    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=200)
+    return output, 200
