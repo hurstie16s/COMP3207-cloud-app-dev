@@ -20,7 +20,7 @@ def main(req: HttpRequest) -> HttpResponse:
         output = {"result": False, "msg": "Submission Failure"}
         output = 400
     # Check question is unique
-    elif checkQuestion(question):
+    elif not checkQuestion(question):
         output = {"result": False, "msg": "Question already exists"}
         code = 403
     else:

@@ -11,6 +11,44 @@ def main(req: HttpRequest) -> HttpResponse:
 
     logging.info('Python HTTP trigger function processed a request.')
 
+    #Get data from JSON doc
+    input = req.get_json()
+    id = input.get("id")
+    if id is None:
+       output, code = getQuestionByID(id)
+    else:
+        output, code = getAllQuestions()
+
+    # Return HttpResponse
+    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+
+def getQuestionByID(id: str) -> (dict,int):
+    
+    # Get all interview questions
+    # Add checks
+    query = "SELECT * FROM InterviewQuestions WHERE InterviewQuestions.id = @id"
+    params = [{"name": "@id", "value": id}]
+    questionsResult = DBFunctions.query_items(
+        query=query,
+        parameters=params,
+        container=AzureData.containerInterviewQuestions
+    )
+
+    questionFull = questionsResult[0]
+
+    question = {
+        "id": questionFull.get("id"),
+        "question" : questionFull.get("interviewQuestion"),
+        "difficulty": questionFull.get("difficulty"),
+        "regularity": questionFull.get("regularity")
+    }
+
+    output = {"questions": [question]}
+
+    return output, 200
+
+def getAllQuestions() -> (dict,int):
+    
     # Get all interview questions
     # Add checks
     query = "SELECT * FROM InterviewQuestions"
@@ -22,13 +60,13 @@ def main(req: HttpRequest) -> HttpResponse:
     questions=[]
     for question in questionsResult :
         questionDict = {
+            "id" : question.get("id"),
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
-            "regularity": question.get("regularity")
+            "regularity": question.get("regularity"),
         }
         questions.append(questionDict)
 
     output = {"questions": questions}
 
-    # Return HttpResponse
-    return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=200)
+    return output, 200

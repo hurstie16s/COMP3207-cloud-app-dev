@@ -70,6 +70,7 @@ def main(req: HttpRequest) -> HttpResponse:
         "email": email,
         "username": username,
         "hashed_password": hashed_password,
+        "change_password": False
     }
     
     try:

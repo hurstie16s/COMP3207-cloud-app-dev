@@ -31,7 +31,13 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     #Get data from JSON doc
-    input = req.get_json()
+    try:
+        input = req.get_json()
+    except ValueError:
+        output = {"result": False, "msg": "Malformed Request"}
+        code = 400
+        return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+    
     emailOrUsername = input.get("username")
     password = input.get("password")
 
@@ -65,6 +71,9 @@ def main(req: HttpRequest) -> HttpResponse:
             # AuthSuccess
             output = {"result": True, "msg": "AuthSuccess"}
             code = 200
+        elif (result[0].get("change_password")):
+            output = {"result": True, "msg": "Redirect to Change Password"}
+            code = 203
         else :
             # AuthFail
             output = {"result": False, "msg": "Invalid Login"}
