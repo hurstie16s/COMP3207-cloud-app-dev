@@ -38,8 +38,8 @@ def main(req: HttpRequest) -> HttpResponse:
     private = req.form.get("private")
     webmFile = req.files["webmFile"]
     #setting up the file names
-    webm_file_name = username + str(uuid.uuid4()) + ".webm"
-    wav_file_name = username + str(uuid.uuid4()) + ".wav"
+    webm_file_name = "/tmp/" + username + str(uuid.uuid4()) + ".webm"
+    wav_file_name = "/tmp/" + username + str(uuid.uuid4()) + ".wav"
     try:        
         try:
             webmFile.save(webm_file_name)

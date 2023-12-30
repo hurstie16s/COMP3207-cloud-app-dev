@@ -55,7 +55,7 @@ app.get('/explore', (req, res) => {
 
 app.get('/question/:id', (req, res) => {
   const userCookie = req.cookies.user;
-  userCookie ? res.render('question', {id: req.params['id']}) : res.redirect('sign-in');
+  userCookie ? res.render('question', {id: req.params['id']}) : res.redirect('/sign-in');
 });
 
 app.get('/account', (req, res) => {
