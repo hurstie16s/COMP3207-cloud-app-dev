@@ -65,7 +65,7 @@ def main(req: HttpRequest) -> HttpResponse:
         
     else:
         # Verify Password
-        logging.info("CHECK MESSAGE:: hashed password type: "+str(type(result[0].get("password"))))
+        #logging.info("CHECK MESSAGE:: hashed password type: "+str(type(result[0].get("password"))))
         verified = PasswordFunctions.verify(password, result[0].get("password"))
 
         if (verified):
