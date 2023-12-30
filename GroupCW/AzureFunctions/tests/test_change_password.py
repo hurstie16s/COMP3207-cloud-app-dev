@@ -3,10 +3,11 @@ import unittest
 import requests
 import uuid
 import time
+import json
 #Azure Imports
 #Code base Imports
 import AzureData
-from shared_code import DBFunctions
+from shared_code import DBFunctions, PasswordFunctions
 
 class TestAddUserFunction(unittest.TestCase):
     TEST_URL = "http://localhost:7071/password/change"
@@ -20,7 +21,7 @@ class TestAddUserFunction(unittest.TestCase):
         data = {
             "username": self.testUsername,
             "email": self.testEmail,
-            "password": self.testPassword
+            "hashed_password": PasswordFunctions.hash_password(self.testPassword)
         }
 
         DBFunctions.create_item(
@@ -32,16 +33,16 @@ class TestAddUserFunction(unittest.TestCase):
         
         falsePassword = str(time.time_ns())
 
-        data={
+        data= json.dumps({
             "username": self.testUsername,
             "currentPassword": falsePassword,
             "newPassword": falsePassword,
             "newPasswordConfirm": falsePassword
-        }
+        })
 
-        response = requests.get(url=self.TEST_URL, data=data)
+        response = requests.put(url=self.TEST_URL, data=data)
 
-        self.assertEqual(response.content, {"result": False, "msg": "AuthFail"})
+        self.assertEqual(response.content, b'{"result": false, "msg": "AuthFail"}')
 
         self.assertEqual(response.status_code, 403)
 
@@ -51,16 +52,16 @@ class TestAddUserFunction(unittest.TestCase):
         newPassword = "newPassword"
         newPasswordConfirm = "newPasswordConfirmFail"
 
-        data={
+        data= json.dumps({
             "username": self.testUsername,
             "currentPassword": self.testPassword,
             "newPassword": newPassword,
             "newPasswordConfirm": newPasswordConfirm
-        }
+        })
 
-        response = requests.get(url=self.TEST_URL, data=data)
+        response = requests.put(url=self.TEST_URL, data=data)
 
-        self.assertEqual(response.content, {"result": False, "msg": "Password does not match confirmation"})
+        self.assertEqual(response.content, b'{"result": false, "msg": "Password does not match confirmation"}')
 
         self.assertEqual(response.status_code, 403)
 
@@ -68,15 +69,15 @@ class TestAddUserFunction(unittest.TestCase):
         
         newPassword = "newPassword"
 
-        data={
+        data= json.dumps({
             "username": self.testUsername,
             "currentPassword": self.testPassword,
             "newPassword": newPassword,
             "newPasswordConfirm": newPassword
-        }
+        })
 
-        response = requests.get(url=self.TEST_URL, data=data)
+        response = requests.put(url=self.TEST_URL, data=data)
 
-        self.assertEqual(response.content, {"result": True, "msg": "Password Changed"})
+        self.assertEqual(response.content, b'{"result": true, "msg": "Password Changed"}')
 
         self.assertEqual(response.status_code, 200)

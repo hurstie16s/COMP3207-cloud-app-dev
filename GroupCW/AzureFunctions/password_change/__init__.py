@@ -37,7 +37,7 @@ def main(req: HttpRequest) -> HttpResponse:
     userInfo = result[0]
 
     # Verify password
-    if not PasswordFunctions.verify(currentPassword, userInfo.get("password")):
+    if not PasswordFunctions.verify(currentPassword, userInfo.get("hashed_password")):
         # Set JSON output
         output = {"result": False, "msg": "AuthFail"}
         code = 403
