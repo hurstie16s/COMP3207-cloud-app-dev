@@ -67,7 +67,7 @@ def main(req: HttpRequest) -> HttpResponse:
             code = 200
         elif (result[0].get("change_password")):
             output = {"result": True, "msg": "Redirect to Change Password"}
-            code = 203
+            code = 200
         else :
             # AuthFail
             output = {"result": False, "msg": "Invalid Login"}
