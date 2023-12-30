@@ -7,9 +7,9 @@
         "direction": "in",
         "name": "req",
         "methods": [
-          "get"
+          "put"
         ],
-        "route": "login"
+        "route": "password/change"
       },
       {
         "type": "http",
