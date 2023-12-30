@@ -173,7 +173,7 @@ a {
     font-size: 14px;
     margin: 1em 0.25em;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     ;
 }
