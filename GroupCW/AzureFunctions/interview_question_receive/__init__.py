@@ -4,12 +4,18 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
+from jwt.exceptions import InvalidTokenError
 import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
 
     logging.info('Python HTTP trigger function processed a request.')
+
+    try:
+        auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     #Get data from JSON doc
     id = req.params.get('id')

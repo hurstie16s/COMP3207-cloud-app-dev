@@ -186,7 +186,6 @@ var app = new Vue({
         const blob = await AudioRecorder.stop();
 
         const formData = new FormData();
-        formData.append('username', this.user);
         formData.append('industry', 'TODO'); // TODO: Industry?
         formData.append('interviewTitle', this.question.question);
         formData.append('private', false); // TODO: Private?
