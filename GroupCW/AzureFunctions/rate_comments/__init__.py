@@ -14,12 +14,18 @@ def main(req: HttpRequest) -> HttpResponse:
         username = req_body.get('username')  
         rate_action = req_body.get('rate_action')  # 'like' for thumbs up, 'dislike' for thumbs down
 
-        # Construct the query
-        interview_data_query = f"SELECT * FROM c WHERE ARRAY_CONTAINS(c.comments, {{'id': '{comment_id}'}}, true)"
+        # Define the query with a parameter placeholder
+        interview_data_query = "SELECT * FROM c WHERE ARRAY_CONTAINS(c.comments, {'id': @commentId}, true)"
+
+        # Define the parameters
+        parameters = [
+            {"name": "@commentId", "value": comment_id}
+        ]
 
         # Use DBFunctions to query the data
         interview_data_list = DBFunctions.query_items(
-            query=interview_data_query, 
+            query=interview_data_query,
+            parameters=parameters,
             container=AzureData.containerInterviewData
         )
 
