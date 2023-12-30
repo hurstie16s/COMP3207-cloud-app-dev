@@ -31,24 +31,24 @@ var app = new Vue({
           if (!this.email) {app.emailError = 'Email Required';}
 
           //only calls api if fields if both username and password have values
-          if (this.username && this.password && this.email) {
-            const response = handleRegister(this.username, this.password);
-            if (response.result === true) { // successful register logs you in straight away
-              app.user = this.username;
-              setCookie(app.user);
-              window.location.href = '/explore'
-            } else { //long winded nested if for to classify errors into username and password
-              if (response.msg.toLowerCase().includes("username")) {
-                app.usernameError = response.msg;
-              } else if (response.msg.toLowerCase().includes("password")) {
-                app.passwordError = response.msg;
-              } else if (response.msg.toLowerCase().includes("email")){ 
-                app.emailError = response.msg;
-              } else { //error not standardised or name error!
-                alert(response.msg);
-              }
-            }
+          const data = {
+            username: this.username,
+            password: this.password,
+            email: this.email 
           }
+          postHelper(data, '/register')
+          .then(response => {
+            if (response.status === 201) {
+            app.user = this.username;
+            setCookie(app.user);
+            window.location.href = '/explore'
+            } else {
+              handleError(response.data);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
         
         },
 
@@ -59,9 +59,13 @@ var app = new Vue({
       }
 });
 
-//---------------------------------------------------------
-// Dummies
-function handleRegister() {
-  //call api
-  return {result: true, msg: 'OK'}
+
+function handleError(error) {
+  if (error.toLowerCase().includes('email')) {
+    app.emailError = error;
+  } else if (error.toLowerCase().includes('username')) {
+    app.usernameError = error;
+  } else {
+    app.passwordError = error.replace(/:/g, ':\n').replace(/;/g, '\n \u2022 ');
+  }
 }

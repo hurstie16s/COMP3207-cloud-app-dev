@@ -20,7 +20,7 @@ var app = new Vue({
     },
     //Js Methods here:
     methods: {
-        login() {
+        async login() {
           app.usernameError = '';
           app.passwordError = '';
 
@@ -30,20 +30,24 @@ var app = new Vue({
 
           //only calls api if fields if both username and password have values
           if (this.username && this.password) {
-            const response = handleLogin(this.username, this.password);
-            if (response.result === true) {
-              app.user = this.username;
-              setCookie(app.user);
-              window.location.href = '/explore'
-            } else { //long winded nested if for to classify errors into username and password
-              if (response.msg.toLowerCase().includes("username")) {
-                app.usernameError = response.msg;
-              } else if (response.msg.toLowerCase().includes("password")) {
-                app.passwordError = response.msg;
-              } else { //error not standardised
-                alert(response.msg);
-              }
+            const data = {
+              username: this.username,
+              password: this.password 
             }
+            getHelper(data, '/login')
+            .then(response => {
+              if (response.result) {
+                app.user = this.username;
+                setCookie(app.user);
+                window.location.href = '/explore'
+              } else {
+                app.passwordError = response.msg;
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+
           }
         },
 
@@ -54,13 +58,6 @@ var app = new Vue({
         
       }
 });
-
-function setCookie(username) {
-  // Set the 'user' cookie with an expiration time of 1 hour
-  const expirationDate = new Date();
-  expirationDate.setTime(expirationDate.getTime() + (1 * 60 * 60 * 1000)); // 1 hour
-  document.cookie = `user=${username}; expires=${expirationDate.toUTCString()}; path=/`;
-}
 
 //---------------------------------------------------------
 // Dummies

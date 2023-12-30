@@ -12,8 +12,7 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 // URL of the backend API
-const BACKEND_ENDPOINT = process.env.BACKEND || 'http://localhost:8181';
-
+const BACKEND_ENDPOINT = process.env.BACKEND || 'http://localhost:7071';
 //Start the server
 function startServer() {
     const PORT = process.env.PORT || 8080;

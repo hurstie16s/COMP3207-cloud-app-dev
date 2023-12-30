@@ -1,12 +1,40 @@
-function getHelper(data, endpoint) {
-
+async function getHelper(data, endpoint) {
+  try {
+    const response = await axios({
+      method: 'GET',
+      url: BACKEND_URL + endpoint,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    })
+    console.log('Response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.log('ERROR:', error);
+    return error.response;
+  }
 }
 
-function postHelper(data, endpoint) {
-
+async function postHelper(data, endpoint) {
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: BACKEND_URL + endpoint,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    })
+    console.log('Response:', response);
+    return response;
+  } catch (error) {
+    console.log('ERROR:', error);
+    return error.response;
+  }
 }
 
-function putHelper(data, endpoint) {
+async function putHelper(data, endpoint) {
 
 }
 
