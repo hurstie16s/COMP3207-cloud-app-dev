@@ -37,10 +37,10 @@ def getQuestionByID(id: str) -> (dict,int):
     questionFull = questionsResult[0]
 
     question = {
+        "id": questionFull.get("id"),
         "question" : questionFull.get("interviewQuestion"),
         "difficulty": questionFull.get("difficulty"),
-        "regularity": questionFull.get("regularity"),
-        "id": questionFull.get("id")
+        "regularity": questionFull.get("regularity")
     }
 
     output = {"questions": [question]}
@@ -64,7 +64,6 @@ def getAllQuestions() -> (dict,int):
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
             "regularity": question.get("regularity"),
-            "id": question.get("id")
         }
         questions.append(questionDict)
 
