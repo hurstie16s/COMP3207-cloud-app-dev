@@ -34,9 +34,16 @@ def getQuestionByID(id: str) -> (dict,int):
         container=AzureData.containerInterviewQuestions
     )
 
-    question = [questionsResult[0]]
+    questionFull = questionsResult[0]
 
-    output = {"questions": question}
+    question = {
+        "question" : questionFull.get("interviewQuestion"),
+        "difficulty": questionFull.get("difficulty"),
+        "regularity": questionFull.get("regularity"),
+        "id": questionFull.get("id")
+    }
+
+    output = {"questions": [question]}
 
     return output, 200
 
@@ -55,7 +62,8 @@ def getAllQuestions() -> (dict,int):
         questionDict = {
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
-            "regularity": question.get("regularity")
+            "regularity": question.get("regularity"),
+            "id": question.get("id")
         }
         questions.append(questionDict)
 
