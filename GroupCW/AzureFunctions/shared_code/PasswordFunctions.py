@@ -1,7 +1,6 @@
 #System Imports
 import bcrypt
 import base64
-import logging
 
 def hash_password(password):
     salt = bcrypt.gensalt()
