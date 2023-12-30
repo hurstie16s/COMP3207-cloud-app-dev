@@ -34,7 +34,7 @@ def getQuestionByID(id: str) -> (dict,int):
     )
 
     if len(questionsResult) == 0:
-        return {"error": "Question not found"}, 404
+        return {"msg": "Question not found"}, 404
 
     questionFull = questionsResult[0]
 
@@ -45,7 +45,9 @@ def getQuestionByID(id: str) -> (dict,int):
         "regularity": questionFull.get("regularity")
     }
 
-    return question, 200
+    output = {"msg": "Questions collected", "questions": [question]}
+
+    return output, 200
 
 def getAllQuestions() -> (dict,int):
     
@@ -67,6 +69,6 @@ def getAllQuestions() -> (dict,int):
         }
         questions.append(questionDict)
 
-    output = {"questions": questions}
+    output = {"msg": "All questions collected", "questions": questions}
 
     return output, 200
