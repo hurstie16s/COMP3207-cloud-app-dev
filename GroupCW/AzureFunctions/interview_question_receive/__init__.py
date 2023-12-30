@@ -63,8 +63,7 @@ def getAllQuestions() -> (dict,int):
             "id" : question.get("id"),
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
-            "regularity": question.get("regularity"),
-            "id": question.get("id")
+            "regularity": question.get("regularity")
         }
         questions.append(questionDict)
 
