@@ -242,6 +242,7 @@ a {
 .sign-in, .sign-up, .reset-password, .new-password {
     /* width: 420px; */
     /* height: 520px; */
+    max-width: 440px;
     display: grid;
     grid-template-columns: auto auto;
     place-items: center;
