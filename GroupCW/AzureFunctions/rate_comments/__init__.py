@@ -1,7 +1,7 @@
 import logging
 import json
 import AzureData
-
+from shared_code import DBFunctions
 from azure.functions import HttpRequest, HttpResponse
 
 
@@ -14,17 +14,19 @@ def main(req: HttpRequest) -> HttpResponse:
         username = req_body.get('username')  
         rate_action = req_body.get('rate_action')  # 'like' for thumbs up, 'dislike' for thumbs down
 
-        # Retrieve the interview data that contains the comment
+        # Construct the query
         interview_data_query = f"SELECT * FROM c WHERE ARRAY_CONTAINS(c.comments, {{'id': '{comment_id}'}}, true)"
-        interview_data_list = list(AzureData.containerInterviewData.query_items(
-            query=interview_data_query,
-            enable_cross_partition_query=True
-        ))
+
+        # Use DBFunctions to query the data
+        interview_data_list = DBFunctions.query_items(
+            query=interview_data_query, 
+            container=AzureData.containerInterviewData
+        )
 
         if not interview_data_list:
-            return HttpResponse(json.dumps({"result": False, "msg": "No interview data found for the provided comment ID"}), status_code=400, mimetype="application/json")
+            return HttpResponse(json.dumps({"result": False, "msg": "No interview data found"}), status_code=400, mimetype="application/json")
 
-        interview_data = interview_data_list[0]  
+        interview_data = interview_data_list[0]
         comments_list = interview_data.get('comments', [])
 
         comment_to_rate = next((comment for comment in comments_list if comment['id'] == comment_id), None)
@@ -60,7 +62,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 comments_list[i] = comment_to_rate
                 break
 
-        AzureData.containerInterviewData.replace_item(item=interview_data['id'], body=interview_data)
+        DBFunctions.upsert_item(data=interview_data, container=AzureData.containerInterviewData)
 
         return HttpResponse(json.dumps({"result": True, "msg": "Comment rated successfully"}), status_code=200, mimetype="application/json")
     

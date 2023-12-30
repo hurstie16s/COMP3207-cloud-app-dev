@@ -2,7 +2,6 @@
 # Azure Imports
 import asyncio
 import uuid
-import json
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
 import AzureData
@@ -50,20 +49,20 @@ def main(req: HttpRequest) -> HttpResponse:
         username = req_body.get('username')
         password = req_body.get('password')
     except ValueError:
-        return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")
+        return HttpResponse("Invalid request body", status_code=400)
 
     if not is_valid_email(email):
-        return HttpResponse(json.dumps({"result": False, "msg": "Invalid email format"}), status_code=400, mimetype="application/json")
+        return HttpResponse("Invalid email format", status_code=400)
     
     if not asyncio.run(is_email_unique(email)):
-        return HttpResponse(json.dumps({"result": False, "msg": "Email is already registered"}), status_code=400, mimetype="application/json")
+        return HttpResponse("Email is already registered", status_code=400)
 
     if not asyncio.run(is_username_unique(username)):
-        return HttpResponse(json.dumps({"result": False, "msg": "Username is already taken"}), status_code=400, mimetype="application/json")
+        return HttpResponse("Username is already taken", status_code=400)
 
     password_issues = validate_password(password)
     if password_issues:  # If the list is not empty, report the issues
-        return HttpResponse(json.dumps({"result": False, "msg": f"Password is invalid for the following reason(s): {'; '.join(password_issues)}"}), status_code=400, mimetype="application/json")
+        return HttpResponse(f"Password is invalid for the following reason(s): {'; '.join(password_issues)}", status_code=400)
     hashed_password = hash_password(password)
 
     new_user = {
@@ -76,6 +75,6 @@ def main(req: HttpRequest) -> HttpResponse:
     
     try:
         AzureData.containerUsers.create_item(body=new_user)
-        return HttpResponse(json.dumps({"result": True, "msg": "User registered successfully"}), status_code=200, mimetype="application/json")
+        return HttpResponse("User registered successfully", status_code=201)
     except Exception as e:
-        return HttpResponse(json.dumps({"result": False, "msg": f"Failed to create user: {str(e)}"}), status_code=500, mimetype="application/json")
+        return HttpResponse(f"Failed to create user: {str(e)}", status_code=500)

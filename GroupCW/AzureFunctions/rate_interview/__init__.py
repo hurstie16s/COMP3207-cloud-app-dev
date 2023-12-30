@@ -3,6 +3,7 @@ import json
 import uuid
 from azure.functions import HttpRequest, HttpResponse
 import AzureData
+from shared_code import DBFunctions
 
 def main(req: HttpRequest) -> HttpResponse:
     logging.info('rate_interview function processing a request.')
@@ -41,7 +42,8 @@ def main(req: HttpRequest) -> HttpResponse:
         average_rating = round(total_ratings / len(interview_data['ratings']), 1)
 
         # Update the interview data in the database
-        AzureData.containerInterviewData.upsert_item(interview_data)
+        container = AzureData.containerInterviewData
+        average_rating = DBFunctions.rate_interview(interview_id, username, rating, container)
         return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "average_rating": average_rating}), status_code=200, mimetype="application/json")
 
     except ValueError:
