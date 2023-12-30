@@ -243,7 +243,6 @@ a {
 .sign-in, .sign-up, .reset-password, .new-password {
     /* width: 420px; */
     /* height: 520px; */
-    max-width: 440px;
     display: grid;
     grid-template-columns: auto auto;
     place-items: center;
@@ -807,6 +806,7 @@ select {
     background-color: transparent;
     outline: none;
     cursor: pointer;
+    font-family: var(--header-font);
 }
 
 option {
@@ -822,6 +822,13 @@ option {
     display: none;
 }
 
+.response-container-idk {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 
 .chip {
     border-radius: 1000px;
@@ -832,6 +839,7 @@ option {
     box-shadow: inset 0 0 0 1000px rgb(var(--background-lighter-5));
     font-size: 1rem;
     color: rgb(var(--text));
+    border: 2px solid rgb(var(--theme));
 }
 
 .filter>input:checked+label {
