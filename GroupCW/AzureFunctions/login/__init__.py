@@ -59,7 +59,7 @@ def main(req: HttpRequest) -> HttpResponse:
         
     else:
         # Verify Password
-        verified = PasswordFunctions.verify(password, result[0].get("password"))
+        verified = PasswordFunctions.verify(password, result[0].get("hashed_password"))
 
         if (verified):
             # AuthSuccess
@@ -74,4 +74,6 @@ def main(req: HttpRequest) -> HttpResponse:
             code = 401
 
     # Return HttpResponse
+    logging.info(output)
+    logging.info(code)
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
