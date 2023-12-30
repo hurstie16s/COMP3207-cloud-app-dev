@@ -45,7 +45,7 @@ def getQuestionByID(id: str) -> (dict,int):
         "regularity": questionFull.get("regularity")
     }
 
-    output = {"msg": "Questions collected", "questions": [question]}
+    output = {"msg": "Questions collected", "question": question}
 
     return output, 200
 

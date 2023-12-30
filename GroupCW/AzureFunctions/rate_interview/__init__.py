@@ -54,7 +54,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
         # Update the interview data in the database
         AzureData.containerInterviewData.upsert_item(interview_data)
-        return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "average_rating": average_rating}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "average_rating": average_rating, "ratings": interview_data["ratings"]}), status_code=200, mimetype="application/json")
 
     except ValueError:
         return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")
