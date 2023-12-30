@@ -12,12 +12,11 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     #Get data from JSON doc
-    input = req.get_json()
-    id = input.get("id")
-    if id is None:
-       output, code = getQuestionByID(id)
-    else:
+    id = req.params.get('id')
+    if id is None or id == "":
         output, code = getAllQuestions()
+    else:
+        output, code = getQuestionByID(id)
 
     # Return HttpResponse
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
@@ -34,6 +33,9 @@ def getQuestionByID(id: str) -> (dict,int):
         container=AzureData.containerInterviewQuestions
     )
 
+    if len(questionsResult) == 0:
+        return {"error": "Question not found"}, 404
+
     questionFull = questionsResult[0]
 
     question = {
@@ -43,9 +45,7 @@ def getQuestionByID(id: str) -> (dict,int):
         "id": questionFull.get("id")
     }
 
-    output = {"questions": [question]}
-
-    return output, 200
+    return question, 200
 
 def getAllQuestions() -> (dict,int):
     
