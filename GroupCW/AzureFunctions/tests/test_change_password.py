@@ -65,4 +65,18 @@ class TestAddUserFunction(unittest.TestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_password_change_success(self):
-        pass
+        
+        newPassword = "newPassword"
+
+        data={
+            "username": self.testUsername,
+            "currentPassword": self.testPassword,
+            "newPassword": newPassword,
+            "newPasswordConfirm": newPassword
+        }
+
+        response = requests.get(url=self.TEST_URL, data=data)
+
+        self.assertEqual(response.content, {"result": True, "msg": "Password Changed"})
+
+        self.assertEqual(response.status_code, 200)
