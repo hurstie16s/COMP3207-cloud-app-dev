@@ -180,6 +180,7 @@ a {
 
 .input-error>span {
     margin: 0 0.35em 0 0.35em;
+    white-space: pre-line;
 }
 
 .input {
@@ -639,7 +640,7 @@ hr {
     align-items: center;
 }
 
-.response>.response-controls> span{
+.response>.response-controls>span {
     font-size: 1.1em;
     font-family: var(--header-font);
     margin-left: 0.5em;
@@ -1029,7 +1030,7 @@ option {
 }
 
 .tooltip::after {
-    
+
     font-size: 1rem;
     content: "";
     z-index: 1;
@@ -1044,24 +1045,25 @@ option {
     top: -80%;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
-    position:absolute;
-    
+    position: absolute;
+
     transition: var(--transition);
 }
 
 .tooltip:hover::before, .tooltip:hover::after {
-    
+
     opacity: 1;
 }
 
-.respones-header{
+.respones-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.respones-header>div{
+
+.respones-header>div {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 1em;
-} 
+}
