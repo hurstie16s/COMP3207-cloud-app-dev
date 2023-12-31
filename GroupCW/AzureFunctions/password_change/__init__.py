@@ -67,8 +67,6 @@ def main(req: HttpRequest) -> HttpResponse:
 
         output = {"result": True, "msg": "Password Changed"}
         code = 200
-
-        check_password_changed(newPasswordHash, username)
     
     # Return HttpResponse
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
@@ -77,22 +75,3 @@ async def update_password(data: dict):
     # Update database
     DBFunctions.upsert_item(data=data, container=AzureData.containerUsers)
     logging.info("Password Changed")
-
-
-def check_password_changed(newPasswordHash, username):
-
-    # Get data for user
-    query = "SELECT * FROM Users WHERE Users.username = @username"
-    params = [{"name":"@username", "value": username}]
-
-    # Can garuntee only 1 result returned, at most
-    result = DBFunctions.query_items(
-        query=query, 
-        parameters=params, 
-        container=AzureData.containerUsers
-    )
-
-    userInfo = result[0]
-    logging.info(str(userInfo.get("hashed_password")))
-    a = userInfo.get("hashed_password") == newPasswordHash
-    logging.info(str(a))
