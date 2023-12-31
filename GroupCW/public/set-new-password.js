@@ -27,11 +27,6 @@ var app = new Vue({
             if (!this.password1) {app.password1Error = 'Password Required';}
             if (!this.password2) {app.password2Error = 'Password Required';}
 
-            if (this.password1 !== this.password2) {
-                app.password2Error = 'Passwords must match';
-                return;
-            }
-
             if (this.password1 && this.password2) {
                 const response = handleSetNewPassoword(app.user, this.password1);
                 if (response.result === true) {

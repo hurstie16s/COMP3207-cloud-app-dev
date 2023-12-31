@@ -42,10 +42,12 @@ var app = new Vue({
                 window.location.href = '/explore'
               } else if (response.status === 401) {
                 handleError(response.data.msg);
-              } else if (response.status === 203) {
-                //redirect to change password
+              } else if (response.status === 300) {
+                app.user = this.username;
+                setCookie(app.user);
+                window.location.href = '/set-new-password'
               } else {
-                alert(`${response.status}: ${response.statusText}`)
+                alert(`${response.status}: ${response.statusText}`) //undefined error
               }
             })
             .catch(error => {
