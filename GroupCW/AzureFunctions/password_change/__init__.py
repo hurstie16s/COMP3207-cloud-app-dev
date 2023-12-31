@@ -59,8 +59,6 @@ def main(req: HttpRequest) -> HttpResponse:
         # Hash new password
         newPasswordHash = PasswordFunctions.hash_password(password=newPassword)
 
-        logging.info("New Hashed Password: {}".format(str(newPasswordHash)))
-
         newDict = {
             "hashed_password": newPasswordHash,
             "change_password": False
