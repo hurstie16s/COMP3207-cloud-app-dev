@@ -73,4 +73,8 @@ function getUserCookie() {
 function logout() {
     document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
     window.location.href = '/';
-  }
+}
+
+function getAccount(user) {
+    window.location.href = `/account/${user}`;
+}

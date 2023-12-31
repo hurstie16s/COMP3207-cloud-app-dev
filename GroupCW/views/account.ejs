@@ -9,7 +9,7 @@
 
 <section class="account-page ">
     <section class="your-account card rounded shadowed">
-        <h2 class="underlined">John Smith</h2>
+        <h2 class="underlined">{{account}}</h2>
         <ul>
 
             <li>2 Responses to 1 Questions</li>
@@ -161,6 +161,8 @@
 
 </main>
 </div>
+
+<script>const USER_ID = '<%= id %>';</script>
 
 <%- include('footer'); -%>
 
