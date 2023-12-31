@@ -37,7 +37,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
     userInfo = result[0]
 
-    logging.info("Old Hashed Password: {}".format(str(userInfo.get("hashed_password"))))
+    password_issues = PasswordFunctions.validate_password(newPassword)
 
     # Verify password
     if not PasswordFunctions.verify(currentPassword, userInfo.get("hashed_password")):
@@ -47,6 +47,13 @@ def main(req: HttpRequest) -> HttpResponse:
     elif newPassword != newPasswordConfirm :
         # Set JSON output
         output = {"result": False, "msg": "Password does not match confirmation"}
+        code = 403
+    elif password_issues:
+        #Set JSON output
+        output = {
+            "result": False, 
+            "msg": f"Password is invalid for the following reason(s): {'; '.join(password_issues)}"
+        }
         code = 403
     else:
         # Hash new password
