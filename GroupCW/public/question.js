@@ -34,18 +34,6 @@ var app = new Vue({
         AudioRecorder.start();
       },
 
-      getUserCookie() {
-        // Function to read the value of the 'user' cookie
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-          const [key, value] = cookie.trim().split('=');
-          if (key === 'user') {
-            this.user = value; // Use 'this' to refer to the Vue instance
-            break;
-          }
-        }
-      },
-
       async loadQuestion(questionId) {
         const res = await axios.get(`${BACKEND_URL}/interview/question/receive?id=${questionId}`);
         if (res.status === 404) {
