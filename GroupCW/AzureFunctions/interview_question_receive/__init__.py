@@ -42,7 +42,8 @@ def getQuestionByID(id: str) -> (dict,int):
         "id": questionFull.get("id"),
         "question" : questionFull.get("interviewQuestion"),
         "difficulty": questionFull.get("difficulty"),
-        "regularity": questionFull.get("regularity")
+        "regularity": questionFull.get("regularity"),
+        "numberOfResponses": questionFull.get("numberOfResponses")
     }
 
     output = {"msg": "Questions collected", "questions": [question]}
@@ -65,7 +66,8 @@ def getAllQuestions() -> (dict,int):
             "id" : question.get("id"),
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
-            "regularity": question.get("regularity")
+            "regularity": question.get("regularity"),
+            "numberOfResponses": question.get("numberOfResponses")
         }
         questions.append(questionDict)
 
