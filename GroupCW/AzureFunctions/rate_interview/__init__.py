@@ -41,16 +41,17 @@ def main(req: HttpRequest) -> HttpResponse:
             return HttpResponse(json.dumps({"result": False, "msg": "Interview data not found for the provided ID"}), status_code=400, mimetype="application/json")
 
         # Check if user has already rated
-        if any(r['username'] == username for r in interview_data.get('ratings', [])):
-            return HttpResponse(json.dumps({"result": False, "msg": "You have already rated this interview"}), status_code=400, mimetype="application/json")
-
-        # Add the rating
-        new_rating = {"username": username, "rating": rating}
-        interview_data.setdefault('ratings', []).append(new_rating)
+        ratings = interview_data.get('ratings', [])
+        existing_rating = next((r for r in ratings if r['username'] == username), None)
+        if existing_rating:
+            existing_rating['rating'] = rating
+        else:
+            ratings.append({"username": username, "rating": rating})
 
         # Calculate the new average rating
-        total_ratings = sum(r['rating'] for r in interview_data['ratings'])
-        average_rating = round(total_ratings / len(interview_data['ratings']), 1)
+        total_ratings = sum(r['rating'] for r in ratings)
+        average_rating = round(total_ratings / len(ratings), 1)
+        interview_data['ratings'] = ratings
 
         # Update the interview data in the database
         AzureData.containerInterviewData.upsert_item(interview_data)
