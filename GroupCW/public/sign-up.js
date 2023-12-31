@@ -31,25 +31,26 @@ var app = new Vue({
           if (!this.email) {app.emailError = 'Email Required';}
 
           //only calls api if fields if both username and password have values
-          const data = {
-            username: this.username,
-            password: this.password,
-            email: this.email 
-          }
-          postHelper(data, '/register')
-          .then(response => {
-            if (response.status === 201) {
-            app.user = this.username;
-            setCookie(app.user);
-            window.location.href = '/explore'
-            } else {
-              handleError(response.data);
+          if (this.username && this.password && this.password) {
+            const data = {
+              username: this.username,
+              password: this.password,
+              email: this.email 
             }
-          })
-          .catch(error => {
-            console.log(error);
-          })
-        
+            postHelper(data, '/register')
+            .then(response => {
+              if (response.status === 201) {
+              app.user = this.username;
+              setCookie(app.user);
+              window.location.href = '/explore'
+              } else {
+                handleError(response.data);
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+          }
         },
 
     },
