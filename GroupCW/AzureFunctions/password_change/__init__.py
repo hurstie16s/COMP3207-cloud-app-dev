@@ -1,6 +1,7 @@
 # System Imports
 import logging
 import json
+import asyncio
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
@@ -36,6 +37,8 @@ def main(req: HttpRequest) -> HttpResponse:
 
     userInfo = result[0]
 
+    logging.info("Old Hashed Password: {}".format(str(userInfo.get("hashed_password"))))
+
     # Verify password
     if not PasswordFunctions.verify(currentPassword, userInfo.get("hashed_password")):
         # Set JSON output
@@ -49,8 +52,10 @@ def main(req: HttpRequest) -> HttpResponse:
         # Hash new password
         newPasswordHash = PasswordFunctions.hash_password(password=newPassword)
 
+        logging.info("New Hashed Password: {}".format(str(newPasswordHash)))
+
         newDict = {
-            "password": newPasswordHash,
+            "hashed_password": newPasswordHash,
             "change_password": False
         }
 
@@ -58,10 +63,15 @@ def main(req: HttpRequest) -> HttpResponse:
         userInfo.update(newDict)
 
         # Update database
-        DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
+        asyncio.run(update_password(userInfo))
 
         output = {"result": True, "msg": "Password Changed"}
         code = 200
     
     # Return HttpResponse
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+
+async def update_password(data: dict):
+    # Update database
+    DBFunctions.upsert_item(data=data, container=AzureData.containerUsers)
+    logging.info("Password Changed")
