@@ -35,7 +35,21 @@ async function postHelper(data, endpoint) {
 }
 
 async function putHelper(data, endpoint) {
-
+  try {
+    const response = await axios({
+      method: 'PUT',
+      url: BACKEND_URL + endpoint,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    })
+    console.log('Response:', response);
+    return response;
+  } catch (error) {
+    console.log('ERROR:', error);
+    return error.response;
+  }
 }
 
 function setCookie(username) {
