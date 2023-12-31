@@ -12,9 +12,6 @@ var app = new Vue({
     },
     //Js Methods here:
     methods: {
-      logout() {
-        logout(); //utils.logout
-      },
       
 
     },

@@ -14,10 +14,6 @@ var app = new Vue({
     },
     //Js Methods here:
     methods: {
-      logout() {
-        logout(); //utils.logout
-      },
-      
 
       async loadQuestion(questionId) {
         const res = await axios.get(`${BACKEND_URL}/interview/question/receive`);
