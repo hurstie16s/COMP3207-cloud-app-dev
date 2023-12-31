@@ -35,7 +35,7 @@ var app = new Vue({
       async loadQuestions() {
         const res = await axios.get(`${BACKEND_URL}/interview/question/receive`);
         if (res.status !== 200) {
-          alert('API returned non-200 status when loading questions: ${res.status}');
+          alert(`API returned non-200 status when loading questions: ${res.status}`);
           return;
         }
       
