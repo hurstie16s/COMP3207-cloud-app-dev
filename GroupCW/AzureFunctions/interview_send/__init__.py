@@ -10,7 +10,7 @@ import AzureData as AzureData
 import os
 import uuid
 from moviepy.editor import VideoFileClip
-
+import logging
 
 translation_params = {
     'api-version': '3.0',
@@ -37,16 +37,9 @@ def main(req: HttpRequest) -> HttpResponse:
     webmFile = req.files["webmFile"]
     video_clip = None
     #setting up the file names
-<<<<<<< Updated upstream
-    webm_file_name = username + str(uuid.uuid4()) + ".webm"
-    wav_file_name = username + str(uuid.uuid4()) + ".wav"
-    try:
-        
-=======
     webm_file_name =  username + str(uuid.uuid4()) + ".webm"
     wav_file_name = username + str(uuid.uuid4()) + ".wav"
     try:        
->>>>>>> Stashed changes
         try:
             webmFile.save(webm_file_name)
             video_clip = VideoFileClip(webm_file_name)
@@ -60,17 +53,9 @@ def main(req: HttpRequest) -> HttpResponse:
            
             #Azure Speech SDK
             speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
-<<<<<<< Updated upstream
-            wave_format = speechsdk.audio.AudioStreamFormat(samples_per_second, bits_per_sample, channels)
-            stream = speechsdk.audio.PushAudioInputStream(stream_format=wave_format)
-            audio_config = speechsdk.audio.AudioConfig(stream=stream)
-            transcriber = speechsdk.transcription.ConversationTranscriber(speech_config, audio_config)
-        
-=======
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
             speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
->>>>>>> Stashed changes
 
             done = False
             transcriptions = []
