@@ -28,7 +28,8 @@ def main(req: HttpRequest) -> HttpResponse:
         data = {
             "interviewQuestion": question,
             "difficulty": difficulty,
-            "regularity": regularity
+            "regularity": regularity,
+            "numberOfResponses": 0
         }
         DBFunctions.create_item(
             data=data,
