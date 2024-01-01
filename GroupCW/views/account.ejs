@@ -9,7 +9,7 @@
 
 <section class="account-page ">
     <section class="your-account card rounded shadowed">
-        <h2 class="underlined">John Smith</h2>
+        <h2 class="underlined">{{account}}</h2>
         <ul>
 
             <li>2 Responses to 1 Questions</li>
@@ -19,6 +19,7 @@
         <br>
         <br>
         <button class="red-button">Delete Account</button>
+        <button onclick="window.location.href = '/set-new-password'">Reset Password</button>
     </section>
 
     <section class="your-responses card rounded shadowed">
@@ -160,12 +161,13 @@
 
 </main>
 </div>
-<!-- VueJS -->
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+<script>const USER_ID = '<%= id %>';</script>
+
+<%- include('footer'); -%>
 
 <!-- Application Javascript -->
-<script src="/static/account.js"></script>
+<script defer src="/static/account.js"></script>
 
 </body>
-
 </html>

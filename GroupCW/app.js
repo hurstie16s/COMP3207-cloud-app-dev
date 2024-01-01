@@ -12,8 +12,7 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 // URL of the backend API
-const BACKEND_ENDPOINT = process.env.BACKEND || 'http://localhost:8181';
-
+const BACKEND_ENDPOINT = process.env.BACKEND || 'http://localhost:7071';
 //Start the server
 function startServer() {
     const PORT = process.env.PORT || 8080;
@@ -58,9 +57,9 @@ app.get('/question/:id', (req, res) => {
   userCookie ? res.render('question', {id: req.params['id']}) : res.redirect('/sign-in');
 });
 
-app.get('/account', (req, res) => {
+app.get('/account/:user', (req, res) => {
   const userCookie = req.cookies.user;
-  userCookie ? res.render('account') : res.redirect('sign-in');
+  userCookie ? res.render('account', {id: req.params['user']}) : res.redirect('/sign-in');
 });
 
 
