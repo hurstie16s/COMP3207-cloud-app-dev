@@ -2,10 +2,11 @@
 import unittest
 import requests
 import uuid
+import json
 #Azure Imports
 #Code base Imports
 import AzureData
-from shared_code import DBFunctions
+from shared_code import DBFunctions, PasswordFunctions
 
 class TestAddUserFunction(unittest.TestCase):
     TEST_URL = "http://localhost:7071/login"
@@ -19,7 +20,7 @@ class TestAddUserFunction(unittest.TestCase):
         data = {
             "username": self.testUsername,
             "email": self.testEmail,
-            "password": self.testPassword
+            "hashed_password": PasswordFunctions.hash_password(self.testPassword)
         }
 
         DBFunctions.create_item(
@@ -33,29 +34,38 @@ class TestAddUserFunction(unittest.TestCase):
         username = "false User"
         password = "false Password"
 
-        response = requests.get(url=self.TEST_URL, data={"username": username, "password": password})
-        result = response.status_code == 401 and response.content == {"result": False, "msg": "User not found"}
-        self.assertTrue(result)
+        data = json.dumps({"username": username, "password": password})
+
+        response = requests.post(url=self.TEST_URL, data=data)
+        
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, b'{"result": false, "msg": "User not found"}')
 
     def test_password_incorrect(self):
 
         # Incorrect Password
         password = "false Password"
 
-        response = requests.get(url=self.TEST_URL, data={"username": self.testUsername, "password": password})
-        result = response.status_code == 401 and response.content == {"result": False, "msg": "Invalid Login"}
-        self.assertTrue(result)
+        data = json.dumps({"username": self.testUsername, "password": password})
+
+        response = requests.post(url=self.TEST_URL, data=data)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.content, b'{"result": false, "msg": "Invalid Login"}')
 
     def test_login_success(self):
 
-        response = requests.get(url=self.TEST_URL, data={"username": self.testUsername, "password": self.testPassword})
+        data = json.dumps({"username": self.testUsername, "password": self.testPassword})
+
+        response = requests.post(url=self.TEST_URL, data=data)
         self.assertEqual(response.status_code, 200)
 
+    """
     def tearDown(self):
         DBFunctions.delete_item(
             id=self.testUsername, 
             container=AzureData.containerUsers
         )
+    """
         
 if __name__ == '__main__':
     unittest.main()

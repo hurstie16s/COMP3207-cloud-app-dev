@@ -36,10 +36,11 @@ def main(req: HttpRequest) -> HttpResponse:
     interviewQuestion = req.form.get("interviewQuestion") #input("what do you want your prompt to be? : ") req.params.get('text')
     private = req.form.get("private")
     webmFile = req.files["webmFile"]
-    video_clip = None
     #setting up the file names
+
     webm_file_name =  username + str(uuid.uuid4()) + ".webm"
     wav_file_name = username + str(uuid.uuid4()) + ".wav"
+
     try:        
         try:
             webmFile.save(webm_file_name)
@@ -55,6 +56,7 @@ def main(req: HttpRequest) -> HttpResponse:
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
             speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
 
             done = False
             transcriptions = []
@@ -97,7 +99,18 @@ def main(req: HttpRequest) -> HttpResponse:
                 transcription += text
         except:
             raise
-        
+
+        # ChatGPT Part
+        # Call function with question + transcript as parameters
+        # Store the return value (interview feedback)
+        try:
+            output_feedback = send_to_ai(interviewQuestion, transcription)
+            # Need to sort out language part
+            language = 'en'
+        except:
+            raise
+
+
         #Translation
         try:
             jsonText = [{
@@ -118,10 +131,15 @@ def main(req: HttpRequest) -> HttpResponse:
                 "interviewQuestion": interviewQuestion,
                 "interviewBlopURL": bob_client.url,
                 "interviewLanguage": response['detectedLanguage']["language"],
-                "trasncript": response['translations'],
+                "transcript": response['translations'],
                 "comments": [],
                 "rating": [],
-                "flags": [],
+                "tips": [ 
+                    {
+                        "language": language,
+                        "ChatGPTResponse": output_feedback
+                    }
+                ],
                 "private": private
             }
         try:
