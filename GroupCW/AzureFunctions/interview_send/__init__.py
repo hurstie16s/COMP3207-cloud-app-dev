@@ -1,5 +1,6 @@
 # System Imports
 # Azure Imports
+import logging
 from azure.functions import HttpRequest, HttpResponse
 import azure.cognitiveservices.speech as speechsdk
 from scipy.io import wavfile
@@ -9,8 +10,8 @@ import json
 import AzureData as AzureData
 import os
 import uuid
-from moviepy.editor import VideoFileClip
-import logging
+from moviepy.video.io import ffmpeg_tools
+from interview_review.__init__ import send_to_ai
 
 translation_params = {
     'api-version': '3.0',
@@ -42,12 +43,10 @@ def main(req: HttpRequest) -> HttpResponse:
     try:        
         try:
             webmFile.save(webm_file_name)
-            video_clip = VideoFileClip(webm_file_name)
-            audio_clip = video_clip.audio
-            audio_clip.write_audiofile(wav_file_name, codec='pcm_s16le', ffmpeg_params=['-ar', '16000'])
-        except:
+            ffmpeg_tools.ffmpeg_extract_audio(webm_file_name, wav_file_name)
+        except Exception as e:
+            logging.exception("Error converting WebM to WAV: " + str(e), exc_info=True)
             raise ExceptionWithCreatingFiles
-
         
         try:
            
@@ -108,6 +107,7 @@ def main(req: HttpRequest) -> HttpResponse:
             request = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
             response = request.json()[0]
         except:
+            logging.exception("Error performing translation: " + str(e), exc_info=True)
             raise ExceptionWithTranslation
         
         #Json data to store to cosmosDB
@@ -127,27 +127,16 @@ def main(req: HttpRequest) -> HttpResponse:
         try:
             AzureData.containerInterviewData.create_item(jsonBody, enable_automatic_id_generation=True)
         except:
+            logging.exception("Error storing interview data in CosmosDB: " + str(e), exc_info=True)
             raise ExceptionWithStoringToCosmosDB
-            
-        #cleanup
-        if video_clip:
-            video_clip.close()
-            if(os.path.exists(webm_file_name)): os.remove(webm_file_name)
-            if(os.path.exists(wav_file_name)): os.remove(wav_file_name)
         
         return HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}),mimetype="application/json")
             
         
-    except Exception as e:
-        
+    except Exception as e:        
         #Check if files exists and delete them
-        if video_clip:
-            video_clip.close()
-            if(os.path.exists(webm_file_name)): os.remove(webm_file_name)
-            if(os.path.exists(wav_file_name)): os.remove(wav_file_name)
-            blob_file = AzureData.blob_service_client.get_blob_client(container=AzureData.container_name, blob=webm_file_name)
-            blob_exists = blob_file.exists()
-            if(blob_exists): blob_file.delete_blob()
+        blob_file = AzureData.blob_service_client.get_blob_client(container=AzureData.container_name, blob=webm_file_name)
+        if(blob_file.exists()): blob_file.delete_blob()
         
         #custom error messages
         if isinstance(e, ExceptionWithStoringToCosmosDB):
@@ -160,8 +149,19 @@ def main(req: HttpRequest) -> HttpResponse:
         elif isinstance(e, ExceptionWithTranscription):
             return HttpResponse(body=json.dumps({"result": False , "msg" : "Error with the creation of transcription, please try again."}),mimetype="application/json")
         else:
-            return HttpResponse(body=json.dumps({"result": False , "msg" : "Unknown error, please try again."}),mimetype="application/json")       
-            
+            return HttpResponse(body=json.dumps({"result": False , "msg" : "Unknown error: " + str(e)}),mimetype="application/json")       
+    finally:
+        try: # Remove WebM file if it exists
+            os.remove(webm_file_name)
+        except OSError:
+            pass
+
+        try: # Remove WAV file if it exists
+            os.remove(wav_file_name)
+        except OSError:
+            pass
+
+
 class ExceptionWithStoringToCosmosDB(Exception):
     pass
 
