@@ -39,6 +39,10 @@ var app = new Vue({
         return questions.filter(question => {
           return question.question.toLowerCase().includes(this.search.toLowerCase());
         });
+      },
+
+      topQs() {
+        return this.questions.sort((a, b) => b.numberOfResponses - a.numberOfResponses).slice(0, 3);
       }
     },
     beforeMount() {
