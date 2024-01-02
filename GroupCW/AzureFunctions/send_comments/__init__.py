@@ -38,7 +38,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
         # Update the interview data in the database
         DBFunctions.upsert_item(interview_data, AzureData.containerInterviewData)
-        return HttpResponse(json.dumps({"result": True, "msg": "Comment added successfully"}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Comment added successfully", "data": comment_data}), status_code=200, mimetype="application/json")
 
     except Exception as e:
         logging.error(f"Error occurred: {str(e)}")
