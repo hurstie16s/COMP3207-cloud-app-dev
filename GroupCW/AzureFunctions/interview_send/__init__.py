@@ -88,7 +88,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 time.sleep(.5)
                 timeSpent += 0.5
                 if(timeSpent > 300): raise
-            speech_recognizer.stop_continuous_recognition
+            speech_recognizer.stop_continuous_recognition()
             
             with open(webm_file_name, "rb") as data:
                 bob_client = AzureData.blob_container.upload_blob(name=webm_file_name, data=data)
