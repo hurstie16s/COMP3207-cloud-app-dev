@@ -12,7 +12,11 @@ from shared_code import DBFunctions
 class TestLoginUserFunction(unittest.TestCase):  
     
     TEST_URL="http://localhost:7071/interview/data/send"
-    '''
+'''
+Will do this later
+
+
+
     def setUp(self):
         # Create Dummy Credentials
         self.testUsername = str(uuid.uuid1().hex)
@@ -27,9 +31,8 @@ class TestLoginUserFunction(unittest.TestCase):
 
         DBFunctions.create_item(
             data=data,
-            container=AzureData.interviewData
+            container=AzureData.containerInterviewData
         )
-    '''
     
     def test_sending_interview(self):
          with open("./test.webm", 'rb') as file:
@@ -48,11 +51,13 @@ class TestLoginUserFunction(unittest.TestCase):
             self.assertEqual(200, response.status_code)
             self.assertEqual(b'{"result": true, "msg": "OK"}', response.content)
 
-'''
+
     def tearDown(self):
         pass
-        '''
+        
 
 
 if __name__ == '__main__':
     unittest.main()
+    
+'''

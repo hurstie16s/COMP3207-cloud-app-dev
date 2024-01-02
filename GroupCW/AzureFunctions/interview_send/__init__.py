@@ -55,6 +55,7 @@ def main(req: HttpRequest) -> HttpResponse:
     audioUuid = str(uuid.uuid4())
     webm_file_name = "/tmp/" + username + audioUuid + ".webm"
     wav_file_name = "/tmp/" + username + audioUuid + ".wav"
+
     try:        
         try:
             webmFile.save(webm_file_name)
@@ -64,16 +65,13 @@ def main(req: HttpRequest) -> HttpResponse:
             raise ExceptionWithCreatingFiles
         
         try:
-            channels = 1
-            bits_per_sample = 16
-            samples_per_second = 16000
-
+           
             #Azure Speech SDK
             speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
-            wave_format = speechsdk.audio.AudioStreamFormat(samples_per_second, bits_per_sample, channels)
-            stream = speechsdk.audio.PushAudioInputStream(stream_format=wave_format)
-            audio_config = speechsdk.audio.AudioConfig(stream=stream)
-            transcriber = speechsdk.transcription.ConversationTranscriber(speech_config, audio_config)
+            audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
+
+            speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
 
             done = False
             transcriptions = []
@@ -87,26 +85,26 @@ def main(req: HttpRequest) -> HttpResponse:
             def transcribed_cb(evt: speechsdk.ConnectionEventArgs):
                 """Callback for handling transcribed events"""
                 result_text = evt.result.text
-                print(evt.result.reason)
-                #if evt.result.reason == speechsdk.ResultReason.RecognizedSpeech:
-                    #print("Recognized: {}".format(evt.text))
-                #elif evt.result.reason == speechsdk.ResultReason.NoMatch:
-                # print("No speech could be recognized: {}".format(evt.no_match_details))
+                logging.info(evt.result.reason)
+                logging.info(result_text)
                 nonlocal transcriptions
                 transcriptions.append(result_text)
 
             # Subscribe to the events fired by the conversation transcriber
-            transcriber.transcribed.connect(transcribed_cb)
-            transcriber.session_stopped.connect(stop_cb)
-            transcriber.canceled.connect(stop_cb)
+            speech_recognizer.recognized.connect(transcribed_cb)
+            speech_recognizer.session_stopped.connect(stop_cb)
+            speech_recognizer.canceled.connect(stop_cb)
             
-            transcriber.start_transcribing_async()
-            _, wav_data = wavfile.read(wav_file_name)
-            stream.write(wav_data.tobytes())
-            stream.close()
+            
+            timeSpent = 0
+            speech_recognizer.start_continuous_recognition()
+            #infinite loop that may need fixing
             while not done:
+                logging.info("Done:" + str(done))
                 time.sleep(.5)
-            transcriber.stop_transcribing_async()
+                timeSpent += 0.5
+                if(timeSpent > 300): raise
+            speech_recognizer.stop_continuous_recognition
             
             with open(webm_file_name, "rb") as data:
                 bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)
