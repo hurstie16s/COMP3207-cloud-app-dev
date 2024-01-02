@@ -58,8 +58,7 @@ var app = new Vue({
         const formData = new FormData();
         formData.append('username', this.user);
         formData.append('industry', 'TODO'); // TODO: Industry?
-        formData.append('interviewTitle', this.question.question);
-        formData.append('interviewQuestion', this.question.question);
+        formData.append('interviewQuestion', this.question.questions[0].question);
         formData.append('private', false); // TODO: Private?
         formData.append('webmFile', blob);
 

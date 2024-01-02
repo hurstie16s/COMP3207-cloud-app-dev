@@ -32,14 +32,13 @@ def main(req: HttpRequest) -> HttpResponse:
     #Json inputs from body
     username = req.form.get("username") #input("what is your username? : ") req.params.get('username')
     industry = req.form.get("industry")
-    interviewTitle = req.form.get("interviewTitle") #input("what do you want your prompt to be? : ") req.params.get('text')
     interviewQuestion = req.form.get("interviewQuestion") #input("what do you want your prompt to be? : ") req.params.get('text')
     private = req.form.get("private")
     webmFile = req.files["webmFile"]
     #setting up the file names
 
-    webm_file_name =  "/tmp/" + username + str(uuid.uuid4()) + ".webm"
-    wav_file_name =  "/tmp/" + username + str(uuid.uuid4()) + ".wav"
+    webm_file_name =  username + str(uuid.uuid4()) + ".webm"
+    wav_file_name = username + str(uuid.uuid4()) + ".wav"
 
     try:        
         try:
@@ -127,7 +126,6 @@ def main(req: HttpRequest) -> HttpResponse:
         jsonBody = {
                 "username": username,
                 "industry": industry,
-                "interviewTitle": interviewTitle,
                 "interviewQuestion": interviewQuestion,
                 "interviewBlopURL": bob_client.url,
                 "interviewLanguage": response['detectedLanguage']["language"],
