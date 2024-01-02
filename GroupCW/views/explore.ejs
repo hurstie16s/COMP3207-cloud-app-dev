@@ -79,8 +79,8 @@
             <div class="question-meta">
                 <div>
                     <p class="question-response-count flex-center"><span
-                            class="material-symbols-rounded">sticky_note_2</span> ???
-                        Responses</p>
+                            class="material-symbols-rounded">sticky_note_2</span>
+                            {{ question.numberOfResponses }} Responses</p>
                     <div>
                         <span class="chip chip-regularity-standard" v-if="question.regularity === 0"></span>
                         <span class="chip chip-regularity-infrequent" v-else-if="question.regularity === 1"></span>

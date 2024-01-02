@@ -21,8 +21,7 @@ def main(req: HttpRequest) -> HttpResponse:
     # Return HttpResponse
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
-def getQuestionByID(id: str) -> (dict,int):
-    
+def getQuestionByID(id: str) -> (dict,int):    
     # Get all interview questions
     # Add checks
     query = "SELECT * FROM InterviewQuestions WHERE InterviewQuestions.id = @id"
@@ -37,13 +36,23 @@ def getQuestionByID(id: str) -> (dict,int):
         return {"msg": "Question not found"}, 404
 
     questionFull = questionsResult[0]
+    
+    countResult = DBFunctions.query_items(
+        query="SELECT VALUE COUNT(1) FROM c WHERE c.questionId = @id",
+        parameters=[{"name": "@id", "value": str(id)}],
+        container=AzureData.containerInterviewData
+    )
+
+    responseCount = 0
+    if len(countResult) > 0:
+        responseCount = countResult[0]
 
     question = {
         "id": questionFull.get("id"),
         "question" : questionFull.get("interviewQuestion"),
         "difficulty": questionFull.get("difficulty"),
         "regularity": questionFull.get("regularity"),
-        "numberOfResponses": questionFull.get("numberOfResponses")
+        "numberOfResponses": responseCount
     }
 
     output = {"msg": "Questions collected", "question": question}
@@ -51,14 +60,24 @@ def getQuestionByID(id: str) -> (dict,int):
     return output, 200
 
 def getAllQuestions() -> (dict,int):
-    
     # Get all interview questions
-    # Add checks
     query = "SELECT * FROM InterviewQuestions"
     questionsResult = DBFunctions.query_items(
         query=query,
         container=AzureData.containerInterviewQuestions
     )
+
+    # Fetch response counts - Python CosmosDB SDK does not support GROUP BY with COUNT so we must aggregate manually
+    responses = DBFunctions.query_items(
+        query="SELECT * from c",
+        container=AzureData.containerInterviewData
+    )
+
+    responseCounts = {}
+    for response in responses:
+        questionId = response.get("questionId")
+        responseCounts[questionId] = responseCounts.get(questionId, 0) + 1
+
 
     questions=[]
     for question in questionsResult :
@@ -67,7 +86,7 @@ def getAllQuestions() -> (dict,int):
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
             "regularity": question.get("regularity"),
-            "numberOfResponses": question.get("numberOfResponses")
+            "numberOfResponses": responseCounts.get(question.get("id")) or 0
         }
         questions.append(questionDict)
 
