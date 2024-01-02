@@ -10,35 +10,15 @@
 <section class="explore">
     <section class="card top-questions rounded shadowed">
         <h2 class="underlined">Top Questions</h2>
-        <div class="question rounded">
-            <p class="question-text">Tell me about yourself</p>
+        <div class="question rounded" v-for="question in topQuestions">
+            <p class="question-text">{{ question.question }}</p>
             <hr>
             <div class="question-meta">
                 <p class="question-response-count flex-center"><span
-                        class="material-symbols-rounded">sticky_note_2</span> 432
-                    Responses</p>
+                        class="material-symbols-rounded">sticky_note_2</span>
+                    {{ question.numberOfResponses }} Responses</p>
                 <button class="material-symbols-rounded icon-button"
-                    onclick="location.href='/question'">chevron_right</button>
-            </div>
-        </div>
-        <div class="question rounded">
-            <p class="question-text">Why do you want to work at this company?</p>
-            <hr>
-            <div class="question-meta">
-                <p class="question-response-count flex-center"><span
-                        class="material-symbols-rounded">sticky_note_2</span> 387
-                    Responses</p>
-                <button class="material-symbols-rounded icon-button">chevron_right</button>
-            </div>
-        </div>
-        <div class="question rounded">
-            <p class="question-text">Tell me about a time where you had to work as part of a team</p>
-            <hr>
-            <div class="question-meta">
-                <p class="question-response-count flex-center"><span
-                        class="material-symbols-rounded">sticky_note_2</span> 210
-                    Responses</p>
-                <button class="material-symbols-rounded icon-button">chevron_right</button>
+                    @click="navToQuestion(question.id)">chevron_right</button>
             </div>
         </div>
     </section>
