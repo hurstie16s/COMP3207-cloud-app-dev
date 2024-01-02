@@ -43,13 +43,13 @@
                     <span class="material-symbols-rounded toggle-off">visibility_off</span>
                 </label>
 
-                <input type="checkbox" :id="'transcript-toggle-' + index" class="toggle hidden">
+                <input type="checkbox" :id="'transcript-toggle-' + index" class="toggle hidden" @change="toggleVisibility('response-transcript-' + index)" v-model="!visibleElements['response-transcript-' + index]">
                 <label :for="'transcript-toggle-' + index" class="toggle-label" title="Toggle transcript">
                     <span class="material-symbols-rounded toggle-on">description</span>
                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                 </label>
 
-                <input type="checkbox" :id="'comments-toggle-' + index" class="toggle hidden">
+                <input type="checkbox" :id="'comments-toggle-' + index" class="toggle hidden" @change="toggleVisibility('response-comments-' + index)" v-model="!visibleElements['response-comments-' + index]">
                 <label :for="'comments-toggle-' + index" class="toggle-label" title="Toggle comments">
                     <span class="material-symbols-rounded toggle-on">comment</span>
                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
@@ -66,11 +66,11 @@
                 <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
                 <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
             </div>
-            <div class="response-transcript">
+            <div :id="'response-transcript-' + index" class="response-transcript" :class="{ 'invisible': visibleElements['response-transcript-' + index] }">
                 <h3 class="underlined">Transcript</h3>
                 <p>{{response.transcript[0].text}}</p>
             </div>
-            <div class="response-comments">
+            <div :id="'response-comments-' + index" class="response-comments" :class="{ 'invisible': visibleElements['response-comments-' + index] }">
                 <h3 class="underlined">Comments</h3>
                 <div class="comment rounded" v-for="comment in response.comments" :key="comment.id">
                     <p class="comment-username"><span class="material-symbols-rounded">person</span>{{comment.username}}

@@ -570,6 +570,12 @@ hr {
     margin-top: 2.5em;
 }
 
+.invisible {
+    max-height: 0;
+    overflow: hidden;
+    
+}
+
 .star {
     font-size: 1.8em !important;
     font-variation-settings: 'wght'300;

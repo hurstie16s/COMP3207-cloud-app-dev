@@ -5,7 +5,8 @@ var app = new Vue({
       user: null,
       account: null,
 
-      interviews: []
+      interviews: [],
+      visibleElements: {}
     },
     //On Awake methods here:
     mounted: function() {
@@ -23,6 +24,7 @@ var app = new Vue({
         postHelper(data, '/interview/data/search')
         .then(response => {
           this.interviews = response.data;
+          if (Object.keys(this.visibleElements).length === 0) {this.loadElements();}
         })
         .catch(error => {
           console.log(error);
@@ -75,11 +77,23 @@ var app = new Vue({
       },
 
       isLiked(comment) {
-        console.log(comment);
         return comment.thumbs_up.includes(this.user)
       },
 
-      isDisliked(comment) {return comment.thumbs_down.includes(this.user)}
+      isDisliked(comment) {
+        return comment.thumbs_down.includes(this.user)
+      },
+
+      toggleVisibility(id) {
+        this.$set(this.visibleElements, id, !this.visibleElements[id]);
+      },
+
+      loadElements() {
+        this.interviews.forEach((response, index) => {
+          this.$set(this.visibleElements, `response-transcript-${index}`, (index === 0 ? false : true));
+          this.$set(this.visibleElements, `response-comments-${index}`, (index === 0 ? false : true));
+        });
+      }
 
     },
     //FrontEnd methods here:
@@ -93,4 +107,6 @@ var app = new Vue({
       this.loadResponses();
     }
 });
+
+
 
