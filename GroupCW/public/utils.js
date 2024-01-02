@@ -8,8 +8,8 @@ async function getHelper(data, endpoint) {
       },
       data: data
     })
-    console.log('Response:', response.data);
-    return response.data;
+    console.log('Response:', response);
+    return response;
   } catch (error) {
     console.log('ERROR:', error);
     return error.response;
