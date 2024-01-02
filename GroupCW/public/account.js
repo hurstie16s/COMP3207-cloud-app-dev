@@ -47,25 +47,21 @@ var app = new Vue({
       },
 
       like(comment) {
-        if (!comment.thumbs_up.includes(this.user)) {
-          const data = {
-            comment_id: comment.id,
-            username: this.user,
-            rate_action: "like"
-          }
-          this.sendCommentRating(data);
-        } 
+        const data = {
+          comment_id: comment.id,
+          username: this.user,
+          rate_action: "like"
+        }
+        this.sendCommentRating(data);
       },
 
       dislike(comment) {
-        if (!comment.thumbs_down.includes(this.user)) {
-          const data = {
-            comment_id: comment.id,
-            username: this.user,
-            rate_action: "dislike"
-          }
-          this.sendCommentRating(data);
-        } 
+        const data = {
+          comment_id: comment.id,
+          username: this.user,
+          rate_action: "dislike"
+        }
+        this.sendCommentRating(data);
       },
 
       async sendCommentRating(data) {
