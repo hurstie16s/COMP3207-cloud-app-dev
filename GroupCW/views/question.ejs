@@ -62,33 +62,33 @@
     <section class="your-responses card rounded shadowed">
         <h2 class="underlined">Your Responses</h2>
 
-        <div class="response card rounded shadowed">
+        <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
             <div class="response-meta">
-                <p class="username"><span class="material-symbols-rounded">person</span>John Smith
-                </p>
-                <span class="timestamp">19/12/2023 at 13:45</span>
+                <p class="username"><span class="material-symbols-rounded">person</span>
+                    {{ response.username }}</p>
+                <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
             </div>
 
-
             <div class="response-options">
-                <span class="avg-rating flex-center">4.2<span
+                <span class="avg-rating flex-center">{{ averageRatings[response.id].toFixed(1) }}<span
                         class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" id="visibility-toggle-1" class="toggle hidden">
-                <label class="toggle-label" for="visibility-toggle-1" title="Public visibility toggle">
+                <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
+                    v-model="response.private" :true-value="false" :false-value="true" v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
+                <label class="toggle-label" v-bind:for="'visibility-toggle-user-' + i" title="Public visibility toggle">
                     <span class="material-symbols-rounded toggle-on">visibility</span>
                     <span class="material-symbols-rounded toggle-off">visibility_off</span>
                 </label>
-                <input type="checkbox" id="transcript-toggle-1" class="toggle hidden">
-                <label class="toggle-label" for="transcript-toggle-1" title="Toggle transcript">
+                <input type="checkbox" v-bind:id="'transcript-toggle-user-' + i" class="toggle hidden" v-model="response.showTranscript">
+                <label class="toggle-label" v-bind:for="'transcript-toggle-user-' + i" title="Toggle transcript">
                     <span class="material-symbols-rounded toggle-on">description</span>
                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                 </label>
-                <input type="checkbox" id="comments-toggle-1" class="toggle hidden">
-                <label class="toggle-label" for="comments-toggle-1" title="Toggle comments">
+                <input type="checkbox" v-bind:id="'comments-toggle-user-' + i" class="toggle hidden" v-model="response.showComments">
+                <label class="toggle-label" v-bind:for="'comments-toggle-user-' + i" title="Toggle comments">
                     <span class="material-symbols-rounded toggle-on">comment</span>
                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                 </label>
-                <button
+                <button @click="deleteResponse(response.questionId, response.id)"
                     class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
             </div>
 
@@ -96,123 +96,36 @@
                 <hr>
             </div>
             <div class="response-controls">
-                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
-                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
-                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button" @click="seekAudio(response.id, -10)">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button"
+                    v-if="!response.audio || response.audioPaused" @click="playAudio(response)">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button" v-else @click="pauseAudio(response)">pause</button>
+                <button class="material-symbols-rounded icon-button minimal-button" @click="seekAudio(response.id, 10)">forward_10</button>
             </div>
-            <div class="response-rating hidden">
-                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-            </div>
-            <div class="response-transcript">
+            <div class="response-transcript" v-if="response.showTranscript">
                 <h3 class="underlined">Transcript</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis tellus ac congue
-                    tempus. Cras sed lectus sed massa dictum commodo eu in sapien. Nulla id bibendum magna, at
-                    porttitor dolor. Phasellus dapibus ligula erat, at suscipit arcu malesuada ut. Fusce egestas
-                    neque id felis dictum, eu consectetur leo sollicitudin. Curabitur tempor rhoncus nisi eu
-                    porta. Curabitur bibendum sollicitudin urna vel egestas. Duis augue massa, laoreet eu
-                    fermentum sed, rutrum sit amet ante. Pellentesque tincidunt ultricies vestibulum. Phasellus
-                    condimentum quam leo, ac bibendum libero efficitur id. In mauris urna, egestas in velit vel,
-                    scelerisque suscipit magna. Sed volutpat volutpat velit, vitae molestie nulla fringilla ut.
-                    Sed pellentesque lacus eget bibendum pulvinar.</p>
+                <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
             </div>
-            <div class="response-comments">
+            <div class="response-comments" v-if="response.showComments">
                 <h3 class="underlined">Comments</h3>
-                <div class="comment rounded">
-                    <p class="comment-username"><span class="material-symbols-rounded">person</span>Chris Doe
-                    </p>
-                    <p class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis tellus ac congue
-                        tempus. Cras sed lectus sed massa dictum commodo eu in sapien.</p>
+                <div class="comment rounded" v-for="comment in response.comments">
+                    <p class="comment-username"><span class="material-symbols-rounded">person</span>{{ comment.username }}</p>
+                    <p class="comment-text">{{ comment.comment }}</p>
                     <div class="like-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button liked">thumb_up</button>
-                        <span>12</span>
+                        <button class="icon-button material-symbols-rounded minimal-button" @click="rateComment(response.id, comment.id, 'like')"
+                            :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
+                        <span>{{ comment.thumbs_up.length }}</span>
                     </div>
                     <div class="dislike-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
-                        <span>2</span>
-                    </div>
-                </div>
-                <div class="comment rounded">
-                    <p class="comment-username"><span class="material-symbols-rounded">person</span>Penny Tool
-                    </p>
-                    <p class="comment-text">Nunc convallis tellus ac congue tempus.</p>
-                    <div class="like-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button">thumb_up</button>
-                        <span>4</span>
-                    </div>
-                    <div class="dislike-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button disliked">thumb_down</button>
-                        <span>1</span>
-                    </div>
-                </div>
-                <div class="comment rounded">
-                    <p class="comment-username"><span class="material-symbols-rounded">person</span>Theodore
-                        Handle</p>
-                    <p class="comment-text">Cras sed lectus sed massa dictum commodo eu in sapien.</p>
-                    <div class="like-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button">thumb_up</button>
-                        <span>17</span>
-                    </div>
-                    <div class="dislike-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button">thumb_down</button>
-                        <span>0</span>
+                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button" @click="rateComment(response.id, comment.id, 'dislike')"
+                            :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
+                        <span>{{ comment.thumbs_down.length }}</span>
                     </div>
                 </div>
                 <div class="new-comment">
-                    <textarea class="input" placeholder="Add a comment..."></textarea>
-                    <button class="material-symbols-rounded icon-button">chevron_right</button>
+                    <textarea class="input" placeholder="Add a comment..." v-model="response.pending_comment"></textarea>
+                    <button class="material-symbols-rounded icon-button" @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
                 </div>
-            </div>
-        </div>
-
-        <div class="response card rounded shadowed">
-            <div class="response-meta">
-                <p class="username"><span class="material-symbols-rounded">person</span>John Smith
-                </p>
-                <span class="timestamp">19/12/2023 at 14:19</span>
-            </div>
-
-            <div class="response-options">
-                <span class="avg-rating flex-center">3.8<span
-                        class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" id="visibility-toggle-2" class="toggle hidden">
-                <label class="toggle-label" for="visibility-toggle-2">
-                    <span class="material-symbols-rounded toggle-on">visibility</span>
-                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
-                </label>
-                <input type="checkbox" id="transcript-toggle-2" class="toggle hidden">
-                <label class="toggle-label" for="transcript-toggle-2">
-                    <span class="material-symbols-rounded toggle-on">description</span>
-                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
-                </label>
-                <input type="checkbox" id="comments-toggle-2" class="toggle hidden">
-                <label class="toggle-label" for="comments-toggle-2">
-                    <span class="material-symbols-rounded toggle-on">comment</span>
-                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
-                </label>
-                <button
-                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
-            </div>
-
-            <div class="response-timeline">
-                <hr>
-            </div>
-            <div class="response-controls">
-                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
-                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
-                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
-            </div>
-            <div class="response-rating hidden">
-                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
             </div>
         </div>
     </section>
@@ -223,23 +136,23 @@
 
         </div>
 
-        <div class="response card rounded shadowed">
+        <div class="response card rounded shadowed" v-for="(response, i) in communityResponses">
             <div class="response-meta">
-                <p class="username"><span class="material-symbols-rounded">person</span>Jane Doe
-                </p>
-                <span class="timestamp">9/12/2023 at 19:00</span>
+                <p class="username"><span class="material-symbols-rounded">person</span>
+                    {{ response.username }}</p>
+                <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
             </div>
 
             <div class="response-options">
-                <span class="avg-rating flex-center">4.9<span
+                <span class="avg-rating flex-center">{{ averageRatings[response.id].toFixed(1) }}<span
                         class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" id="transcript-toggle-3" class="toggle hidden">
-                <label class="toggle-label" for="transcript-toggle-3">
+                <input type="checkbox" v-bind:id="'transcript-toggle-community-' + i" class="toggle hidden" v-model="response.showTranscript">
+                <label class="toggle-label" v-bind:for="'transcript-toggle-community-' + i">
                     <span class="material-symbols-rounded toggle-on">description</span>
                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                 </label>
-                <input type="checkbox" id="comments-toggle-3" class="toggle hidden">
-                <label class="toggle-label" for="comments-toggle-3">
+                <input type="checkbox" v-bind:id="'comments-toggle-community-' + i" class="toggle hidden" v-model="response.showComments">
+                <label class="toggle-label" v-bind:for="'comments-toggle-community-' + i">
                     <span class="material-symbols-rounded toggle-on">comment</span>
                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                 </label>
@@ -255,51 +168,41 @@
             </div>
             <div class="response-rating">
                 <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
+                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 5)"
+                    :class="[userRatings[response.id] >= 5 ? 'star-filled' : '']">star_rate</span>
+                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 4)"
+                    :class="[userRatings[response.id] >= 4 ? 'star-filled' : '']">star_rate</span>
+                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 3)"
+                    :class="[userRatings[response.id] >= 3 ? 'star-filled' : '']">star_rate</span>
+                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 2)"
+                    :class="[userRatings[response.id] >= 2 ? 'star-filled' : '']">star_rate</span>
+                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 1)"
+                    :class="[userRatings[response.id] >= 1 ? 'star-filled' : '']">star_rate</span>
             </div>
-        </div>
-
-        <div class="response card rounded shadowed">
-            <div class="response-meta">
-                <p class="username"><span class="material-symbols-rounded">person</span>Jane Smith
-                </p>
-                <span class="timestamp">10/11/2023 at 12:15</span>
+            <div class="response-transcript" v-if="response.showTranscript">
+                <h3 class="underlined">Transcript</h3>
+                <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
             </div>
-
-            <div class="response-options">
-                <span class="avg-rating flex-center">4.2<span
-                        class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" id="transcript-toggle-4" class="toggle hidden">
-                <label class="toggle-label" for="transcript-toggle-4">
-                    <span class="material-symbols-rounded toggle-on">description</span>
-                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
-                </label>
-                <input type="checkbox" id="comments-toggle-4" class="toggle hidden">
-                <label class="toggle-label" for="comments-toggle-4">
-                    <span class="material-symbols-rounded toggle-on">comment</span>
-                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
-                </label>
-            </div>
-
-            <div class="response-timeline">
-                <hr>
-            </div>
-            <div class="response-controls">
-                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
-                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
-                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
-            </div>
-            <div class="response-rating">
-                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
-                <span class="material-symbols-rounded star">star_rate</span>
+            <div class="response-comments" v-if="response.showComments">
+                <h3 class="underlined">Comments</h3>
+                <div class="comment rounded" v-for="comment in response.comments">
+                    <p class="comment-username"><span class="material-symbols-rounded">person</span>{{ comment.username }}</p>
+                    <p class="comment-text">{{ comment.comment }}</p>
+                    <div class="like-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button" @click="rateComment(response.id, comment.id, 'like')"
+                            :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
+                        <span>{{ comment.thumbs_up.length }}</span>
+                    </div>
+                    <div class="dislike-count rounded">
+                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button" @click="rateComment(response.id, comment.id, 'dislike')"
+                            :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
+                        <span>{{ comment.thumbs_down.length }}</span>
+                    </div>
+                </div>
+                <div class="new-comment">
+                    <textarea class="input" placeholder="Add a comment..." v-model="response.pending_comment"></textarea>
+                    <button class="material-symbols-rounded icon-button" @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
+                </div>
             </div>
         </div>
     </section>

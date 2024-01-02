@@ -12,6 +12,8 @@ import os
 import uuid
 from moviepy.video.io import ffmpeg_tools
 from interview_review.__init__ import send_to_ai
+from shared_code import DBFunctions
+import datetime
 
 translation_params = {
     'api-version': '3.0',
@@ -28,18 +30,31 @@ translation_headers = {
 
 #need to properly implement all available audio files and return appropiate error messages
 def main(req: HttpRequest) -> HttpResponse:
-    
+    interviewId = req.route_params.get('id')
+
+    # Fetch interview question data 
+    questionsResult = DBFunctions.query_items(
+        query="SELECT * FROM InterviewQuestions WHERE InterviewQuestions.id = @id",
+        parameters=[{"name": "@id", "value": interviewId}],
+        container=AzureData.containerInterviewQuestions
+    )
+
+    if len(questionsResult) == 0:
+        return HttpResponse(body=json.dumps({"result": False, "msg" : "Question not found"}), mimetype="application/json", status_code=404)
+
+    question = questionsResult[0]
+    logging.info(json.dumps(question))
+
     #Json inputs from body
-    username = req.form.get("username") #input("what is your username? : ") req.params.get('username')
+    username = req.form.get("username") # TODO: Get from JWT
     industry = req.form.get("industry")
     interviewTitle = req.form.get("interviewTitle") #input("what do you want your prompt to be? : ") req.params.get('text')
-    interviewQuestion = req.form.get("interviewQuestion") #input("what do you want your prompt to be? : ") req.params.get('text')
-    private = req.form.get("private")
+    private = req.form.get("private") == "true" # Form data is always a string, so convert to bool
     webmFile = req.files["webmFile"]
     #setting up the file names
-
-    webm_file_name =  "/tmp/" + username + str(uuid.uuid4()) + ".webm"
-    wav_file_name =  "/tmp/" + username + str(uuid.uuid4()) + ".wav"
+    audioUuid = str(uuid.uuid4())
+    webm_file_name = "/tmp/" + username + audioUuid + ".webm"
+    wav_file_name = "/tmp/" + username + audioUuid + ".wav"
 
     try:        
         try:
@@ -92,7 +107,7 @@ def main(req: HttpRequest) -> HttpResponse:
             speech_recognizer.stop_continuous_recognition
             
             with open(webm_file_name, "rb") as data:
-                bob_client = AzureData.blob_container.upload_blob(name=webm_file_name, data=data)
+                bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)
             
             transcription = ""
             for text in transcriptions:
@@ -104,7 +119,7 @@ def main(req: HttpRequest) -> HttpResponse:
         # Call function with question + transcript as parameters
         # Store the return value (interview feedback)
         try:
-            output_feedback = send_to_ai(interviewQuestion, transcription)
+            output_feedback = send_to_ai(question['interviewQuestion'], transcription)
             # Need to sort out language part
             language = 'en'
         except:
@@ -127,9 +142,11 @@ def main(req: HttpRequest) -> HttpResponse:
         jsonBody = {
                 "username": username,
                 "industry": industry,
+                "questionId": question['id'],
                 "interviewTitle": interviewTitle,
-                "interviewQuestion": interviewQuestion,
-                "interviewBlopURL": bob_client.url,
+                "interviewQuestion": question['interviewQuestion'],
+                "interviewBlobURL": bob_client.url,
+                "audioUuid": audioUuid,
                 "interviewLanguage": response['detectedLanguage']["language"],
                 "transcript": response['translations'],
                 "comments": [],
@@ -140,7 +157,8 @@ def main(req: HttpRequest) -> HttpResponse:
                         "ChatGPTResponse": output_feedback
                     }
                 ],
-                "private": private
+                "private": private,
+                "timestamp": datetime.datetime.now().isoformat()
             }
         try:
             AzureData.containerInterviewData.create_item(jsonBody, enable_automatic_id_generation=True)
