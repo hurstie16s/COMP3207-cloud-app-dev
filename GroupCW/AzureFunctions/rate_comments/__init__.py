@@ -70,7 +70,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
         DBFunctions.upsert_item(data=interview_data, container=AzureData.containerInterviewData)
 
-        return HttpResponse(json.dumps({"result": True, "msg": "Comment rated successfully"}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Comment rated successfully", "comment": comment_to_rate}), status_code=200, mimetype="application/json")
     
     except ValueError:
         return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")
