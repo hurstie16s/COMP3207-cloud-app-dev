@@ -40,6 +40,9 @@ var app = new Vue({
         }
       
         app.questions = res.data['questions'];
+        app.questions.sort((a, b) => {
+          return b.numberOfResponses - a.numberOfResponses;
+        })
       },
 
       navToQuestion(questionId) {
@@ -56,6 +59,9 @@ var app = new Vue({
         return questions.filter(question => {
           return question.question.toLowerCase().includes(this.search.toLowerCase());
         });
+      },
+      topQuestions() {
+        return this.questions.slice(0, 3);
       }
     },
     beforeMount() {
