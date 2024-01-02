@@ -6,12 +6,19 @@ def main(req: HttpRequest) -> HttpResponse:
     
     
     JsonInput = req.get_json()
-    industry = JsonInput['industry']
+    username = JsonInput['username']
+    interviewQuestion = JsonInput['interviewQuestion']
     query = ""
-    if(industry == all): 
-        query += "where interviewData.industry = " + industry
+    if(interviewQuestion != ""): 
+        query += "where interviewData.interviewQuestion = " + interviewQuestion
+    
+    if(username != ""):
+        if(query == ""):
+            query += "where interviewData.username = " + username
+        else:
+            query += " AND interviewData.username = " + username
+    
     allInterviews = list(AzureData.containerInterviewData.query_items(query="SELECT * from interviewData " + query, enable_cross_partition_query=True))
-    print(allInterviews)
     return HttpResponse(body=json.dumps(allInterviews),mimetype="application/json")
     
 if __name__ == '__main__': 
