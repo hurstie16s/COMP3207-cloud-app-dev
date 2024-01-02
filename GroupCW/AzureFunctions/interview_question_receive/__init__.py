@@ -46,7 +46,7 @@ def getQuestionByID(id: str) -> (dict,int):
         "numberOfResponses": questionFull.get("numberOfResponses")
     }
 
-    output = {"msg": "Questions collected", "questions": [question]}
+    output = {"msg": "Questions collected", "question": question}
 
     return output, 200
 

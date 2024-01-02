@@ -6,10 +6,8 @@
         "type": "httpTrigger",
         "direction": "in",
         "name": "req",
-        "methods": [
-          "post"
-        ],
-        "route": "interview/data/send"
+        "methods": ["post"],
+        "route": "interview/{id}/responses"
       },
       {
         "type": "http",
