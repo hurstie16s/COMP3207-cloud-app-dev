@@ -25,7 +25,7 @@
     <section class="your-responses card rounded shadowed">
         <h2 class="underlined">Your Responses</h2>
 
-        <div class="response card rounded shadowed" v-for="response in interviews" :key="response.id">
+        <div class="response card rounded shadowed" v-for="(response, index) in interviews" :key="response.id">
             <div class="response-meta">
                 <p class="username"><span class="material-symbols-rounded">person</span>{{response.username}}
                 </p>
@@ -35,20 +35,22 @@
             <h2 class="question-text">{{response.interviewQuestion}}</h2>
 
             <div class="response-options">
-                <span class="avg-rating flex-center">{{4.2}}<span
+                <span class="avg-rating flex-center">4.2<span
                         class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" id="visibility-toggle-1" class="toggle hidden">
-                <label class="toggle-label" for="visibility-toggle-1" title="Public visibility toggle">
+                <input type="checkbox" :id="'visibility-toggle-' + index" class="toggle hidden">
+                <label :for="'visibility-toggle-' + index" class="toggle-label" title="Public visibility toggle">
                     <span class="material-symbols-rounded toggle-on">visibility</span>
                     <span class="material-symbols-rounded toggle-off">visibility_off</span>
                 </label>
-                <input type="checkbox" id="transcript-toggle-1" class="toggle hidden">
-                <label class="toggle-label" for="transcript-toggle-1" title="Toggle transcript">
+
+                <input type="checkbox" :id="'transcript-toggle-' + index" class="toggle hidden">
+                <label :for="'transcript-toggle-' + index" class="toggle-label" title="Toggle transcript">
                     <span class="material-symbols-rounded toggle-on">description</span>
                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                 </label>
-                <input type="checkbox" id="comments-toggle-1" class="toggle hidden">
-                <label class="toggle-label" for="comments-toggle-1" title="Toggle comments">
+
+                <input type="checkbox" :id="'comments-toggle-' + index" class="toggle hidden">
+                <label :for="'comments-toggle-' + index" class="toggle-label" title="Toggle comments">
                     <span class="material-symbols-rounded toggle-on">comment</span>
                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                 </label>
