@@ -14,6 +14,7 @@ from moviepy.video.io import ffmpeg_tools
 from chatGPTReview.__init__ import send_interview_to_ai
 from shared_code import DBFunctions
 import datetime
+import ast
 
 translation_params = {
     'api-version': '3.0',
@@ -53,8 +54,9 @@ def main(req: HttpRequest) -> HttpResponse:
     webmFile = req.files["webmFile"]
     #setting up the file names
     audioUuid = str(uuid.uuid4())
-    webm_file_name = "/tmp/" + username + audioUuid + ".webm"
-    wav_file_name = "/tmp/" + username + audioUuid + ".wav"
+    webm_file_name = "tmp" + os.sep + username + audioUuid + ".webm"
+    wav_file_name = "tmp" + os.sep + username + audioUuid + ".wav"
+    
 
     try:        
         try:
@@ -120,6 +122,12 @@ def main(req: HttpRequest) -> HttpResponse:
         # Store the return value (interview feedback)
         try:
             output_feedback = send_interview_to_ai(question['interviewQuestion'], transcription)
+            lines = output_feedback.split('\n')
+
+            # Extract the lists using ast.literal_eval
+            good_points = ast.literal_eval(lines[0].split(':')[1].strip())
+            improvement_points = ast.literal_eval(lines[1].split(':')[1].strip())
+            
             # Need to sort out language part
             language = 'en'
         except:
@@ -154,7 +162,8 @@ def main(req: HttpRequest) -> HttpResponse:
                 "tips": [ 
                     {
                         "language": language,
-                        "ChatGPTResponse": output_feedback
+                        "goodPoints": good_points,
+                        "improvementPoints": improvement_points
                     }
                 ],
                 "private": private,

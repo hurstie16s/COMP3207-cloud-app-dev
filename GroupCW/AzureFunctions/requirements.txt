@@ -9,7 +9,7 @@ azure-cosmos==4.5.1
 azure-functions==1.17.0
 azure-mgmt-core==1.4.0
 azure-storage-blob==12.19.0
-AzureData==2.0
+./AzureData/dist/AzureData-2.0.tar.gz
 bcrypt==3.2.0
 certifi==2023.7.22
 cffi==1.16.0

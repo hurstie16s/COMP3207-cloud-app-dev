@@ -11,7 +11,8 @@ client = OpenAI(
 # Prompt parts
 start_for_interview = "Based on this interview question: "
 evaluation_for_interview = "Evaluate this interview transcript for this question: "
-bullet_points_for_interview = "Give 2 small bullet points about the good points and 2 small points on what could be improved."
+bullet_points_for_interview = "Give 2 bullet points about the good points and 2 points on what could be improved. Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets"
+format_for_bullet_points_for_interview = "e.g. Good Points: ['point 1', 'point 2'] Improvement Points: ['point 1', 'point 2']"
 
 
 def send_interview_to_ai(question, transcript):
@@ -20,7 +21,7 @@ def send_interview_to_ai(question, transcript):
             messages=[
                 {
                     "role": "user",
-                    "content": start_for_interview + question + evaluation_for_interview + transcript + bullet_points_for_interview,
+                    "content": start_for_interview + question + evaluation_for_interview + transcript + bullet_points_for_interview + format_for_bullet_points_for_interview,
                 }
             ],
             model="gpt-3.5-turbo",
@@ -42,7 +43,7 @@ def send_interview_to_ai(question, transcript):
 
 start_for_question = "Give me a list of bullet point of general advice not specific to an industry on how to answer this interview question: "
 bullet_points_for_question = "Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets "
-example_for_bullet_points_for_question = "e.g. ['advice 1', 'advice 2']"
+example_for_bullet_points_for_question = "e.g. ['advice 1', 'advice 2'] please don't add any \\n."
 
 def send_question_to_ai(question):
     try:
