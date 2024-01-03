@@ -11,8 +11,8 @@ client = OpenAI(
 # Prompt parts
 start_for_interview = "Based on this interview question: "
 evaluation_for_interview = "Evaluate this interview transcript for this question: "
-bullet_points_for_interview = "Give 2 bullet points about the good points and 2 points on what could be improved. Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets"
-format_for_bullet_points_for_interview = "e.g. Good Points: ['point 1', 'point 2'] Improvement Points: ['point 1', 'point 2']"
+bullet_points_for_interview = "Give 2 bullet points about the good points and 2 points on what could be improved. Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets "
+format_for_bullet_points_for_interview = "Force this format please: ' Good Points: ['point 1', 'point 2'] Improvement Points: ['point 1', 'point 2'] ' "
 
 
 def send_interview_to_ai(question, transcript):

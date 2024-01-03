@@ -122,11 +122,10 @@ def main(req: HttpRequest) -> HttpResponse:
         # Store the return value (interview feedback)
         try:
             output_feedback = send_interview_to_ai(question['interviewQuestion'], transcription)
-            lines = output_feedback.split('\n')
-
+            tips = output_feedback.split('\n')
             # Extract the lists using ast.literal_eval
-            good_points = ast.literal_eval(lines[0].split(':')[1].strip())
-            improvement_points = ast.literal_eval(lines[1].split(':')[1].strip())
+            
+            
             
             # Need to sort out language part
             language = 'en'
@@ -162,8 +161,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 "tips": [ 
                     {
                         "language": language,
-                        "goodPoints": good_points,
-                        "improvementPoints": improvement_points
+                        "tips": tips,
                     }
                 ],
                 "private": private,
