@@ -23,6 +23,9 @@ var app = new Vue({
         }
       
         app.questions = res.data['questions'];
+        app.questions.sort((a, b) => {
+          return b.numberOfResponses - a.numberOfResponses;
+        })
       },
 
       navToQuestion(questionId) {
@@ -40,9 +43,8 @@ var app = new Vue({
           return question.question.toLowerCase().includes(this.search.toLowerCase());
         });
       },
-
-      topQs() {
-        return this.questions.sort((a, b) => b.numberOfResponses - a.numberOfResponses).slice(0, 3);
+      topQuestions() {
+        return this.questions.slice(0, 3);
       }
     },
     beforeMount() {

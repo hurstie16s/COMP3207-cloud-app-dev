@@ -239,7 +239,6 @@ a {
     width: 100%;
 } */
 
-
 .sign-in, .sign-up, .reset-password, .new-password {
     /* width: 420px; */
     /* height: 520px; */
@@ -824,6 +823,9 @@ option {
     justify-content: flex-end;
 }
 
+.filters label {
+    cursor: pointer;
+}
 
 .chip {
     border-radius: 1000px;
