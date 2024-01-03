@@ -70,6 +70,7 @@ def main(req: HttpRequest) -> HttpResponse:
            
             #Azure Speech SDK
             speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
+            
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
             speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
@@ -97,7 +98,6 @@ def main(req: HttpRequest) -> HttpResponse:
             speech_recognizer.session_stopped.connect(stop_cb)
             speech_recognizer.canceled.connect(stop_cb)
             
-            
             timeSpent = 0
             speech_recognizer.start_continuous_recognition()
             #infinite loop that may need fixing
@@ -106,14 +106,17 @@ def main(req: HttpRequest) -> HttpResponse:
                 time.sleep(.5)
                 timeSpent += 0.5
                 if(timeSpent > 300): raise
-            speech_recognizer.stop_continuous_recognition
-            
-            with open(webm_file_name, "rb") as data:
-                bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)
+            speech_recognizer.stop_continuous_recognition()
             
             transcription = ""
             for text in transcriptions:
                 transcription += text
+            
+            if(transcription == ""):
+                raise    
+                
+            with open(webm_file_name, "rb") as data:
+                bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)       
         except:
             raise
 
