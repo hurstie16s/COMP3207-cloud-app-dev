@@ -14,6 +14,7 @@ from moviepy.video.io import ffmpeg_tools
 from chatGPTReview.__init__ import send_interview_to_ai
 from shared_code import DBFunctions
 import datetime
+import ast
 
 translation_params = {
     'api-version': '3.0',
@@ -53,8 +54,9 @@ def main(req: HttpRequest) -> HttpResponse:
     webmFile = req.files["webmFile"]
     #setting up the file names
     audioUuid = str(uuid.uuid4())
-    webm_file_name = "/tmp/" + username + audioUuid + ".webm"
-    wav_file_name = "/tmp/" + username + audioUuid + ".wav"
+    webm_file_name = "tmp" + os.sep + username + audioUuid + ".webm"
+    wav_file_name = "tmp" + os.sep + username + audioUuid + ".wav"
+    
 
     try:        
         try:
@@ -68,6 +70,7 @@ def main(req: HttpRequest) -> HttpResponse:
            
             #Azure Speech SDK
             speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
+            
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
             speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
@@ -95,7 +98,6 @@ def main(req: HttpRequest) -> HttpResponse:
             speech_recognizer.session_stopped.connect(stop_cb)
             speech_recognizer.canceled.connect(stop_cb)
             
-            
             timeSpent = 0
             speech_recognizer.start_continuous_recognition()
             #infinite loop that may need fixing
@@ -104,14 +106,17 @@ def main(req: HttpRequest) -> HttpResponse:
                 time.sleep(.5)
                 timeSpent += 0.5
                 if(timeSpent > 300): raise
-            speech_recognizer.stop_continuous_recognition
-            
-            with open(webm_file_name, "rb") as data:
-                bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)
+            speech_recognizer.stop_continuous_recognition()
             
             transcription = ""
             for text in transcriptions:
                 transcription += text
+            
+            if(transcription == ""):
+                raise    
+                
+            with open(webm_file_name, "rb") as data:
+                bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)       
         except:
             raise
 
@@ -120,6 +125,11 @@ def main(req: HttpRequest) -> HttpResponse:
         # Store the return value (interview feedback)
         try:
             output_feedback = send_interview_to_ai(question['interviewQuestion'], transcription)
+            tips = output_feedback.split('\n')
+            # Extract the lists using ast.literal_eval
+            
+            
+            
             # Need to sort out language part
             language = 'en'
         except:
@@ -154,7 +164,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 "tips": [ 
                     {
                         "language": language,
-                        "ChatGPTResponse": output_feedback
+                        "tips": tips,
                     }
                 ],
                 "private": private,
