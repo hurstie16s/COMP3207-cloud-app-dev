@@ -11,7 +11,7 @@ import AzureData as AzureData
 import os
 import uuid
 from moviepy.video.io import ffmpeg_tools
-from interview_review.__init__ import send_to_ai
+from chatGPTReview.__init__ import send_interview_to_ai
 from shared_code import DBFunctions
 import datetime
 
@@ -119,7 +119,7 @@ def main(req: HttpRequest) -> HttpResponse:
         # Call function with question + transcript as parameters
         # Store the return value (interview feedback)
         try:
-            output_feedback = send_to_ai(question['interviewQuestion'], transcription)
+            output_feedback = send_interview_to_ai(question['interviewQuestion'], transcription)
             # Need to sort out language part
             language = 'en'
         except:

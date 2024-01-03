@@ -9,18 +9,18 @@ client = OpenAI(
 )
 
 # Prompt parts
-start = "Based on this interview question: "
-evaluation = "Evaluate this interview transcript for this question: "
-bullet_points = "Give 2 small bullet points about the good points and 2 small points on what could be improved."
+start_for_interview = "Based on this interview question: "
+evaluation_for_interview = "Evaluate this interview transcript for this question: "
+bullet_points_for_interview = "Give 2 small bullet points about the good points and 2 small points on what could be improved."
 
 
-def send_to_ai(question, transcript):
+def send_interview_to_ai(question, transcript):
     try:
         chat_completion = client.with_options(max_retries=0).chat.completions.create(
             messages=[
                 {
                     "role": "user",
-                    "content": start + question + evaluation + transcript + bullet_points,
+                    "content": start_for_interview + question + evaluation_for_interview + transcript + bullet_points_for_interview,
                 }
             ],
             model="gpt-3.5-turbo",
@@ -39,6 +39,37 @@ def send_to_ai(question, transcript):
         print("Error response: " + str(error.response))
     # Returns None
     return
+
+start_for_question = "Give me a list of bullet point of general advice not specific to an industry on how to answer this interview question: "
+bullet_points_for_question = "Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets "
+example_for_bullet_points_for_question = "e.g. ['advice 1', 'advice 2']"
+
+def send_question_to_ai(question):
+    try:
+        chat_completion = client.with_options(max_retries=0).chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": start_for_question + question + bullet_points_for_question + example_for_bullet_points_for_question,
+                }
+            ],
+            model="gpt-3.5-turbo",
+        )
+        reply = chat_completion.choices[0].message.content
+        return reply
+    except openai.APIConnectionError as error:
+        print("The server could not be reached.")
+        print(error.__cause__)
+    except openai.RateLimitError as error:
+        print(str(error.status_code) + " status code received.")
+    except openai.AuthenticationError as error:
+        print("Authentication Error: " + str(error.status_code) + " status code.")
+    except openai.APIStatusError as error:
+        print("Non-200 status code received.")
+        print("Error response: " + str(error.response))
+    # Returns None
+    return
+
 
 """
 # These will be from the 'blob'
