@@ -6,6 +6,7 @@ from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
 from shared_code import DBFunctions, FaultCheckers
 import AzureData
+from chatGPTReview.__init__ import send_question_to_ai
 
 def main(req: HttpRequest) -> HttpResponse:
     
@@ -24,11 +25,18 @@ def main(req: HttpRequest) -> HttpResponse:
         output = {"result": False, "msg": "Question already exists"}
         code = 403
     else:
+        try: 
+            output_feedback = send_question_to_ai(question)
+        except Exception as e:
+            logging.warning("Issue with ChatGPT service")
+            output = {"result": False, "msg": "Error with ChatGPT Service."}
+            
         # Insert question into db
         data = {
             "interviewQuestion": question,
             "difficulty": difficulty,
-            "regularity": regularity
+            "regularity": regularity,
+            "tips": output_feedback,
         }
         DBFunctions.create_item(
             data=data,
