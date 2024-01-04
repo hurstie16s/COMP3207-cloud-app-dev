@@ -10,7 +10,16 @@ def main(req: HttpRequest) -> HttpResponse:
     except InvalidTokenError:
         return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
-    try:     
+    try:
+      # Delete user's responses
+      query = "SELECT * FROM c WHERE c.username = @username"
+      parameters = [{"name": "@username", "value": username}]
+      items = DBFunctions.query_items(query, parameters, AzureData.containerInterviewData)
+
+      for item in items:
+        DBFunctions.delete_item(item.get("id"), AzureData.containerInterviewData)
+
+      # Delete user
       query = "SELECT * FROM c WHERE c.username = @username"
       parameters = [{"name": "@username", "value": username}]
       items = DBFunctions.query_items(query, parameters, AzureData.containerUsers)
