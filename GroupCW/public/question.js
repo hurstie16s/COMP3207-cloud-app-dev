@@ -20,7 +20,6 @@ var app = new Vue({
         alert(`API returned non-200 status when loading questions: ${res.status}`);
         return;
       }
-
       return res.data.questions.find(question => question.id === questionId);
     },
 
@@ -45,7 +44,7 @@ var app = new Vue({
         alert(`API returned non-200 status when loading questions: ${res.status}`);
         return;
       }
-
+      console.log(res);
       return res.data.question;
     },
 

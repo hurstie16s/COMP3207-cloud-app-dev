@@ -911,7 +911,7 @@ option {
 
 .toggle-label {
     position: relative;
-    width: 4.6em;
+    width: 4.6em !important;
     height: 2.5em;
     background-color: rgb(var(--background-lighter-10));
     padding: 0.1em;
@@ -1012,7 +1012,7 @@ option {
 
 .tooltip {
     position: relative;
-    width: fit-content;
+    width: max-content;
 }
 
 .tooltip::before {
