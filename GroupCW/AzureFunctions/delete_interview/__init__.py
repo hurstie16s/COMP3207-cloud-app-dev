@@ -16,7 +16,7 @@ def main(req: HttpRequest) -> HttpResponse:
       items = DBFunctions.query_items(query, parameters, AzureData.containerInterviewData)
 
       if not items:
-        return HttpResponse(json.dumps({"result": False, "msg": "Interview not found"}), status_code=400, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": False, "msg": "Interview not found"}), status_code=404, mimetype="application/json")
 
       interview = items[0]
 
