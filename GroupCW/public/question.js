@@ -3,7 +3,7 @@ var app = new Vue({
   //All data here
   data: {
     user: null,
-    question: null,
+    question: {},
     responses: [],
     isRecording: false,
   },

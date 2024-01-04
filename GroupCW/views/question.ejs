@@ -42,33 +42,7 @@
                     <section class="question-advice card rounded shadowed">
                         <h2 class="underlined">Advice</h2>
                         <ul>
-                            <li>Start with a Strong Opening: Begin with a concise and compelling introduction that grabs
-                                the
-                                interviewer's attention.</li>
-
-                            <li>Provide a Brief Professional Overview: Share key aspects of your professional
-                                background, such
-                                as your education, relevant experience, and current role.</li>
-
-                            <li>Highlight Key Achievements: Mention notable accomplishments and projects to showcase
-                                your skills
-                                and contributions.</li>
-
-                            <li>Connect to the Job: Tailor your response by emphasizing experiences and skills that
-                                align with
-                                the requirements of the position.</li>
-
-                            <li>Showcase Soft Skills: Discuss interpersonal skills, teamwork, and adaptability to
-                                demonstrate
-                                your overall fit for the company culture.</li>
-
-                            <li>Express Passion and Motivation: Share your enthusiasm for the industry and the specific
-                                role,
-                                conveying genuine interest in the opportunity.</li>
-
-                            <li>Keep it Concise: Aim for a response that lasts around 2-3 minutes, focusing on the most
-                                relevant
-                                and impactful information.</li>
+                            <li v-for="tip in question.tips">{{tip}}</li>
                         </ul>
                     </section>
                     <section class="your-responses card rounded shadowed">
