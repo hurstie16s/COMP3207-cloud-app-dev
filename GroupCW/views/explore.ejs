@@ -59,19 +59,19 @@
                         <section class="submit-question rounded card shadowed bordered">
                             <h2 class="underlined header-margin">Submit a Question</h2>
                             <div class="search-container">
-                                <input type="text" class="input" placeholder="New question...">
-                                <button class="material-symbols-rounded icon-button">chevron_right</button>
+                                <input type="text" class="input" placeholder="New question..." v-model="newQuestion.text">
+                                <button class="material-symbols-rounded icon-button" @click="submitQuestion(newQuestion.text, newQuestion.regularity, newQuestion.difficulty)">chevron_right</button>
                             </div>
                             <div class="submit-question-options">
                                 <div class="tooltip" tooltip-text="Set Regularity">
-                                    <select name="industry">
+                                    <select name="regularity" v-model="newQuestion.regularity">
                                         <option>Standard</option>
                                         <option>Infrequent</option>
                                         <option>Unusual</option>
                                     </select>
                                 </div>
                                 <div class="tooltip" tooltip-text="Set Difficulty">
-                                    <select name="industry">
+                                    <select name="difficulty" v-model="newQuestion.difficulty">
                                         <option>Beginner</option>
                                         <option>Intermediate</option>
                                         <option>Advanced</option>

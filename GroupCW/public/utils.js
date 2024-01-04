@@ -82,3 +82,31 @@ function getAccount(user) {
 function getMyAccount() {
   window.location.href = `/account/${app.user}`;
 }
+
+function mapDifficultyToInt(difficulty) {
+  // Map difficulty string to corresponding integer value
+  switch (difficulty) {
+      case 'Beginner':
+          return 0;
+      case 'Intermediate':
+          return 1;
+      case 'Advanced':
+          return 2;
+      default:
+          return 0; // Default or error case
+  }
+}
+
+function mapRegularityToInt(regularity) {
+  // Map regularity string to corresponding integer value
+  switch (regularity) {
+      case 'Standard':
+          return 0;
+      case 'Infrequent':
+          return 1;
+      case 'Unusual':
+          return 2;
+      default:
+          return 0; // Default or error case
+  }
+}
