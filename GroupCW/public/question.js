@@ -76,7 +76,6 @@ var app = new Vue({
       async submitComment(questionId, responseId, comment) {
         const data = {
           id: responseId,
-          username: this.user,
           comment: comment
         };
 
@@ -95,7 +94,6 @@ var app = new Vue({
       async rateComment(responseId, commentId, action) {
         const data = {
           comment_id: commentId,
-          username: this.user,
           rate_action: action
         };
 
@@ -114,7 +112,6 @@ var app = new Vue({
       async rateInterview(responseId, rating) {
         const data = {
           id: responseId,
-          username: this.user,
           rating: rating
         };
 
@@ -186,7 +183,6 @@ var app = new Vue({
         const blob = await AudioRecorder.stop();
 
         const formData = new FormData();
-        formData.append('username', this.user);
         formData.append('industry', 'TODO'); // TODO: Industry?
         formData.append('interviewTitle', this.question.question);
         formData.append('private', false); // TODO: Private?
@@ -243,7 +239,8 @@ var app = new Vue({
       }
     },
     async beforeMount() {
-      this.user = getUserCookie();
+      forceLoggedIn();
+      this.user = getLoggedInUsername();
       this.question = await this.loadQuestion(QUESTION_ID); // QUESTION_ID is defined via EJS in question.ejs
       this.responses = await this.loadResponses(QUESTION_ID);
     }

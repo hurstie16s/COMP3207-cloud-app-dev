@@ -15,8 +15,5 @@
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
-    <script>
-        const BACKEND_URL = 'http://localhost:7071';
-        axios.defaults.validateStatus = () => true;
-    </script>
+    <script>const BACKEND_URL = '<%= BACKEND_URL %>';</script>
 </head>

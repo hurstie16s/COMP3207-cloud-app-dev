@@ -4,24 +4,29 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
+from jwt.exceptions import InvalidTokenError
 import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
-
     logging.info('Python HTTP trigger function processed a request.')
+
+    try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     #Get data from JSON doc
     id = req.params.get('id')
     if id is None or id == "":
-        output, code = getAllQuestions()
+        output, code = getAllQuestions(username)
     else:
-        output, code = getQuestionByID(id)
+        output, code = getQuestionByID(id, username)
 
     # Return HttpResponse
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
-def getQuestionByID(id: str) -> (dict,int):    
+def getQuestionByID(id: str, username: str) -> (dict,int):    
     # Get all interview questions
     # Add checks
     query = "SELECT * FROM InterviewQuestions WHERE InterviewQuestions.id = @id"
@@ -38,8 +43,11 @@ def getQuestionByID(id: str) -> (dict,int):
     questionFull = questionsResult[0]
     
     countResult = DBFunctions.query_items(
-        query="SELECT VALUE COUNT(1) FROM c WHERE c.questionId = @id",
-        parameters=[{"name": "@id", "value": str(id)}],
+        query="SELECT VALUE COUNT(1) FROM c WHERE c.questionId = @id AND (c.private = false OR c.username = @username)",
+        parameters=[
+            {"name": "@id", "value": str(id)},
+            {"name": "@username", "value": username}
+        ],
         container=AzureData.containerInterviewData
     )
 
@@ -60,7 +68,7 @@ def getQuestionByID(id: str) -> (dict,int):
 
     return output, 200
 
-def getAllQuestions() -> (dict,int):
+def getAllQuestions(username: str) -> (dict,int):
     # Get all interview questions
     query = "SELECT * FROM InterviewQuestions"
     questionsResult = DBFunctions.query_items(
@@ -77,8 +85,10 @@ def getAllQuestions() -> (dict,int):
     responseCounts = {}
     for response in responses:
         questionId = response.get("questionId")
-        responseCounts[questionId] = responseCounts.get(questionId, 0) + 1
+        if response.get("private") == True and response.get("username") != username:
+            continue
 
+        responseCounts[questionId] = responseCounts.get(questionId, 0) + 1
 
     questions=[]
     for question in questionsResult :

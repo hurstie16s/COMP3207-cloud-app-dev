@@ -12,9 +12,10 @@ import os
 import uuid
 from moviepy.video.io import ffmpeg_tools
 from chatGPTReview.__init__ import send_interview_to_ai
-from shared_code import DBFunctions
 import datetime
 import tempfile
+from shared_code import DBFunctions, auth
+from jwt.exceptions import InvalidTokenError
 
 translation_params = {
     'api-version': '3.0',
@@ -47,7 +48,12 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info(json.dumps(question))
 
     #Json inputs from body
-    username = req.form.get("username") # TODO: Get from JWT
+    try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
+    
+    #Json inputs from body
     industry = req.form.get("industry")
     interviewTitle = req.form.get("interviewTitle") #input("what do you want your prompt to be? : ") req.params.get('text')
     private = req.form.get("private") == "true" # Form data is always a string, so convert to bool
@@ -176,8 +182,6 @@ def main(req: HttpRequest) -> HttpResponse:
             raise ExceptionWithStoringToCosmosDB
         
         return HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}),mimetype="application/json")
-            
-        
     except Exception as e:        
         #Check if files exists and delete them
         blob_file = AzureData.blob_service_client.get_blob_client(container=AzureData.container_name, blob=webm_file_name)

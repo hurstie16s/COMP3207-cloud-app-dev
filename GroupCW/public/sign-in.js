@@ -11,13 +11,6 @@ var app = new Vue({
 
       
     },
-    //On Awake methods here:
-    mounted: function() {
-      if (document.cookie.split(';').includes('user')) {
-        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
-        app.user = null; //change to cookie
-      }
-    },
     //Js Methods here:
     methods: {
         async login() {
@@ -37,15 +30,15 @@ var app = new Vue({
             postHelper(data, '/login')
             .then(response => {
               if (response.status === 200) {
-                app.user = this.username;
-                setCookie(app.user);
+                setSessionData(response.data.username, response.data.token);
+                app.user = response.data.username;
                 window.location.href = '/explore'
               } else if (response.status === 401) {
                 handleError(response.data.msg);
               } else if (response.status === 300) {
-                app.user = this.username;
-                setCookie(app.user);
-                window.location.href = '/set-new-password'
+                setSessionData(response.data.username, response.data.token);
+                app.use = response.data.username;
+                window.location.href = '/set-new-password';
               } else {
                 alert(`${response.status}: ${response.statusText}`) //undefined error
               }

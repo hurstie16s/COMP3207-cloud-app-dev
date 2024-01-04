@@ -3,3 +3,11 @@
 <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
 
 <script defer src="/static/utils.js"></script>
+
+<script>
+  axios.defaults.validateStatus = () => true;
+        
+  if (window.localStorage.getItem('token')) {
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('token');
+  }
+</script>
