@@ -14,7 +14,7 @@ from moviepy.video.io import ffmpeg_tools
 from chatGPTReview.__init__ import send_interview_to_ai
 from shared_code import DBFunctions
 import datetime
-import ast
+import tempfile
 
 translation_params = {
     'api-version': '3.0',
@@ -53,10 +53,10 @@ def main(req: HttpRequest) -> HttpResponse:
     private = req.form.get("private") == "true" # Form data is always a string, so convert to bool
     webmFile = req.files["webmFile"]
     #setting up the file names
+    temp_dir = tempfile.TemporaryDirectory()
     audioUuid = str(uuid.uuid4())
-    webm_file_name = "tmp" + os.sep + username + audioUuid + ".webm"
-    wav_file_name = "tmp" + os.sep + username + audioUuid + ".wav"
-    
+    webm_file_name = temp_dir.name + os.sep + username + audioUuid + ".webm"
+    wav_file_name = temp_dir.name + os.sep + username + audioUuid + ".wav"
 
     try:        
         try:
@@ -74,7 +74,6 @@ def main(req: HttpRequest) -> HttpResponse:
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
             speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
-
 
             done = False
             transcriptions = []
@@ -112,8 +111,8 @@ def main(req: HttpRequest) -> HttpResponse:
             for text in transcriptions:
                 transcription += text
             
-            if(transcription == ""):
-                raise    
+            if transcription == "":
+                logging.warn("Transcription was empty")    
                 
             with open(webm_file_name, "rb") as data:
                 bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)       
@@ -205,6 +204,11 @@ def main(req: HttpRequest) -> HttpResponse:
         try: # Remove WAV file if it exists
             os.remove(wav_file_name)
         except OSError:
+            pass
+
+        try: # Remove temp directory
+            temp_dir.cleanup()
+        except:
             pass
 
 

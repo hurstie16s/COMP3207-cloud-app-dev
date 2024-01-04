@@ -23,6 +23,7 @@ var app = new Vue({
 
       return res.data.questions.find(question => question.id === questionId);
     },
+<<<<<<< HEAD
 
     startRecording() {
       app.isRecording = true
@@ -44,6 +45,35 @@ var app = new Vue({
       } else if (res.status !== 200) {
         alert(`API returned non-200 status when loading questions: ${res.status}`);
         return;
+=======
+    //FrontEnd methods here:
+    computed: {
+      userResponses() {
+        return this.responses.filter(response => response.username === this.user);
+      },
+      communityResponses() {
+        return this.responses.filter(response => response.username !== this.user);
+      },
+      userRatings() {
+        const res = {};
+        this.responses.filter(r => r.ratings).forEach(response => {
+          const rating = response.ratings.find(rating => rating.username === this.user);
+          if (rating !== undefined) res[response.id] = rating.rating;
+        });
+        return res;
+      },
+      averageRatings() {
+        const res = {};
+        this.responses.forEach(response => {
+          if (!response.ratings || response.ratings.length === 0) {
+            res[response.id] = 0.0;
+            return;
+          }
+          
+          res[response.id] = response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+        });
+        return res;
+>>>>>>> origin/main
       }
 
       return res.data.question;
@@ -230,7 +260,7 @@ var app = new Vue({
     averageRatings() {
       const res = {};
       this.responses.forEach(response => {
-        if (!response.ratings) {
+        if (!response.ratings || response.ratings.length === 0) {
           res[response.id] = 0.0;
           return;
         }

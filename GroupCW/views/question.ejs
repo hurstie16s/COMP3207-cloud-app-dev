@@ -168,9 +168,11 @@
                 <hr>
             </div>
             <div class="response-controls">
-                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
-                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
-                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button" @click="seekAudio(response.id, -10)">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button"
+                    v-if="!response.audio || response.audioPaused" @click="playAudio(response)">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button" v-else @click="pauseAudio(response)">pause</button>
+                <button class="material-symbols-rounded icon-button minimal-button" @click="seekAudio(response.id, 10)">forward_10</button>
             </div>
             <div class="response-rating">
                 <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
