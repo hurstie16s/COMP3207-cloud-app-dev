@@ -14,18 +14,16 @@ var app = new Vue({
     },
     //Js Methods here:
     methods: {
-        resetPassword() {
+        async resetPassword() {
           app.emailError = '';
 
           if (app.email) {
-            const response = handlePasswordReset();
-            if (response.result === true) {
-              //TODO:
-              //feedback that password has been reset
-            } else {
-              app.emailError = response.msg;
+            const res = await axios.put(`${BACKEND_URL}/password/reset`, {email: this.email});
+            if (res.status > 299) {
+              alert(`API returned non-200 status when submitting comment: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+              return;
             }
-          } else {app.emailError = 'Email Required';}
+          } else {this.emailError = 'Email Required';}
         }
 
     },
@@ -34,12 +32,3 @@ var app = new Vue({
         
       }
 });
-
-
-
-//---------------------------------------------------------
-// Dummies
-function handlePasswordReset() {
-  //call api
-  return {result: false, msg: 'Email does not exist'}
-}
