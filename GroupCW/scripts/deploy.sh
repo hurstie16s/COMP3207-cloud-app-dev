@@ -33,8 +33,8 @@ if [[ $shouldDeployBackend =~ ^(y| ) ]] || [[ -z $shouldDeployBackend ]]; then
   func azure functionapp publish $funcappid
   set +x
 
-  $backendResourceGroup=$(az functionapp list --query "[?name=='${funcappid}'].resourceGroup" | jq .[0] -r)
-  $corsSetup=$(az functionapp cors show --resource-group $backendResourceGroup --name $funcappid | jq '.allowedOrigins | index("*") // empty')
+  backendResourceGroup=$(az functionapp list --query "[?name=='${funcappid}'].resourceGroup" | jq .[0] -r)
+  corsSetup=$(az functionapp cors show --resource-group $backendResourceGroup --name $funcappid | jq '.allowedOrigins | index("*") // empty')
   if [[ ! -z "$corsSetup" ]]; then
     # It is safe to use * because we are not using cookies
     echo -e "${GREEN}Setting up CORS...${RESET}"
@@ -44,7 +44,7 @@ if [[ $shouldDeployBackend =~ ^(y| ) ]] || [[ -z $shouldDeployBackend ]]; then
     set +x
   fi
 
-  $backendUrl="https://${funcappid}.azurewebsites.net"
+  backendUrl="https://${funcappid}.azurewebsites.net"
   echo -e "${GREEN}Deployed backend to ${CYAN}${backendUrl}${RESET}"
 fi
 
@@ -92,6 +92,7 @@ if [[ $shouldDeployFrontend =~ ^(y| ) ]] || [[ -z $shouldDeployFrontend ]]; then
   set -x
   zip -r $frontendZip node_modules public/ views/ package.json package-lock.json app.js > /dev/null
   az webapp config appsettings set --resource-group $resourceGroup --name $webAppId --settings BACKEND=$backendUrl > /dev/null
+  az webapp config appsettings set --resource-group $resourceGroup --name $webAppId --settings PRODUCTION=true > /dev/null
   az webapp deploy --resource-group $resourceGroup --name $webAppId --src-path $frontendZip --type zip > /dev/null
   set +x
 
