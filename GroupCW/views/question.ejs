@@ -123,7 +123,30 @@
                             </div>
 
                             <div class="response-timeline">
-                                <hr>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="timeline-wave"
+                                    v-if="!response.audio || response.audioPaused">
+                                    <path stroke="#cacbcf" fill="none" id="straight-line" d="M0 20 L10000 20" />
+                                </svg>
+                                <svg class="timeline-wave" v-else>
+                                    <defs>
+                                        <path stroke="#cacbcf" fill="none" id="sine-wave" d="M0 20
+                                        C 40 0, 60 0, 100 20 C 140 40, 160 40, 200 20
+                                        C 240 0, 260 0, 300 20 C 340 40, 360 40, 400 20
+                                        C 440 0, 460 0, 500 20 C 540 40, 560 40, 600 20
+                                        C 640 0, 660 0, 700 20 C 740 40, 760 40, 800 20
+                                        C 840 0, 860 0, 900 20 C 940 40, 960 40, 1000 20
+                                        C 1040 0, 1060 0, 1100 20 C 1140 40, 1160 40, 1200 20
+                                        C 1240 0, 1260 0, 1300 20 C 1340 40, 1360 40, 1400 20
+                                        C 1440 0, 1460 0, 1500 20 C 1540 40, 1560 40, 1600 20
+                                        C 1640 0, 1660 0, 1700 20 C 1740 40, 1760 40, 1800 20
+                                        C 1840 0, 1860 0, 1900 20 C 1940 40, 1960 40, 2000 20" />
+                                    </defs>
+                                    <use xlink:href="#sine-wave" x="0" y="0">
+                                        <animate attributeName="x" from="0" to="-200" dur="2.5s"
+                                            repeatCount="indefinite" />
+                                    </use>
+                                </svg>
+
                             </div>
                             <div class="response-controls">
                                 <button class="material-symbols-rounded icon-button minimal-button"
