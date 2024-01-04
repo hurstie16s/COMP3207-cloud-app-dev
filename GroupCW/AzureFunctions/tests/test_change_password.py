@@ -77,7 +77,7 @@ class TestAddUserFunction(unittest.TestCase):
             "newPasswordConfirm": newPassword
         })
 
-        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data)
+        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data, headers={"Authorization": self.jwt})
         self.assertEqual(response.content, b'{"result": true, "msg": "Password Changed"}')
         self.assertEqual(response.status_code, 200)
 
