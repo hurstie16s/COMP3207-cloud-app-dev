@@ -143,6 +143,10 @@
                                     @click="pauseAudio(response)">pause</button>
                                 <button class="material-symbols-rounded icon-button minimal-button"
                                     @click="seekAudio(response.id, 10)">forward_10</button>
+                                <span class="response-timestamp">00:00</span>
+                            </div>
+                            <div class="response-container-idk">
+                                <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
@@ -244,19 +248,23 @@
                                     @click="pauseAudio(response)">pause</button>
                                 <button class="material-symbols-rounded icon-button minimal-button"
                                     @click="seekAudio(response.id, 10)">forward_10</button>
+                                <span class="response-timestamp">00:00</span>
                             </div>
-                            <div class="response-rating">
-                                <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 5)"
-                                    :class="[userRatings[response.id] >= 5 ? 'star-filled' : '']">star_rate</span>
-                                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 4)"
-                                    :class="[userRatings[response.id] >= 4 ? 'star-filled' : '']">star_rate</span>
-                                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 3)"
-                                    :class="[userRatings[response.id] >= 3 ? 'star-filled' : '']">star_rate</span>
-                                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 2)"
-                                    :class="[userRatings[response.id] >= 2 ? 'star-filled' : '']">star_rate</span>
-                                <span class="material-symbols-rounded star" @click="rateInterview(response.id, 1)"
-                                    :class="[userRatings[response.id] >= 1 ? 'star-filled' : '']">star_rate</span>
+                            <div class="response-container-idk">
+                                <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
+                                <div class="response-rating">
+                                    <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 5)"
+                                        :class="[userRatings[response.id] >= 5 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 4)"
+                                        :class="[userRatings[response.id] >= 4 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 3)"
+                                        :class="[userRatings[response.id] >= 3 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 2)"
+                                        :class="[userRatings[response.id] >= 2 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 1)"
+                                        :class="[userRatings[response.id] >= 1 ? 'star-filled' : '']">star_rate</span>
+                                </div>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
@@ -290,7 +298,7 @@
                                     <textarea class="input" placeholder="Add a comment..."
                                         v-model="response.pending_comment"></textarea>
                                     <button class="material-symbols-rounded icon-button tooltip"
-                                    tooltip-text="Post Comment"
+                                        tooltip-text="Post Comment"
                                         @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
                                 </div>
                             </div>
