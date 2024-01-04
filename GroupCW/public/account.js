@@ -23,8 +23,6 @@ var app = new Vue({
         postHelper(data, '/interview/data/search')
         .then(response => {
           this.responses = response.data;
-          this.responses[0].showTranscript = true;
-          this.responses[0].showComments = true;
         })
         .catch(error => {
           console.log(error);

@@ -213,20 +213,10 @@ var app = new Vue({
   //FrontEnd methods here:
   computed: {
     userResponses() {
-      const responses = this.responses.filter(response => response.username === this.user);
-      if (responses.length > 0) {
-        responses[0].showTranscript = true;
-        responses[0].showComments = true;
-      }
-      return responses;
+      return this.responses.filter(response => response.username === this.user);
     },
     communityResponses() {
-      const responses = this.responses.filter(response => response.username !== this.user);
-      if (responses.length > 0) {
-        responses[0].showTranscript = true;
-        responses[0].showComments = true;
-      }
-      return responses;
+      return this.responses.filter(response => response.username !== this.user);
     },
     userRatings() {
       const res = {};
