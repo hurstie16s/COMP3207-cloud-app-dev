@@ -240,7 +240,7 @@ var app = new Vue({
     averageRatings() {
       const res = {};
       this.responses.forEach(response => {
-        if (!response.ratings) {
+        if (!response.ratings || response.ratings.length === 0) {
           res[response.id] = 0.0;
           return;
         }
