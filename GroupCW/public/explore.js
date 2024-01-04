@@ -17,6 +17,7 @@ var app = new Vue({
     methods: {
 
       async loadQuestions() {
+        console.log("retrieving Qs")
         const res = await axios.get(`${BACKEND_URL}/interview/question/receive`);
         if (res.status !== 200) {
           alert(`API returned non-200 status when loading questions: ${res.status}`);
@@ -47,6 +48,7 @@ var app = new Vue({
         }
         document.getElementById('question-submission-spinner').classList.toggle('hidden');
         this.newQuestion.text = '';
+        this.loadQuestions();
       },
     },
     //FrontEnd methods here:
