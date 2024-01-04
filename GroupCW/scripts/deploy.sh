@@ -9,6 +9,12 @@ MAGENTA="\e[95m"
 CYAN="\e[96m"
 RESET="\e[0m"
 
+if ! command -v jq &> /dev/null
+then
+    echo -e "${RED}jq${GREEN} is not installed: please install it and try again${RESET}"
+    exit 1
+fi
+
 scriptPath=$(readlink -f $0)
 root=$(dirname $(dirname $scriptPath))
 
@@ -26,8 +32,19 @@ if [[ $shouldDeployBackend =~ ^(y| ) ]] || [[ -z $shouldDeployBackend ]]; then
   set -x
   func azure functionapp publish $funcappid
   set +x
-  $backendUrl="https://${funcappid}.azurewebsites.net"
 
+  $backendResourceGroup=$(az functionapp list --query "[?name=='${funcappid}'].resourceGroup" | jq .[0] -r)
+  $corsSetup=$(az functionapp cors show --resource-group $backendResourceGroup --name $funcappid | jq '.allowedOrigins | index("*") // empty')
+  if [[ ! -z "$corsSetup" ]]; then
+    # It is safe to use * because we are not using cookies
+    echo -e "${GREEN}Setting up CORS...${RESET}"
+    echo -e $GRAY
+    set -x
+    az functionapp cors add --resource-group $backendResourceGroup --name $funcappid --allowed-origins "*"
+    set +x
+  fi
+
+  $backendUrl="https://${funcappid}.azurewebsites.net"
   echo -e "${GREEN}Deployed backend to ${CYAN}${backendUrl}${RESET}"
 fi
 
