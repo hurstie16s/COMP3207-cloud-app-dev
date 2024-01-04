@@ -3,7 +3,8 @@ import logging
 import json
 import uuid
 from azure.functions import HttpRequest, HttpResponse
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
+from jwt.exceptions import InvalidTokenError
 import AzureData 
 
 def main(req: HttpRequest) -> HttpResponse:
@@ -15,11 +16,17 @@ def main(req: HttpRequest) -> HttpResponse:
       items = DBFunctions.query_items(query, parameters, AzureData.containerInterviewData)
 
       if not items:
-        return HttpResponse(json.dumps({"result": False, "msg": "Interview not found"}), status_code=400, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": False, "msg": "Interview not found"}), status_code=404, mimetype="application/json")
 
       interview = items[0]
 
-      # TODO: Get username from JWT and compare to username in interview data
+      try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+      except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
+    
+      if interview["username"] != username:
+        return HttpResponse(json.dumps({"result": False, "msg": "You don't have permission to delete this interview"}), status_code=403, mimetype="application/json")
 
       DBFunctions.delete_item(responseId, AzureData.containerInterviewData)
       return HttpResponse(json.dumps({"result": True}), status_code=200, mimetype="application/json")

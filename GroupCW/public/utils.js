@@ -4,6 +4,7 @@ async function getHelper(data, endpoint) {
       method: 'GET',
       url: BACKEND_URL + endpoint,
       headers: {
+        'Authorization': window.localStorage.getItem('token'),
         'Content-Type': 'application/json'
       },
       data: data
@@ -22,6 +23,7 @@ async function postHelper(data, endpoint) {
       method: 'POST',
       url: BACKEND_URL + endpoint,
       headers: {
+        'Authorization': window.localStorage.getItem('token'),
         'Content-Type': 'application/json'
       },
       data: data
@@ -40,6 +42,7 @@ async function putHelper(data, endpoint) {
       method: 'PUT',
       url: BACKEND_URL + endpoint,
       headers: {
+        'Authorization': window.localStorage.getItem('token'),
         'Content-Type': 'application/json'
       },
       data: data
@@ -52,26 +55,23 @@ async function putHelper(data, endpoint) {
   }
 }
 
-function setCookie(username) {
-  // Set the 'user' cookie with an expiration time of 1 hour
-  const expirationDate = new Date();
-  expirationDate.setTime(expirationDate.getTime() + (1 * 60 * 60 * 1000)); // 1 hour
-  document.cookie = `user=${username}; expires=${expirationDate.toUTCString()}; path=/`;
+function setSessionData(username, token) {
+  window.localStorage.setItem('user', username);
+  window.localStorage.setItem('token', token);
 }
 
-function getUserCookie() {
-  // Function to read the value of the 'user' cookie
-  const cookies = document.cookie.split(';');
-  for (const cookie of cookies) {
-    const [key, value] = cookie.trim().split('=');
-    if (key === 'user') {
-      return value;
-    } else { return null; }
+function getLoggedInUsername() {
+  return window.localStorage.getItem('user') || null;
+}
+
+function forceLoggedIn() {
+  if (!window.localStorage.getItem('user') || !window.localStorage.getItem('token')) {
+    window.location.href = '/sign-in';
   }
 }
 
 function logout() {
-  document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
+  window.localStorage.clear();
   window.location.href = '/';
 }
 

@@ -265,7 +265,8 @@ var app = new Vue({
     }
   },
   async beforeMount() {
-    this.user = getUserCookie();
+      forceLoggedIn();
+    this.user = getLoggedInUsername();
     this.question = await this.loadQuestion(QUESTION_ID); // QUESTION_ID is defined via EJS in question.ejs
     this.responses = await this.loadResponses(QUESTION_ID);
   }

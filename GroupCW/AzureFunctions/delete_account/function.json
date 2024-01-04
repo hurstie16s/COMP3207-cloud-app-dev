@@ -6,10 +6,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": [
-        "put"
-      ],
-      "route": "rate/interview"
+      "methods": ["delete"],
+      "route": "account/self"
     },
     {
       "type": "http",

@@ -12,13 +12,6 @@ var app = new Vue({
       emailError: '',
       
     },
-    //On Awake methods here:
-    mounted: function() {
-      if (document.cookie.split(';').includes('user')) {
-        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
-        app.user = null; //change to cookie
-      }
-    },
     //Js Methods here:
     methods: {
         register() {
@@ -40,9 +33,9 @@ var app = new Vue({
             postHelper(data, '/register')
             .then(response => {
               if (response.status === 201) {
-              app.user = this.username;
-              setCookie(app.user);
-              window.location.href = '/explore'
+                setSessionData(response.data.username, response.data.token);
+                app.user = response.data.username;
+                window.location.href = '/explore';
               } else {
                 handleError(response.data);
               }

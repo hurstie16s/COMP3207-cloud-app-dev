@@ -173,7 +173,8 @@ var app = new Vue({
     },
 
     beforeMount() {
-      this.user = getUserCookie();
+      forceLoggedIn();
+      this.user = getLoggedInUsername();
       this.account = USER_ID; //Defined in account.ejs -- needs to be an api call to see if user exists (if user query returns empty redirect to 403)
       this.loadResponses();
     }

@@ -4,13 +4,18 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
-from shared_code import DBFunctions, FaultCheckers
+from shared_code import DBFunctions, FaultCheckers, auth
+from jwt.exceptions import InvalidTokenError
 import AzureData
 from chatGPTReview.__init__ import send_question_to_ai
 
 def main(req: HttpRequest) -> HttpResponse:
-    
     logging.info('Python HTTP trigger function processed a request.')
+
+    try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     input = req.get_json()
     question = input.get("question")
@@ -40,6 +45,7 @@ def main(req: HttpRequest) -> HttpResponse:
             "difficulty": difficulty,
             "regularity": regularity,
             "tips": eval(tips),
+            "username": username
         }
         DBFunctions.create_item(
             data=data,

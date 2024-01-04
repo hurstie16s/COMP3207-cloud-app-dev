@@ -19,7 +19,7 @@ var app = new Vue({
       },
 
     beforeMount() {
-      this.user = getUserCookie();
+      this.user = getLoggedInUsername();
     }
 });
 

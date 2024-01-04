@@ -9,9 +9,13 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request to rate a comment.')
 
     try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
+
+    try:
         req_body = req.get_json()
         comment_id = req_body.get('comment_id')
-        username = req_body.get('username')  
         rate_action = req_body.get('rate_action')  # 'like' for thumbs up, 'dislike' for thumbs down
 
         # Define the query with a parameter placeholder

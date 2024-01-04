@@ -1,26 +1,30 @@
 import logging
 import json
 from azure.functions import HttpRequest, HttpResponse
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
+from jwt.exceptions import InvalidTokenError
 import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
     try:
+      username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+      return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
+
+    try:
       responseId = req.route_params.get('responseId')
-      logging.info("responseId: " + responseId)
       
       query = "SELECT * FROM c WHERE c.id = @id"
       parameters = [{"name": "@id", "value": responseId}]
       items = DBFunctions.query_items(query, parameters, AzureData.containerInterviewData)
-
-      logging.info(json.dumps(items))
 
       if not items:
         return HttpResponse(json.dumps({"result": False, "msg": "Interview not found"}), status_code=400, mimetype="application/json")
 
       interview = items[0]
 
-      # TODO: Get username from JWT and compare to username in interview data and check if the interview is private
+      if interview.private and interview.username != username:
+        return HttpResponse(json.dumps({"result": False, "msg": "You don't have permission to view this interview"}), status_code=403, mimetype="application/json")
 
       fileName = interview['audioUuid'] + ".webm"
       logging.info("container: " + AzureData.container_name)

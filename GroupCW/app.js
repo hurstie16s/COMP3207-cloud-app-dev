@@ -13,6 +13,11 @@ app.use(cookieParser());
 
 // URL of the backend API
 const BACKEND_ENDPOINT = process.env.BACKEND || 'http://localhost:7071';
+const options = {
+  BACKEND_URL: BACKEND_ENDPOINT,
+  PRODUCTION: process.env.PRODUCTION === 'true',
+};
+
 //Start the server
 function startServer() {
     const PORT = process.env.PORT || 8080;
@@ -27,39 +32,35 @@ app.use('/static', express.static('public'));
 
 //Handle client interface on /
 app.get('/', (req, res) => {
-  res.render('landing')
+  res.render('landing', options);
 });
 
 app.get('/sign-in', (req, res) => {
-  res.render('sign-in');
+  res.render('sign-in', options);
 });
 
 app.get('/sign-up', (req, res) => {
-  res.render('sign-up');
+  res.render('sign-up', options);
 });
 
 app.get('/reset-password', (req, res) => {
-  res.render('reset-password');
+  res.render('reset-password', options);
 });
 
 app.get('/set-new-password', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('set-new-password') : res.redirect('sign-in');
+  res.render('set-new-password', options);
 });
 
 app.get('/explore', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('explore') : res.redirect('sign-in');
+  res.render('explore', options);
 });
 
 app.get('/question/:id', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('question', {id: req.params['id']}) : res.redirect('/sign-in');
+  res.render('question', Object.assign({id: req.params['id']}, options));
 });
 
 app.get('/account/:user', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('account', {id: req.params['user']}) : res.redirect('/sign-in');
+  res.render('account', Object.assign({id: req.params['user']}, options));
 });
 
 

@@ -15,7 +15,6 @@ var app = new Vue({
     },
     //Js Methods here:
     methods: {
-
       async loadQuestions() {
         console.log("retrieving Qs")
         const res = await axios.get(`${BACKEND_URL}/interview/question/receive`);
@@ -67,13 +66,8 @@ var app = new Vue({
       }
     },
     beforeMount() {
-      this.user = getUserCookie();
+      forceLoggedIn();
+      this.user = getLoggedInUsername();
       this.loadQuestions();
     }
 });
-
-
-//any functions outside of vue here:
-
-//---------------------------------------------------------
-// Dummies
