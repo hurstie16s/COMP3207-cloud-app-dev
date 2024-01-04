@@ -11,13 +11,6 @@ var app = new Vue({
 
       
     },
-    //On Awake methods here:
-    mounted: function() {
-      if (document.cookie.split(';').includes('user')) {
-        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
-        app.user = null; //change to cookie
-      }
-    },
     //Js Methods here:
     methods: {
         async login() {
