@@ -7,6 +7,7 @@ var app = new Vue({
       filterRegularity: -1, // -1 = all,
       filterDifficulty: -1, // -1 = all,
       questions: [],
+      newQuestion: {text: "", difficulty: "Beginner", regularity: "Standard"}
     },
     //On Awake methods here:
     mounted: function() {
@@ -30,7 +31,23 @@ var app = new Vue({
 
       navToQuestion(questionId) {
         window.location.href = `/question/${questionId}`;
-      }
+      },
+
+      async submitQuestion(newQuestion, regularity, difficulty) {
+        const data = {
+          question: newQuestion,
+          difficulty: mapDifficultyToInt(difficulty),
+          regularity: mapRegularityToInt(regularity)
+        };
+  
+        const res = await axios.post(`${BACKEND_URL}/interview/question/submit`, data);
+        if (res.status > 299) {
+          alert(`API returned non-200 status when submitting comment: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+          return;
+        }
+  
+        this.newQuestion.text = '';
+      },
     },
     //FrontEnd methods here:
     computed: {
