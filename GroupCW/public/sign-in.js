@@ -37,15 +37,15 @@ var app = new Vue({
             postHelper(data, '/login')
             .then(response => {
               if (response.status === 200) {
-                app.user = this.username;
-                setCookie(app.user);
+                setSessionData(response.data.username, response.data.token);
+                app.user = response.data.username;
                 window.location.href = '/explore'
               } else if (response.status === 401) {
                 handleError(response.data.msg);
               } else if (response.status === 300) {
-                app.user = this.username;
-                setCookie(app.user);
-                window.location.href = '/set-new-password'
+                setSessionData(response.data.username, response.data.token);
+                app.use = response.data.username;
+                window.location.href = '/set-new-password';
               } else {
                 alert(`${response.status}: ${response.statusText}`) //undefined error
               }

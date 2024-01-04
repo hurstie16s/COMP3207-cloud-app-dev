@@ -78,6 +78,5 @@ translation_headers = {
 }
 
 JWT_SIGNING_KEY = "2GKiZVZoOJsPvPIKxeClIEO0gCrG4gQ5"
-os.environ["JwtSigningKey"] = JWT_SIGNING_KEY
 
 # TODO: return functions

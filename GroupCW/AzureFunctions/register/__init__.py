@@ -65,6 +65,6 @@ def main(req: HttpRequest) -> HttpResponse:
     try:
         AzureData.containerUsers.create_item(body=new_user)
         token = auth.signJwt(username)
-        return HttpResponse(json.dumps({"result": True, "token": token}), status_code=201)
+        return HttpResponse(json.dumps({"result": True, "token": token, "username": username}), status_code=201)
     except Exception as e:
         return HttpResponse(json.dumps({"result": False, "msg": f"Failed to create user: {str(e)}"}), status_code=500)

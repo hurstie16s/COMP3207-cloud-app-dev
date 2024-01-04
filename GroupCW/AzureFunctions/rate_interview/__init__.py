@@ -2,17 +2,19 @@ import logging
 import json
 import uuid
 from azure.functions import HttpRequest, HttpResponse
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
 import AzureData
-
+from jwt.exceptions import InvalidTokenError
 
 def main(req: HttpRequest) -> HttpResponse:
-    logging.info('rate_interview function processing a request.')
+    try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     try:
         req_body = req.get_json()
         interview_id = req_body.get('id')
-        username = req_body.get('username')
         rating = req_body.get('rating')
 
         # Validate the rating

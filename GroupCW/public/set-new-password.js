@@ -62,8 +62,8 @@ var app = new Vue({
     computed: {
         
     },
-
     beforeMount() {
-    this.user = getUserCookie();
+        forceLoggedIn();
+        this.user = getLoggedInUsername();
     }
 });

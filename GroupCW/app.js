@@ -43,23 +43,19 @@ app.get('/reset-password', (req, res) => {
 });
 
 app.get('/set-new-password', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('set-new-password') : res.redirect('sign-in');
+  res.render('set-new-password');
 });
 
 app.get('/explore', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('explore') : res.redirect('sign-in');
+  res.render('explore');
 });
 
 app.get('/question/:id', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('question', {id: req.params['id']}) : res.redirect('/sign-in');
+  res.render('question', {id: req.params['id']});
 });
 
 app.get('/account/:user', (req, res) => {
-  const userCookie = req.cookies.user;
-  userCookie ? res.render('account', {id: req.params['user']}) : res.redirect('/sign-in');
+  res.render('account', {id: req.params['user']});
 });
 
 

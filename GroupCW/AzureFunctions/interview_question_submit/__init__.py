@@ -13,7 +13,7 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     try:
-        auth.verifyJwt(req.headers.get('Authorization'))
+        username = auth.verifyJwt(req.headers.get('Authorization'))
     except InvalidTokenError:
         return HttpResponse(body=json.dumps({"msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
@@ -45,6 +45,7 @@ def main(req: HttpRequest) -> HttpResponse:
             "difficulty": difficulty,
             "regularity": regularity,
             "tips": tips,
+            "username": username
         }
         DBFunctions.create_item(
             data=data,
