@@ -61,31 +61,39 @@
                     </div>
                 </div>
             </section>
-
-            <section class="filters rounded card shadowed bordered">
-                <h2 class="underlined header-margin">Filters</h2>
-                <h3 class="underlined header-margin">Regularity</h3>
-                <div class="filter regularity-filter tags">
-                    <input type="radio" name="regualrity" id="regularity-all" checked>
-                    <label for="regularity-all" class="chip chip-regularity-all"></label>
-                    <input type="radio" name="regualrity" id="regularity-standard">
-                    <label for="regularity-standard" class="chip chip-regularity-standard"></label>
-                    <input type="radio" name="regualrity" id="regularity-infrequent">
-                    <label for="regularity-infrequent" class="chip chip-regularity-infrequent"></label>
-                    <input type="radio" name="regualrity" id="regularity-unusual">
-                    <label for="regularity-unusual" class="chip chip-regularity-unusual"></label>
-                </div>
-                <h3 class="underlined header-margin">Difficulty</h3>
-                <div class="filter difficulty-filter tags">
-                    <input type="radio" name="difficulty" id="difficulty-all" checked>
-                    <label for="difficulty-all" class="chip chip-difficulty-all"></label>
-                    <input type="radio" name="difficulty" id="difficulty-beginner">
-                    <label for="difficulty-beginner" class="chip chip-difficulty-beginner"></label>
-                    <input type="radio" name="difficulty" id="difficulty-intermediate">
-                    <label for="difficulty-intermediate" class="chip chip-difficulty-intermediate"></label>
-                    <input type="radio" name="difficulty" id="difficulty-advanced">
-                    <label for="difficulty-advanced" class="chip chip-difficulty-advanced"></label>
-                </div>
+            <section style="display: flex; flex-direction: column; gap: 2rem;">
+                <section class="filters rounded card shadowed bordered">
+                    <h2 class="underlined header-margin">Filters</h2>
+                    <h3 class="underlined header-margin">Regularity</h3>
+                    <div class="filter regularity-filter tags">
+                        <input type="radio" name="regualrity" id="regularity-all" checked>
+                        <label for="regularity-all" class="chip chip-regularity-all"></label>
+                        <input type="radio" name="regualrity" id="regularity-standard">
+                        <label for="regularity-standard" class="chip chip-regularity-standard"></label>
+                        <input type="radio" name="regualrity" id="regularity-infrequent">
+                        <label for="regularity-infrequent" class="chip chip-regularity-infrequent"></label>
+                        <input type="radio" name="regualrity" id="regularity-unusual">
+                        <label for="regularity-unusual" class="chip chip-regularity-unusual"></label>
+                    </div>
+                    <h3 class="underlined header-margin">Difficulty</h3>
+                    <div class="filter difficulty-filter tags">
+                        <input type="radio" name="difficulty" id="difficulty-all" checked>
+                        <label for="difficulty-all" class="chip chip-difficulty-all"></label>
+                        <input type="radio" name="difficulty" id="difficulty-beginner">
+                        <label for="difficulty-beginner" class="chip chip-difficulty-beginner"></label>
+                        <input type="radio" name="difficulty" id="difficulty-intermediate">
+                        <label for="difficulty-intermediate" class="chip chip-difficulty-intermediate"></label>
+                        <input type="radio" name="difficulty" id="difficulty-advanced">
+                        <label for="difficulty-advanced" class="chip chip-difficulty-advanced"></label>
+                    </div>
+                </section>
+                <section class="submit-question rounded card shadowed bordered">
+                    <h2 class="underlined header-margin">Submit Question</h2>
+                    <div class="search-container">
+                        <input type="text" class="input" placeholder="New question...">
+                        <button class="material-symbols-rounded icon-button">chevron_right</button>
+                    </div>
+                </section>
             </section>
             <section class="search rounded card shadowed bordered">
                 <h2 class="underlined">Search</h2>
@@ -135,15 +143,16 @@
                             <p class="question-response-count flex-center"><span
                                     class="material-symbols-rounded">sticky_note_2</span> 210
                                 Responses</p>
-                                <div>
-                                    <span class="chip chip-regularity-standard"></span>
-                                    <span class="chip chip-difficulty-beginner"></span>
-                                </div>
+                            <div>
+                                <span class="chip chip-regularity-standard"></span>
+                                <span class="chip chip-difficulty-beginner"></span>
+                            </div>
                         </div>
                         <button class="material-symbols-rounded icon-button">chevron_right</button>
                     </div>
                 </div>
             </section>
+
         </section>
     </main>
 </body>
