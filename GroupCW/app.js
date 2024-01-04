@@ -14,7 +14,8 @@ app.use(cookieParser());
 // URL of the backend API
 const BACKEND_ENDPOINT = process.env.BACKEND || 'http://localhost:7071';
 const options = {
-  BACKEND_URL: BACKEND_ENDPOINT
+  BACKEND_URL: BACKEND_ENDPOINT,
+  PRODUCTION: process.env.PRODUCTION === 'true',
 };
 
 //Start the server
