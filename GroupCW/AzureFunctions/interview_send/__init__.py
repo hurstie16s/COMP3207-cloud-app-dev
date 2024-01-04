@@ -160,7 +160,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 "interviewLanguage": response['detectedLanguage']["language"],
                 "transcript": response['translations'],
                 "comments": [],
-                "rating": [],
+                "ratings": [],
                 "tips": [ 
                     {
                         "language": language,
