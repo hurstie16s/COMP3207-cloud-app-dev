@@ -5,8 +5,8 @@
     </nav>
     <nav v-else>
         <a href="/">Home</a>
-        <a href="/account">{{user}}</a>
-        <a @click="logout">Log Out</a>
+        <a onclick="getAccount(this.innerText)">{{user}}</a>
+        <a onclick="logout()">Log Out</a>
     </nav>
 </header>
 

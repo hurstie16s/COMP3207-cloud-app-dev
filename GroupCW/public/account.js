@@ -3,43 +3,110 @@ var app = new Vue({
     //All data here
     data: {
       user: null,
+      account: null,
 
+      interviews: [],
+      visibleElements: {}
     },
     //On Awake methods here:
     mounted: function() {
-      this.getUserCookie();
+      
     },
     //Js Methods here:
     methods: {
-      logout() {
-        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
-        this.user = null; //change to cookie
-        window.location.href = '/';
+      
+      async loadResponses() {
+        const data = {
+          username: this.account,
+          interviewQuestion: ""  
+        }
+
+        postHelper(data, '/interview/data/search')
+        .then(response => {
+          this.interviews = response.data;
+          if (Object.keys(this.visibleElements).length === 0) {this.loadElements();}
+        })
+        .catch(error => {
+          console.log(error);
+        })
       },
 
-      getUserCookie() {
-        // Function to read the value of the 'user' cookie
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-          const [key, value] = cookie.trim().split('=');
-          if (key === 'user') {
-            this.user = value; // Use 'this' to refer to the Vue instance
-            break;
-          }
+      async submitComment(response) {
+        const data = {
+          comment: response.commentText,
+          id: response.id,
+          username: this.user
+        }
+        
+        response.commentText = "";
+        try {
+          const response = await axios.put(`${BACKEND_URL}/send/comments`, data);
+            console.log('Comment submitted successfully:', response.data);
+            this.loadResponses();
+        } catch (error) {
+          console.error('Error submitting comment:', error);
         }
       },
+
+      like(comment) {
+        const data = {
+          comment_id: comment.id,
+          username: this.user,
+          rate_action: "like"
+        }
+        this.sendCommentRating(data);
+      },
+
+      dislike(comment) {
+        const data = {
+          comment_id: comment.id,
+          username: this.user,
+          rate_action: "dislike"
+        }
+        this.sendCommentRating(data);
+      },
+
+      async sendCommentRating(data) {
+        try {
+          const response = await axios.put(`${BACKEND_URL}/rate/comments`, data);
+            console.log('Comment submitted successfully:', response.data);
+            this.loadResponses();
+        } catch (error) {
+          console.error('Error submitting comment:', error);
+        }
+      },
+
+      isLiked(comment) {
+        return comment.thumbs_up.includes(this.user)
+      },
+
+      isDisliked(comment) {
+        return comment.thumbs_down.includes(this.user)
+      },
+
+      toggleVisibility(id) {
+        this.$set(this.visibleElements, id, !this.visibleElements[id]);
+      },
+
+      loadElements() {
+        this.interviews.forEach((response, index) => {
+          this.$set(this.visibleElements, `response-transcript-${index}`, (index === 0 ? false : true));
+          this.$set(this.visibleElements, `response-comments-${index}`, (index === 0 ? false : true));
+        });
+      }
 
     },
     //FrontEnd methods here:
     computed: {
         
-      }
+      },
+
+    beforeMount() {
+      this.user = getUserCookie();
+      this.account = USER_ID; //Defined in account.ejs -- needs to be an api call to see if user exists (if user query returns empty redirect to 403)
+      this.loadResponses();
+    }
 });
 
 
-//any functions outside of vue here:
 
-
-
-//---------------------------------------------------------
-// Dummies

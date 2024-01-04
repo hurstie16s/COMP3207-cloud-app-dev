@@ -11,26 +11,24 @@ var app = new Vue({
     },
     //On Awake methods here:
     mounted: function() {
-      this.getUserCookie();
+      
     },
     //Js Methods here:
     methods: {
-      logout() {
-        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
-        this.user = null; //change to cookie
-        window.location.href = '/';
+
+      async loadQuestion(questionId) {
+        const res = await axios.get(`${BACKEND_URL}/interview/question/receive`);
+        if (res.status !== 200) {
+          alert(`API returned non-200 status when loading questions: ${res.status}`);
+          return;
+        }
+      
+        return res.data.questions.find(question => question.id === questionId);
       },
 
-      getUserCookie() {
-        // Function to read the value of the 'user' cookie
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-          const [key, value] = cookie.trim().split('=');
-          if (key === 'user') {
-            this.user = value; // Use 'this' to refer to the Vue instance
-            break;
-          }
-        }
+      startRecording() {
+        app.isRecording = true
+        AudioRecorder.start();
       },
 
       formatDate(timestamp) {
@@ -245,6 +243,7 @@ var app = new Vue({
       }
     },
     async beforeMount() {
+      this.user = getUserCookie();
       this.question = await this.loadQuestion(QUESTION_ID); // QUESTION_ID is defined via EJS in question.ejs
       this.responses = await this.loadResponses(QUESTION_ID);
     }

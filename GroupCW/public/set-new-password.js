@@ -4,67 +4,66 @@ var app = new Vue({
     data: {
       user: null,
 
-      password1: '',
-      password1Error: '',
-      password2: '',
-      password2Error: ''
+      oldPassword: '',
+      oldPasswordError: '',
+      newPassword1: '',
+      newPassword1Error: '',
+      newPassword2: '',
+      newPassword2Error: ''
       
     },
     //On Awake methods here:
     mounted: function() {
-        this.getUserCookie();
+
     },
     //Js Methods here:
     methods: {
         logout() {
-            document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'; //date is the past so browser removes it
-            this.user = null; //change to cookie
-            window.location.href = '/';
+            logout(); //utils.logout
         },
 
         setNewPassword() {
-            app.password1Error = '';
-            app.password2Error = '';
+            app.oldPasswordError = '';
+            app.newPassword1Error = '';
+            app.newPassword2Error = '';
 
-            if (!this.password1) {app.password1Error = 'Password Required';}
-            if (!this.password2) {app.password2Error = 'Password Required';}
+            if (!this.oldPassword) {app.oldPasswordError = 'Password Required';}
+            if (!this.newPassword1) {app.newPassword1Error = 'Password Required';}
+            if (!this.newPassword2) {app.newPassword2Error = 'Password Required';}
 
-            if (this.password1 !== this.password2) {
-                app.password2Error = 'Passwords must match';
-                return;
-            }
 
-            if (this.password1 && this.password2) {
-                const response = handleSetNewPassoword(app.user, this.password1);
-                if (response.result === true) {
-                    alert("password has been changed");
-                    window.location.href = '/explore';
-                } else {
-                    alert(response.msg);
+            if (this.oldPassword && this.newPassword1 && this.newPassword2) {
+                const data = {
+                    username: app.user,
+                    currentPassword: this.oldPassword,
+                    newPassword: this.newPassword1,
+                    newPasswordConfirm: this.newPassword2
                 }
+                putHelper(data, '/password/change')
+                .then(response => {
+                    if (response.status === 200) {
+                        window.location.href = '/explore'
+                        alert('Password Change Success')
+                    } else if (response.status === 403) {
+                        response.data.msg === 'AuthFail' ? app.oldPasswordError = 'Does not match old password' : app.newPassword2Error = 'Password does not match confirmation';
+                    } else {
+                        alert(`${response.status}: ${response.statusText}`) //undefined error
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
             }
 
-        },
-
-        getUserCookie() {
-            // Function to read the value of the 'user' cookie
-            const cookies = document.cookie.split(';');
-            for (const cookie of cookies) {
-                const [key, value] = cookie.trim().split('=');
-                if (key === 'user') {
-                    this.user = value; // Use 'this' to refer to the Vue instance
-                    break;
-                }
-            }
         },
 
     },
     //FrontEnd methods here:
     computed: {
         
-      }
-});
+    },
 
-function handleSetNewPassoword(user, password) {
-    return {result: true, msg: "OK"};
-}
+    beforeMount() {
+    this.user = getUserCookie();
+    }
+});

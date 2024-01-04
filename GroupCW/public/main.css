@@ -173,13 +173,14 @@ a {
     font-size: 14px;
     margin: 1em 0.25em;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     ;
 }
 
 .input-error>span {
     margin: 0 0.35em 0 0.35em;
+    white-space: pre-line;
 }
 
 .input {
@@ -269,7 +270,7 @@ a {
     width: 100%;
 }
 
-.new-password>.item4, .new-password>.item5 {
+.new-password>.item4, .new-password>.item5, .new-password>.item6 {
     grid-column: span 2;
     width: 100%;
 }
@@ -465,6 +466,7 @@ hr {
 
 .chip-regularity-standard {
     background-color: #1e9a62;
+    border: 2px solid transparent !important;
 }
 
 .chip-regularity-standard::before {
@@ -473,6 +475,7 @@ hr {
 
 .chip-regularity-infrequent {
     background-color: #d18034;
+    border: 2px solid transparent !important;
 }
 
 .chip-regularity-infrequent::before {
@@ -481,6 +484,7 @@ hr {
 
 .chip-regularity-unusual {
     background-color: #d1344e;
+    border: 2px solid transparent !important;
 }
 
 .chip-regularity-unusual::before {
@@ -497,6 +501,7 @@ hr {
 
 .chip-difficulty-beginner {
     background-color: #1e9a62;
+    border: 2px solid transparent !important;
 }
 
 .chip-difficulty-beginner::before {
@@ -505,6 +510,7 @@ hr {
 
 .chip-difficulty-intermediate {
     background-color: #d18034;
+    border: 2px solid transparent !important;
 }
 
 .chip-difficulty-intermediate::before {
@@ -513,28 +519,12 @@ hr {
 
 .chip-difficulty-advanced {
     background-color: #d1344e;
+    border: 2px solid transparent !important;
 }
 
 .chip-difficulty-advanced::before {
     content: 'Advanced'
 }
-
-.chip-type-behavioural {
-    background-color: #1e9a62;
-}
-
-.chip-type-behavioural::before {
-    content: 'Behavioural'
-}
-
-.chip-type-technical {
-    background-color: #d18034;
-}
-
-.chip-type-technical::before {
-    content: 'Technical'
-}
-
 
 
 
@@ -577,6 +567,12 @@ hr {
 .response-transcript, .response-comments {
     grid-column: span 3;
     margin-top: 2.5em;
+}
+
+.invisible {
+    max-height: 0;
+    overflow: hidden;
+    
 }
 
 .star {
@@ -637,7 +633,7 @@ hr {
     align-items: center;
 }
 
-.response>.response-controls> span{
+.response>.response-controls>span {
     font-size: 1.1em;
     font-family: var(--header-font);
     margin-left: 0.5em;
@@ -804,6 +800,7 @@ select {
     background-color: transparent;
     outline: none;
     cursor: pointer;
+    font-family: var(--header-font);
 }
 
 option {
@@ -819,6 +816,13 @@ option {
     display: none;
 }
 
+.response-container-idk {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 .filters label {
     cursor: pointer;
 }
@@ -832,6 +836,8 @@ option {
     box-shadow: inset 0 0 0 1000px rgb(var(--background-lighter-5));
     font-size: 1rem;
     color: rgb(var(--text));
+    border: 2px solid rgb(var(--theme));
+    cursor: default
 }
 
 .filter>input:checked+label {
@@ -1030,7 +1036,7 @@ option {
 }
 
 .tooltip::after {
-    
+
     font-size: 1rem;
     content: "";
     z-index: 1;
@@ -1045,24 +1051,25 @@ option {
     top: -80%;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
-    position:absolute;
-    
+    position: absolute;
+
     transition: var(--transition);
 }
 
 .tooltip:hover::before, .tooltip:hover::after {
-    
+
     opacity: 1;
 }
 
-.respones-header{
+.respones-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.respones-header>div{
+
+.respones-header>div {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 1em;
-} 
+}

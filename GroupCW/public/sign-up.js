@@ -31,25 +31,26 @@ var app = new Vue({
           if (!this.email) {app.emailError = 'Email Required';}
 
           //only calls api if fields if both username and password have values
-          if (this.username && this.password && this.email) {
-            const response = handleRegister(this.username, this.password);
-            if (response.result === true) { // successful register logs you in straight away
+          if (this.username && this.password && this.password) {
+            const data = {
+              username: this.username,
+              password: this.password,
+              email: this.email 
+            }
+            postHelper(data, '/register')
+            .then(response => {
+              if (response.status === 201) {
               app.user = this.username;
               setCookie(app.user);
               window.location.href = '/explore'
-            } else { //long winded nested if for to classify errors into username and password
-              if (response.msg.toLowerCase().includes("username")) {
-                app.usernameError = response.msg;
-              } else if (response.msg.toLowerCase().includes("password")) {
-                app.passwordError = response.msg;
-              } else if (response.msg.toLowerCase().includes("email")){ 
-                app.emailError = response.msg;
-              } else { //error not standardised or name error!
-                alert(response.msg);
+              } else {
+                handleError(response.data);
               }
-            }
+            })
+            .catch(error => {
+              console.log(error);
+            })
           }
-        
         },
 
     },
@@ -59,31 +60,13 @@ var app = new Vue({
       }
 });
 
-function setCookie(username) {
-  // Set the 'user' cookie with an expiration time of 1 hour
-  const expirationDate = new Date();
-  expirationDate.setTime(expirationDate.getTime() + (1 * 60 * 60 * 1000)); // 1 hour
-  document.cookie = `user=${username}; expires=${expirationDate.toUTCString()}; path=/`;
-}
 
-//---------------------------------------------------------
-// Dummies
-function handleRegister() {
-  //call api
-  return {result: true, msg: 'OK'}
-}
-
-
-
-
-function getHelper(data, endpoint) {
-
-}
-
-function postHelper(data, endpoint) {
-
-}
-
-function putHelper(data, endpoint) {
-
+function handleError(error) {
+  if (error.toLowerCase().includes('email')) {
+    app.emailError = error;
+  } else if (error.toLowerCase().includes('username')) {
+    app.usernameError = error;
+  } else {
+    app.passwordError = error.replace(/:/g, ':\n \u2022 ').replace(/;/g, '\n \u2022 ');
+  }
 }
