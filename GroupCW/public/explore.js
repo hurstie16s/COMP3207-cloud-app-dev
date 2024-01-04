@@ -39,13 +39,13 @@ var app = new Vue({
           difficulty: mapDifficultyToInt(difficulty),
           regularity: mapRegularityToInt(regularity)
         };
-  
+        document.getElementById('question-submission-spinner').classList.toggle('hidden');
         const res = await axios.post(`${BACKEND_URL}/interview/question/submit`, data);
         if (res.status > 299) {
           alert(`API returned non-200 status when submitting comment: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
           return;
         }
-  
+        document.getElementById('question-submission-spinner').classList.toggle('hidden');
         this.newQuestion.text = '';
       },
     },

@@ -1086,7 +1086,25 @@ option {
 } */
 
 .submit-question-options {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     display: flex;
     gap: 1rem;
+    margin-left: 0.3rem;
+}
+
+.submit-question >i {
+    margin-left: 0.3rem;
+    margin-top: 1.5rem;
+    display: inline-block;
+}
+
+i>span {
+    display: inline-block;
+    transform: translateY(0.3em);
+}
+
+
+i>span>.spinner {
+    font-size: 1.5em !important;
+    
 }
