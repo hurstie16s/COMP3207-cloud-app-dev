@@ -60,7 +60,27 @@
         </ul>
     </section>
     <section class="your-responses card rounded shadowed">
-        <h2 class="underlined">Your Responses</h2>
+        <div class="respones-header">
+            <h2 class="underlined">My Responses</h2>
+            <div>
+                <div class="tooltip" tooltip-text="Filter by Industry">
+                    <select name="industry">
+                        <option>All Industries</option>
+                        <!-- for-each options on all industry options from api  -->
+                    </select>
+                </div>
+                <div class="tooltip" tooltip-text="Sort By">
+                    <select name="industry">
+                        <option>Rating</option>
+                        <option>Date</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="userResponses.length === 0">
+           <i>You have no responses</i> 
+        </div>
 
         <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
             <div class="response-meta">
@@ -136,11 +156,27 @@
         </div>
     </section>
     <section class="community-responses card rounded shadowed">
-        <h2 class="underlined">Community Responses</h2>
-
-        <div class="filters">
-
+        <div class="respones-header">
+            <h2 class="underlined">Community Responses</h2>
+            <div>
+                <div class="tooltip" tooltip-text="Filter by Industry">
+                    <select name="industry">
+                        <option>All Industries</option>
+                        <!-- for-each options on all industry options from api  -->
+                    </select>
+                </div>
+                <div class="tooltip" tooltip-text="Sort By">
+                    <select name="industry">
+                        <option>Rating</option>
+                        <option>Date</option>
+                    </select>
+                </div>
+            </div>
         </div>
+
+        <div v-if="communityResponses.length === 0">
+            <i>There are no community responses</i> 
+         </div>
 
         <div class="response card rounded shadowed" v-for="(response, i) in communityResponses">
             <div class="response-meta">

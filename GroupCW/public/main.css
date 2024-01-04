@@ -647,6 +647,10 @@ hr {
     font-weight: 600;
 }
 
+i {
+    color: rgba(var(--text), 0.6);
+}
+
 .response-meta>.timestamp {
     font-size: 0.8rem;
     color: rgba(var(--text), 0.6);
