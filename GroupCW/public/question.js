@@ -6,6 +6,7 @@ var app = new Vue({
     question: null,
     responses: [],
     isRecording: false,
+    awaitingSubmission: false
   },
   //On Awake methods here:
   mounted: function () {
@@ -175,41 +176,52 @@ var app = new Vue({
 
     startRecording() {
       app.isRecording = true
+      app.awaitingSubmission = false;
       AudioRecorder.start();
     },
 
     async stopRecording() {
       app.isRecording = false;
-      const blob = await AudioRecorder.stop();
-
+      app.awaitingSubmission = true;
+      this.blob = await AudioRecorder.stop();
+    },
+    
+    async deleteRecording() {
+      app.awaitingSubmission = false;
+    },
+  
+    async submitRecording() {
       const formData = new FormData();
       formData.append('username', this.user);
-      formData.append('industry', 'TODO'); // TODO: Industry?
+      formData.append('industry', this.industry); 
       formData.append('interviewTitle', this.question.question);
       formData.append('private', false); // TODO: Private?
-      formData.append('webmFile', blob);
-
+      formData.append('webmFile', this.blob);
+  
       const res = await axios({
         method: 'post',
         url: `${BACKEND_URL}/interview/${this.question.id}/responses`,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" }
       });
-
+  
       if (res.status !== 200) {
         alert(`API returned non-200 status when sending audio: ${res.status}`);
         return;
       }
-
+  
       if (res.data.result !== true) {
         alert(`API returned error when sending audio: ${res.data.msg}`);
         return;
       }
-
+  
       await this.loadResponses(QUESTION_ID);
       alert("upload success");
-    }
+      app.awaitingSubmission = false;
+    },
   },
+
+  
   //FrontEnd methods here:
   computed: {
     userResponses() {
