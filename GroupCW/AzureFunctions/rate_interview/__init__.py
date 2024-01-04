@@ -48,14 +48,11 @@ def main(req: HttpRequest) -> HttpResponse:
         else:
             ratings.append({"username": username, "rating": rating})
 
-        # Calculate the new average rating
-        total_ratings = sum(r['rating'] for r in ratings)
-        average_rating = round(total_ratings / len(ratings), 1)
         interview_data['ratings'] = ratings
 
         # Update the interview data in the database
         AzureData.containerInterviewData.upsert_item(interview_data)
-        return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "average_rating": average_rating, "ratings": interview_data["ratings"]}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "ratings": interview_data["ratings"]}), status_code=200, mimetype="application/json")
 
     except ValueError:
         return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")
