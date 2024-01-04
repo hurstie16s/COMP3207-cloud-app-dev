@@ -2,7 +2,7 @@ let stream;
 let recorder = null;
 let chunks = [];
 
-export default {
+window.AudioRecorder = {
     start: async function () {
       try {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
