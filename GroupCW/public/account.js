@@ -5,8 +5,7 @@ var app = new Vue({
       user: null,
       account: null,
 
-      interviews: [],
-      visibleElements: {}
+      responses: [],
     },
     //On Awake methods here:
     mounted: function() {
@@ -23,83 +22,152 @@ var app = new Vue({
 
         postHelper(data, '/interview/data/search')
         .then(response => {
-          this.interviews = response.data;
-          if (Object.keys(this.visibleElements).length === 0) {this.loadElements();}
+          this.responses = response.data;
+          this.responses[0].showTranscript = true;
+          this.responses[0].showComments = true;
         })
         .catch(error => {
           console.log(error);
         })
       },
 
-      async submitComment(response) {
-        const data = {
-          comment: response.commentText,
-          id: response.id,
-          username: this.user
-        }
-        
-        response.commentText = "";
-        try {
-          const response = await axios.put(`${BACKEND_URL}/send/comments`, data);
-            console.log('Comment submitted successfully:', response.data);
-            this.loadResponses();
-        } catch (error) {
-          console.error('Error submitting comment:', error);
-        }
+      formatDate(timestamp) {
+        if (!timestamp) return "";
+        const date = new Date(timestamp);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} at ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
       },
 
-      like(comment) {
+      async updatePrivacy(questionId, responseId, isPrivate) {
+        const data = {private: isPrivate};
+        const res = await axios.patch(`${BACKEND_URL}/interview/${questionId}/responses/${responseId}`, data);
+        if (res.status !== 200) {
+          alert(`API returned non-200 status when updating privacy: ${res.status}`);
+          return;
+        }
+
+        const response = this.responses.find(response => response.id === responseId);
+        response.private = isPrivate;
+      },
+
+      async submitComment(questionId, responseId, comment) {
         const data = {
-          comment_id: comment.id,
+          id: responseId,
           username: this.user,
-          rate_action: "like"
+          comment: comment
+        };
+
+        const res = await axios.put(`${BACKEND_URL}/send/comments`, data);
+        if (res.status > 299) {
+          alert(`API returned non-200 status when submitting comment: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+          return;
         }
-        this.sendCommentRating(data);
+
+        const response = this.responses.find(response => response.id === responseId);
+        response.comments.push(res.data.data);
+
+        response.pending_comment = '';
       },
 
-      dislike(comment) {
+      async rateComment(responseId, commentId, action) {
         const data = {
-          comment_id: comment.id,
+          comment_id: commentId,
           username: this.user,
-          rate_action: "dislike"
+          rate_action: action
+        };
+
+        const res = await axios.put(`${BACKEND_URL}/rate/comments`, data);
+        if (res.status > 299) {
+          alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+          return;
         }
-        this.sendCommentRating(data);
+
+        const response = this.responses.find(response => response.id === responseId);
+        const idx = response.comments.findIndex(comment => comment.id === commentId);
+        response.comments[idx] = res.data.comment;
+        response.comments = [...response.comments]; // Force Vue to re-render - doesn't detect change without this
       },
 
-      async sendCommentRating(data) {
-        try {
-          const response = await axios.put(`${BACKEND_URL}/rate/comments`, data);
-            console.log('Comment submitted successfully:', response.data);
-            this.loadResponses();
-        } catch (error) {
-          console.error('Error submitting comment:', error);
+      async deleteResponse(questionId, responseId) {
+        const res = await axios.delete(`${BACKEND_URL}/interview/${questionId}/responses/${responseId}`);
+        if (res.status !== 200) {
+          alert(`API returned non-200 status when deleting response: ${res.status}`);
+          return;
         }
+
+        const idx = this.responses.findIndex(response => response.id === responseId);
+        this.responses.splice(idx, 1);
       },
 
-      isLiked(comment) {
-        return comment.thumbs_up.includes(this.user)
+      async playAudio(response) {
+        if (!response.audio) {
+          const res = await axios.get(`${BACKEND_URL}/interview/${response.questionId}/responses/${response.id}/audio`, {responseType: 'blob'});
+          if (res.status !== 200) {
+            alert(`API returned non-200 status when loading audio: ${res.status}`);
+            return;
+          }
+  
+          const blob = res.data;
+          const url = URL.createObjectURL(blob);
+          const audio = new Audio(url);
+          audio.onended = () => {response.audioPaused = true};
+
+          Vue.set(response, 'audio', audio); // Vue can't detect nested new properties without this
+          Vue.set(response, 'audioPaused', true); // Vue can't detect nested new properties without this
+        }
+
+        response.audio.play();
+        response.audioPaused = false;
       },
 
-      isDisliked(comment) {
-        return comment.thumbs_down.includes(this.user)
+      async pauseAudio(response) {
+        if (!response.audio) return;
+
+        response.audio.pause();
+        response.audioPaused = true;
       },
 
-      toggleVisibility(id) {
-        this.$set(this.visibleElements, id, !this.visibleElements[id]);
-      },
+      async seekAudio(responseId, seconds) {
+        const response = this.responses.find(response => response.id === responseId);
+        if (!response) return;
 
-      loadElements() {
-        this.interviews.forEach((response, index) => {
-          this.$set(this.visibleElements, `response-transcript-${index}`, (index === 0 ? false : true));
-          this.$set(this.visibleElements, `response-comments-${index}`, (index === 0 ? false : true));
-        });
-      }
+        if (!response.audio) return;
+
+        response.audio.currentTime += seconds;
+      },
 
     },
     //FrontEnd methods here:
     computed: {
-        
+      averageRatings() {
+        const res = {};
+        this.responses.forEach(response => {
+          if (!response.ratings) {
+            res[response.id] = 0.0;
+            return;
+          }
+          
+          res[response.id] = response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+        });
+        return res;
       },
+
+      overallRating() {
+        let res = 0.0;
+
+        this.responses.forEach(response => {
+          if (!response.ratings) {
+            return;
+          }
+          res += response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+        });
+        return res/this.responses.length;
+      },
+
+      uniqueQs() {
+        const uniques = new Set(this.responses.map(obj => obj.questionId));
+        return uniques.size;
+      }
+    },
 
     beforeMount() {
       this.user = getUserCookie();

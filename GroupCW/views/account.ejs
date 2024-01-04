@@ -12,8 +12,8 @@
         <h2 class="underlined">{{account}}</h2>
         <ul>
 
-            <li>2 Responses to 1 Questions</li>
-            <li>Average response rating of 4.2<span
+            <li>{{responses.length}} Responses to {{uniqueQs}} Questions</li>
+            <li>Average response rating of {{overallRating.toFixed(1)}}<span
                     class="material-symbols-rounded star-filled inline-adjusted">star_rate</span> </li>
         </ul>
         <br>
@@ -25,69 +25,72 @@
     <section class="your-responses card rounded shadowed">
         <h2 class="underlined">Your Responses</h2>
 
-        <div class="response card rounded shadowed" v-for="(response, index) in interviews" :key="response.id">
+        <div class="response card rounded shadowed" v-for="(response, i) in responses">
             <div class="response-meta">
                 <p class="username"><span class="material-symbols-rounded">person</span>{{response.username}}
                 </p>
-                <span class="timestamp">19/12/2023 at 13:45</span>
+                <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
             </div>
 
             <h2 class="question-text">{{response.interviewQuestion}}</h2>
 
             <div class="response-options">
-                <span class="avg-rating flex-center">4.2<span
+                <span class="avg-rating flex-center">{{ averageRatings[response.id].toFixed(1) }}<span
                         class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" :id="'visibility-toggle-' + index" class="toggle hidden">
-                <label :for="'visibility-toggle-' + index" class="toggle-label" title="Public visibility toggle">
+                <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
+                        v-model="response.private" :true-value="false" :false-value="true" v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
+                <label class="toggle-label" v-bind:for="'visibility-toggle-user-' + i" title="Public visibility toggle">
                     <span class="material-symbols-rounded toggle-on">visibility</span>
                     <span class="material-symbols-rounded toggle-off">visibility_off</span>
                 </label>
 
-                <input type="checkbox" :id="'transcript-toggle-' + index" class="toggle hidden" @change="toggleVisibility('response-transcript-' + index)" v-model="!visibleElements['response-transcript-' + index]">
-                <label :for="'transcript-toggle-' + index" class="toggle-label" title="Toggle transcript">
+                <input type="checkbox" v-bind:id="'transcript-toggle-user-' + i" class="toggle hidden" v-model="response.showTranscript">
+                <label class="toggle-label" v-bind:for="'transcript-toggle-user-' + i" title="Toggle transcript">
                     <span class="material-symbols-rounded toggle-on">description</span>
                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                 </label>
 
-                <input type="checkbox" :id="'comments-toggle-' + index" class="toggle hidden" @change="toggleVisibility('response-comments-' + index)" v-model="!visibleElements['response-comments-' + index]">
-                <label :for="'comments-toggle-' + index" class="toggle-label" title="Toggle comments">
+                <input type="checkbox" v-bind:id="'comments-toggle-user-' + i" class="toggle hidden" v-model="response.showComments">
+                <label class="toggle-label" v-bind:for="'comments-toggle-user-' + i" title="Toggle comments">
                     <span class="material-symbols-rounded toggle-on">comment</span>
                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                 </label>
-                <button
-                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
-            </div>
+                <button @click="deleteResponse(response.questionId, response.id)"
+                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>            </div>
 
             <div class="response-timeline">
                 <hr>
             </div>
             <div class="response-controls">
-                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
-                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
-                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button" @click="seekAudio(response.id, -10)">replay_10</button>
+                <button class="material-symbols-rounded icon-button minimal-button"
+                    v-if="!response.audio || response.audioPaused" @click="playAudio(response)">play_arrow</button>
+                <button class="material-symbols-rounded icon-button minimal-button" v-else @click="pauseAudio(response)">pause</button>
+                <button class="material-symbols-rounded icon-button minimal-button" @click="seekAudio(response.id, 10)">forward_10</button>
             </div>
-            <div :id="'response-transcript-' + index" class="response-transcript" :class="{ 'invisible': visibleElements['response-transcript-' + index] }">
+            <div class="response-transcript" v-if="response.showTranscript">
                 <h3 class="underlined">Transcript</h3>
-                <p>{{response.transcript[0].text}}</p>
+                <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
             </div>
-            <div :id="'response-comments-' + index" class="response-comments" :class="{ 'invisible': visibleElements['response-comments-' + index] }">
+            <div class="response-comments" v-if="response.showComments">
                 <h3 class="underlined">Comments</h3>
-                <div class="comment rounded" v-for="comment in response.comments" :key="comment.id">
-                    <p class="comment-username"><span class="material-symbols-rounded">person</span>{{comment.username}}
-                    </p>
-                    <p class="comment-text">{{comment.comment}}</p>
+                <div class="comment rounded" v-for="comment in response.comments">
+                    <p class="comment-username"><span class="material-symbols-rounded">person</span>{{ comment.username }}</p>
+                    <p class="comment-text">{{ comment.comment }}</p>
                     <div class="like-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button" :class="{ 'filled': isLiked(comment) }" @click="like(comment)">thumb_up</button>
-                        <span>{{comment.thumbs_up.length}}</span>
+                        <button class="icon-button material-symbols-rounded minimal-button" @click="rateComment(response.id, comment.id, 'like')"
+                            :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
+                        <span>{{ comment.thumbs_up.length }}</span>
                     </div>
                     <div class="dislike-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button" :class="{ 'filled': isDisliked(comment) }" @click="dislike(comment)">thumb_down</button>
-                        <span>{{comment.thumbs_down.length}}</span>
+                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button" @click="rateComment(response.id, comment.id, 'dislike')"
+                            :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
+                        <span>{{ comment.thumbs_down.length }}</span>
                     </div>
                 </div>
                 <div class="new-comment">
-                    <textarea class="input" placeholder="Add a comment..." v-model="response.commentText"></textarea>
-                    <button class="material-symbols-rounded icon-button" @click="submitComment(response)">chevron_right</button>
+                    <textarea class="input" placeholder="Add a comment..." v-model="response.pending_comment"></textarea>
+                    <button class="material-symbols-rounded icon-button" @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
                 </div>
             </div>
         </div>
