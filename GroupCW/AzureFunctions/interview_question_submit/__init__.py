@@ -39,7 +39,7 @@ def main(req: HttpRequest) -> HttpResponse:
             "interviewQuestion": question,
             "difficulty": difficulty,
             "regularity": regularity,
-            "tips": tips,
+            "tips": eval(tips),
         }
         DBFunctions.create_item(
             data=data,
