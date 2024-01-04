@@ -6,7 +6,8 @@ var app = new Vue({
     question: {},
     responses: [],
     isRecording: false,
-    awaitingSubmission: false
+    awaitingSubmission: false,
+    industry: 'Computer Science'
   },
   //On Awake methods here:
   mounted: function () {
