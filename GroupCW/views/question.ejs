@@ -10,7 +10,7 @@
     <section class="question-main card rounded shadowed">
         <div class="question-main-header">
             <h2 class="underlined">Question</h2>
-            <div class="tags">
+            <div class="tags" v-if="question">
                 <span class="chip chip-regularity-standard" v-if="question.regularity === 0"></span>
                 <span class="chip chip-regularity-infrequent" v-else-if="question.regularity === 1"></span>
                 <span class="chip chip-regularity-unusual" v-else-if="question.regularity === 2"></span>
@@ -21,7 +21,7 @@
 
             </div>
         </div>
-        <h2 class="question-text">{{ question.question }}</h2>
+        <h2 class="question-text" v-if="question">{{ question.question }}</h2>
         <div class="recording">
             <button v-if="!isRecording" class="material-symbols-rounded icon-button red-button" @click="startRecording()">mic</button>
             <button v-else class="material-symbols-rounded icon-button red-button" @click="stopRecording()">stop_circle</button>
