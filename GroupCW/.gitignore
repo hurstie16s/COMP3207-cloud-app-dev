@@ -19,3 +19,8 @@ docker-compose.yml
 # __pycache__
 __pycache__
 .pyc
+
+AzureFunctions/bin
+AzureFunctions/lib
+AzureFunctions/lib64
+AzureFunctions/pyvenv.cfg
