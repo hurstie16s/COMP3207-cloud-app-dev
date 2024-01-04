@@ -22,9 +22,4 @@ def main(req: HttpRequest) -> HttpResponse:
     # Delete interviewBlobURL key from each interview
     result = list(map(lambda x: {k: v for k, v in x.items() if k != "interviewBlobURL" and not k.startswith('_')}, result))
     
-    for item in result:
-        total_ratings = sum(r['rating'] for r in item)
-        average_rating = round(total_ratings / len(item['rating']), 1)
-        item['average_rating'] = average_rating
-
     return HttpResponse(body=json.dumps(result), mimetype='application/json', status_code=200)
