@@ -199,7 +199,7 @@ a {
 }
 
 .input:focus-within {
-    border-color: rgb(var(--theme-lighter-25));
+    border-color: rgb(var(--theme));
 }
 
 .input:focus-within span {
@@ -1008,6 +1008,7 @@ option {
 
 .tooltip {
     position: relative;
+    width: fit-content;
 }
 
 .tooltip::before {
@@ -1068,4 +1069,20 @@ option {
     align-items: center;
     justify-content: flex-end;
     gap: 1em;
+}
+
+/* .submit-question {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.submit-question>h2, .submit-question>.search-container {
+    grid-column: span 2;
+} */
+
+.submit-question-options {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
 }
