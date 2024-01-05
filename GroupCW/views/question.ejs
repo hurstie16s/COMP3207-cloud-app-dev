@@ -204,6 +204,7 @@
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
+                                <div v-if="response.transcript[0].text.length === 0"></div>
                                 <i v-if="response.transcript[0].text.length === 0">No transcript available</i>
                                 <div class="tooltip" tooltip-text="Select Language" v-if="response.transcript[0].text.length !== 0">
                                     <select name="language">
@@ -389,6 +390,7 @@
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
+                                <div v-if="response.transcript[0].text.length === 0"></div>
                                 <i v-if="response.transcript[0].text.length === 0">No transcript available</i>
                                 <div class="tooltip" tooltip-text="Select Language" v-if="response.transcript[0].text.length !== 0">
                                     <select name="language">

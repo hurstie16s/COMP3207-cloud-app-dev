@@ -174,6 +174,16 @@ var app = new Vue({
       
       goToAccount(user){
         getAccount(user);
+      },
+
+      async deleteAccount() {
+        const res = await axios.delete(`${BACKEND_URL}/account/self`);
+        if (res.status > 299) {
+          addNotification(`An error occurred: ${res.status} ` + (res.data ? ` ${res.data.msg}` : ''));
+          return;
+        }
+        logout();
+        addNotification(`Account successfully deleted`);
       }
 
     },
