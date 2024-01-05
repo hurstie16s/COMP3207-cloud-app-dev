@@ -99,7 +99,7 @@ var app = new Vue({
 
       const res = await axios.put(`${BACKEND_URL}/rate/comments`, data);
       if (res.status > 299) {
-        alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+        addNotification(`An error occurred: ${res.status} ` + (res.data ? ` ${res.data.msg}` : ''));
         return;
       }
 
