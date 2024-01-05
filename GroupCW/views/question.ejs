@@ -65,10 +65,11 @@
                             <h2 class="underlined">My Responses</h2>
                             <div>
                                 <div class="tooltip" tooltip-text="Filter by Industry">
-                                    <select name="industry">
+                                    <select name="industry" v-model="userIndustryFilter">
                                         <option>All Industries</option>
                                         <option
                                             v-for="industry in [...new Set(this.userResponses.map(r => r.industry))]">
+                                            {{industry}}
                                         </option>
                                     </select>
                                 </div>
@@ -206,7 +207,7 @@
                             <h2 class="underlined">Community Responses</h2>
                             <div>
                                 <div class="tooltip" tooltip-text="Filter by Industry">
-                                    <select name="industry">
+                                    <select name="industry"  v-model="communityIndustryFilter">
                                         <option>All Industries</option>
                                         <option
                                             v-for="industry in [...new Set(this.communityResponses.map(r => r.industry))]">

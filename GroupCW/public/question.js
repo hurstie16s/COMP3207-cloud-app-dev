@@ -7,7 +7,9 @@ var app = new Vue({
     responses: [],
     isRecording: false,
     awaitingSubmission: false,
-    industry: 'Computer Science'
+    industry: 'Computer Science',
+    communityIndustryFilter: 'All Industries',
+    userIndustryFilter: 'All Industries'
   },
   //On Awake methods here:
   mounted: function () {
@@ -226,7 +228,10 @@ var app = new Vue({
   //FrontEnd methods here:
   computed: {
     userResponses() {
-      const responses = this.responses.filter(response => response.username === this.user);
+      const responses = this.responses
+        .filter(response => response.username === this.user)
+        .filter(response => this.userIndustryFilter === 'All Industries' || response.industry === this.userIndustryFilter);
+      
       if (responses.length > 0) {
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
@@ -235,7 +240,9 @@ var app = new Vue({
       return responses;
     },
     communityResponses() {
-      const responses = this.responses.filter(response => response.username !== this.user);
+      const responses = this.responses
+        .filter(response => response.username !== this.user)
+        .filter(response => this.communityIndustryFilter === 'All Industries' || response.industry === this.communityIndustryFilter);;
       if (responses.length > 0) {
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
