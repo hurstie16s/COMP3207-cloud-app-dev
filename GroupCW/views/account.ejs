@@ -48,6 +48,10 @@
                             </div>
                         </div>
 
+                        <div v-if="userResponses.length === 0">
+                            <i>You have no responses</i>
+                        </div>
+
                         <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
                             <div class="response-meta">
                                 <p class="username"><span
