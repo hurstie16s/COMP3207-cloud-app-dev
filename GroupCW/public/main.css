@@ -338,7 +338,7 @@ header>nav {
     gap: 4em;
 }
 
-header>nav>a {
+header a {
     color: inherit;
     text-decoration: none;
     text-transform: up;
