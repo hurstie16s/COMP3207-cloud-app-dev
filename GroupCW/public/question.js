@@ -7,7 +7,7 @@ var app = new Vue({
     responses: [],
     isRecording: false,
     awaitingSubmission: false,
-    industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
+    industries: ['Computer Science', 'Engineering', 'Finance', 'Law', 'Retail'],
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries',
@@ -138,7 +138,7 @@ var app = new Vue({
     async deleteResponse(questionId, responseId) {
       const res = await axios.delete(`${BACKEND_URL}/interview/${questionId}/responses/${responseId}`);
       if (res.status !== 200) {
-        
+
         return;
       }
 
@@ -195,41 +195,42 @@ var app = new Vue({
       app.awaitingSubmission = true;
       this.blob = await AudioRecorder.stop();
     },
-    
+
     async deleteRecording() {
       app.awaitingSubmission = false;
     },
-  
+
     async submitRecording() {
       document.getElementById('response-submission-spinner').classList.toggle('hidden');
       const formData = new FormData();
       formData.append('username', this.user);
-      formData.append('industry', this.industry); 
+      formData.append('industry', this.industry);
       formData.append('interviewTitle', this.question.question);
       formData.append('private', false); // TODO: Private?
       formData.append('webmFile', this.blob);
-  
+
       const res = await axios({
         method: 'post',
         url: `${BACKEND_URL}/interview/${this.question.id}/responses`,
         data: formData,
         headers: { "Content-Type": "multipart/form-data" }
       });
-  
+
       if (res.status !== 200) {
         addNotification(`An error occured: ${res.status} `)
         return;
       }
-  
+
       if (res.data.result !== true) {
         addNotification(`An error occured: ${res.data.msg} `)
         return;
       }
-  
-      await this.loadResponses(QUESTION_ID);
-      app.awaitingSubmission = false;
-      document.getElementById('question-submission-spinner').classList.toggle('hidden');
       addNotification('Response Uploaded');
+      document.getElementById('response-submission-spinner').classList.toggle('hidden');
+      app.awaitingSubmission = false;
+
+        await this.loadResponses(QUESTION_ID);
+
     },
 
     calculateAverages() {
@@ -245,20 +246,20 @@ var app = new Vue({
       return response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
     },
 
-    goToAccount(user){
+    goToAccount(user) {
       getAccount(user);
     }
 
   },
 
-  
+
   //FrontEnd methods here:
   computed: {
     userResponses() {
       const responses = this.responses
         .filter(response => response.username === this.user)
         .filter(response => this.userIndustryFilter === 'All Industries' || response.industry === this.userIndustryFilter);
-      
+
       if (this.userSortBy === 'Newest First') {
         responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       } else if (this.userSortBy === 'Oldest First') {
@@ -314,7 +315,7 @@ var app = new Vue({
     },
   },
   async beforeMount() {
-      forceLoggedIn();
+    forceLoggedIn();
     this.user = getLoggedInUsername();
     this.question = await this.loadQuestion(QUESTION_ID); // QUESTION_ID is defined via EJS in question.ejs
     this.loadResponses(QUESTION_ID);
