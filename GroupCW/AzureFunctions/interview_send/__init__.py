@@ -182,32 +182,35 @@ def main(req: HttpRequest) -> HttpResponse:
             raise ExceptionWithTranslation
         
         logging.info("Finished translation")
-
+        
         transcriptionTranslation = {}
         for data in responseInterview['translations']:
-            transcriptionTranslation[data["to"]] = data["text"]
+            country = ReturnLanguageOfLanguageCode(data["to"])
+            transcriptionTranslation[country] = data["text"]
         
         
         tipsGood = {}
         for data in responseAIGood['translations']:
-            tipsGood[data["to"]] = []
+            country = ReturnLanguageOfLanguageCode(data["to"])
+            tipsGood[country] = []
             arrayOfTranslatedTips = data["text"].split('\n')
             for tip in arrayOfTranslatedTips:
                 if "- " in tip:
-                    tipsGood[data["to"]].append(tip.replace("- ", ""))
+                    tipsGood[country].append(tip.replace("- ", ""))
                 elif "-" in tip:
-                    tipsGood[data["to"]].append(tip.replace("-", ""))
+                    tipsGood[country].append(tip.replace("-", ""))
            
             
         tipsImprovement = {}  
         for data in responseAIImprovement['translations']:
-            tipsImprovement[data["to"]] = []
+            country = ReturnLanguageOfLanguageCode(data["to"])
+            tipsImprovement[country] = []
             arrayOfTranslatedTips = data["text"].split('\n')
             for tip in arrayOfTranslatedTips:
                 if "- " in tip:
-                    tipsImprovement[data["to"]].append(tip.replace("- ", ""))
+                    tipsImprovement[country].append(tip.replace("- ", ""))
                 elif "-" in tip:
-                    tipsImprovement[data["to"]].append(tip.replace("-", ""))
+                    tipsImprovement[country].append(tip.replace("-", ""))
             
         
         logging.info("Starting Json Into Cosmos")
@@ -272,7 +275,19 @@ def main(req: HttpRequest) -> HttpResponse:
         except:
             pass
 
-
+def ReturnLanguageOfLanguageCode(languageCode):
+    if(languageCode == "en"):
+        return "English"
+    if(languageCode == "cy"):
+        return "Welsh"
+    if(languageCode == "ga"):
+        return "Irish"
+    if(languageCode == "fr"):
+        return "French"
+    if(languageCode == "pl"):
+        return "Polish"
+    
+    
 class ExceptionWithStoringToCosmosDB(Exception):
     pass
 
