@@ -570,6 +570,19 @@ hr {
     margin-top: 2.5em;
 }
 
+.response-transcript {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.response-transcript>select {
+    justify-self: flex-end;
+}
+
+.response-transcript>p {
+    grid-row: span 2;
+}
+
 .star {
     font-size: 1.8em !important;
     font-variation-settings: 'wght'300;
@@ -838,7 +851,8 @@ option {
     font-size: 1rem;
     color: rgb(var(--text));
     border: 2px solid rgb(var(--theme));
-    cursor: default
+    cursor: default;
+    font-family: var(--header-font);
 }
 
 .filter>input:checked+label {
