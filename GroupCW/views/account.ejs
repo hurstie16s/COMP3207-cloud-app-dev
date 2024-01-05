@@ -188,13 +188,13 @@
                                             <span class="material-symbols-rounded">person</span>{{comment.username }}
                                         </p>
                                         <p class="comment-text">{{ comment.comment }}</p>
-                                        <div class="like-count rounded">
+                                        <div class="like-count rounded"  v-if="comment.username !== user">
                                             <button class="icon-button material-symbols-rounded minimal-button"
                                                 @click="rateComment(response.id, comment.id, 'like')"
                                                 :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
                                             <span>{{ comment.thumbs_up.length }}</span>
                                         </div>
-                                        <div class="dislike-count rounded">
+                                        <div class="dislike-count rounded"  v-if="comment.username !== user">
                                             <button
                                                 class="icon-button material-symbols-rounded minimal-button minimal-red-button"
                                                 @click="rateComment(response.id, comment.id, 'dislike')"
