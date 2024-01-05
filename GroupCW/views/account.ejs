@@ -176,6 +176,9 @@
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
+                                <div v-if="response.comments.length === 0">
+                                    <i>There are no comments yet</i>
+                                </div>
                                 <div class="comment rounded" v-for="comment in response.comments">
                                     <p class="comment-username" @click="goToAccount(comment.username)">
                                         <span class="material-symbols-rounded">person</span>{{comment.username }}</p>

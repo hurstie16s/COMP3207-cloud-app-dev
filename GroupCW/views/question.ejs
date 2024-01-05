@@ -46,10 +46,10 @@
                                     </div>
                                     <button @click="submitRecording()">Submit Recording</button>
                                 </div>
-                                
+
                                 <i id="response-submission-spinner" class="hidden">Submitting Response <span>
-                                    <span class="spinner material-symbols-rounded">cached</span>
-                                </span></i>
+                                        <span class="spinner material-symbols-rounded">cached</span>
+                                    </span></i>
                             </div>
                         </div>
 
@@ -93,7 +93,8 @@
 
                         <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
                             <div class="response-meta">
-                                <p class="username" @click="goToAccount(response.username)"><span class="material-symbols-rounded">person</span>
+                                <p class="username" @click="goToAccount(response.username)"><span
+                                        class="material-symbols-rounded">person</span>
                                     {{ response.username }}</p>
                                 <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
                             </div>
@@ -135,7 +136,8 @@
                                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                                 </label>
                                 <button @click="deleteResponse(response.questionId, response.id)"
-                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip" tooltip-text="Delete Response">delete</button>
+                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip"
+                                    tooltip-text="Delete Response">delete</button>
                             </div>
 
                             <div class="response-timeline">
@@ -197,6 +199,9 @@
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
+                                <div v-if="response.comments.length === 0">
+                                    <i>There are no comments yet</i>
+                                </div>
                                 <div class="comment rounded" v-for="comment in response.comments">
                                     <div class="response-meta">
                                         <p class="comment-username" @click="goToAccount(comment.username)"><span
@@ -223,7 +228,8 @@
                                 <div class="new-comment">
                                     <textarea class="input" placeholder="Add a comment..."
                                         v-model="response.pending_comment"></textarea>
-                                    <button class="material-symbols-rounded icon-button tooltip" tooltip-text="Post Comment"
+                                    <button class="material-symbols-rounded icon-button tooltip"
+                                        tooltip-text="Post Comment"
                                         @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
                                 </div>
                             </div>
@@ -256,7 +262,8 @@
 
                         <div class="response card rounded shadowed" v-for="(response, i) in communityResponses">
                             <div class="response-meta">
-                                <p class="username" @click="goToAccount(response.username)"><span class="material-symbols-rounded">person</span>
+                                <p class="username" @click="goToAccount(response.username)"><span
+                                        class="material-symbols-rounded">person</span>
                                     {{ response.username }}</p>
                                 <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
                             </div>
@@ -364,6 +371,9 @@
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
+                                <div v-if="response.comments.length === 0">
+                                    <i>There are no comments yet</i>
+                                </div>
                                 <div class="comment rounded" v-for="comment in response.comments">
                                     <div class="response-meta">
                                         <p class="comment-username" @click="goToAccount(comment.username)"><span
