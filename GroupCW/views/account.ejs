@@ -64,14 +64,16 @@
                                     <span class="material-symbols-rounded star-filled">star_rate</span>
                                 </span>
 
-                                <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
-                                    v-model="response.private" :true-value="false" :false-value="true"
-                                    v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
-                                <label class="toggle-label" v-bind:for="'visibility-toggle-user-' + i"
-                                    title="Public visibility toggle">
-                                    <span class="material-symbols-rounded toggle-on">visibility</span>
-                                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
-                                </label>
+                                <div v-if="user === account"> 
+                                    <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
+                                        v-model="response.private" :true-value="false" :false-value="true"
+                                        v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
+                                    <label class="toggle-label" v-bind:for="'visibility-toggle-user-' + i"
+                                        title="Public visibility toggle">
+                                        <span class="material-symbols-rounded toggle-on">visibility</span>
+                                        <span class="material-symbols-rounded toggle-off">visibility_off</span>
+                                    </label>
+                                </div>
 
                                 <input type="checkbox" v-bind:id="'gpt-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.showGPT">
