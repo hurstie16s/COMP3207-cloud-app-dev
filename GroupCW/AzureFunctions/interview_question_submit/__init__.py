@@ -8,6 +8,7 @@ from shared_code import DBFunctions, FaultCheckers, auth
 from jwt.exceptions import InvalidTokenError
 import AzureData
 from chatGPTReview.__init__ import send_question_to_ai
+import ast
 
 def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -44,7 +45,7 @@ def main(req: HttpRequest) -> HttpResponse:
             "interviewQuestion": question,
             "difficulty": difficulty,
             "regularity": regularity,
-            "tips": tips,
+            "tips": ast.literal_eval(tips),
             "username": username
         }
         DBFunctions.create_item(
