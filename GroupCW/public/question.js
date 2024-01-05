@@ -295,10 +295,6 @@ var app = new Vue({
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
         });
-        const firstResponse = responses[0];
-        this.$set(firstResponse, 'showTranscript', true);
-        this.$set(firstResponse, 'showComments', true);
-        this.$set(firstResponse, 'showGPT', true);
       }
 
       return responses;
