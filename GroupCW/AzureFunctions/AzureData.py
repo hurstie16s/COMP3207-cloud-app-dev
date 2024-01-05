@@ -77,6 +77,6 @@ translation_headers = {
     'X-ClientTraceId': str(uuid.uuid4())
 }
 
+global JWT_SIGNING_KEY
 JWT_SIGNING_KEY = "2GKiZVZoOJsPvPIKxeClIEO0gCrG4gQ5"
 
-# TODO: return functions
