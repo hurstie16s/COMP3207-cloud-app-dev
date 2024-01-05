@@ -24,4 +24,7 @@ AzureFunctions/bin
 AzureFunctions/lib
 AzureFunctions/lib64
 AzureFunctions/pyvenv.cfg
+AzureFunctions/_requirements.txt
+AzureFunctions/AzureData
 AzureFunctions/Scripts
+

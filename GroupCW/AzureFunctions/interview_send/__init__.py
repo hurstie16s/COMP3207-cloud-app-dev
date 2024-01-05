@@ -16,6 +16,7 @@ import datetime
 import tempfile
 from shared_code import DBFunctions, auth
 from jwt.exceptions import InvalidTokenError
+import ast
 
 translation_params = {
     'api-version': '3.0',
@@ -130,7 +131,12 @@ def main(req: HttpRequest) -> HttpResponse:
         # Store the return value (interview feedback)
         try:
             output_feedback = send_interview_to_ai(question['interviewQuestion'], transcription)
+            if(output_feedback == ""): raise
             tips = output_feedback.split('\n')
+            if(len(tips) == 3):
+                del tips[1]
+            tips[0] = ast.literal_eval(tips[0][len("Good Points: "):].strip())
+            tips[1] = ast.literal_eval(tips[1][len("Improvement Points: "):].strip())
             # Extract the lists using ast.literal_eval
             
             
@@ -166,12 +172,13 @@ def main(req: HttpRequest) -> HttpResponse:
                 "transcript": response['translations'],
                 "comments": [],
                 "ratings": [],
-                "tips": [ 
+                "tips":  
                     {
                         "language": language,
-                        "tips": tips,
+                        "goodPoints": tips[0],
+                        "improvementPoints": tips[1]
                     }
-                ],
+                ,
                 "private": private,
                 "timestamp": datetime.datetime.now().isoformat()
             }
