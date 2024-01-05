@@ -98,6 +98,15 @@
                                     <span class="material-symbols-rounded toggle-on">visibility</span>
                                     <span class="material-symbols-rounded toggle-off">visibility_off</span>
                                 </label>
+
+                                <input type="checkbox" v-bind:id="'gpt-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.showGPT">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle AI Feedback"
+                                    v-bind:for="'gpt-toggle-user-' + i">
+                                    <span class="material-symbols-rounded toggle-on">memory</span>
+                                    <span class="material-symbols-rounded toggle-off strikethrough">memory</span>
+                                </label>
+
                                 <input type="checkbox" v-bind:id="'transcript-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.showTranscript">
                                 <label class="toggle-label tooltip" tooltip-text="Toggle Transcript"
@@ -105,6 +114,7 @@
                                     <span class=" material-symbols-rounded toggle-on">description</span>
                                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                                 </label>
+
                                 <input type="checkbox" v-bind:id="'comments-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.showComments">
                                 <label class="toggle-label tooltip" tooltip-text="Toggle Comments"
@@ -157,6 +167,9 @@
                             <div class="response-container-idk">
                                 <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
                             </div>
+                            <div class="response-gpt-advice" v-if="response.showGPT">
+                                <h3 class="underlined">AI Feedback</h3>
+                            </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
                                 <select name="language" class="tooltip" tooltip-text="Select Language">
@@ -207,7 +220,7 @@
                             <h2 class="underlined">Community Responses</h2>
                             <div>
                                 <div class="tooltip" tooltip-text="Filter by Industry">
-                                    <select name="industry"  v-model="communityIndustryFilter">
+                                    <select name="industry" v-model="communityIndustryFilter">
                                         <option>All Industries</option>
                                         <option v-for="industry in industries">{{industry}}</option>
                                     </select>
@@ -236,6 +249,15 @@
                                 <span class="avg-rating flex-center tooltip" tooltip-text="Average Rating">{{
                                     averageRatings[response.id].toFixed(1) }}<span
                                         class="material-symbols-rounded star-filled">star_rate</span></span>
+
+                                <input type="checkbox" v-bind:id="'gpt-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.showGPT">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle AI Feedback"
+                                    v-bind:for="'gpt-toggle-user-' + i">
+                                    <span class="material-symbols-rounded toggle-on">memory</span>
+                                    <span class="material-symbols-rounded toggle-off strikethrough">memory</span>
+                                </label>
+
                                 <input type="checkbox" v-bind:id="'transcript-toggle-community-' + i"
                                     class="toggle hidden" v-model="response.showTranscript">
                                 <label class="toggle-label tooltip" tooltip-text="Toggle Transcript"
@@ -243,6 +265,7 @@
                                     <span class="material-symbols-rounded toggle-on">description</span>
                                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
                                 </label>
+
                                 <input type="checkbox" v-bind:id="'comments-toggle-community-' + i"
                                     class="toggle hidden" v-model="response.showComments">
                                 <label class="toggle-label tooltip" tooltip-text="Toggle Comments"
@@ -306,6 +329,9 @@
                                     <span class="material-symbols-rounded star" @click="rateInterview(response.id, 1)"
                                         :class="[userRatings[response.id] >= 1 ? 'star-filled' : '']">star_rate</span>
                                 </div>
+                            </div>
+                            <div class="response-gpt-advice" v-if="response.showGPT">
+                                <h3 class="underlined">AI Feedback</h3>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>

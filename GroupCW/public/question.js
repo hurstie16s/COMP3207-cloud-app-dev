@@ -14,7 +14,7 @@ var app = new Vue({
   },
   //On Awake methods here:
   mounted: function () {
-
+    updatePrivacy
   },
   //Js Methods here:
   methods: {
@@ -237,6 +237,7 @@ var app = new Vue({
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
+        this.$set(firstResponse, 'showGPT', true)
       }
       return responses;
     },
@@ -248,6 +249,7 @@ var app = new Vue({
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
+        this.$set(firstResponse, 'showGPT', true);
       }
       return responses;
     },

@@ -565,7 +565,7 @@ hr {
     flex-direction: row-reverse;
 }
 
-.response-transcript, .response-comments {
+.response-transcript, .response-comments, .response-gpt-advice {
     grid-column: span 3;
     margin-top: 2.5em;
 }
