@@ -194,26 +194,31 @@
                                 <h3 class="underlined">AI Feedback</h3>
                                 <h4 class="underlined">Good Points</h4>
                                 <ul>
-
+                                    <li v-for="tip in response.tips.goodPoints">{{tip}}</li>
                                 </ul>
 
                                 <h4 class="underlined">Areas for Improvement</h4>
                                 <ul>
-
+                                    <li v-for="tip in response.tips.improvementPoints">{{tip}}</li>
                                 </ul>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
-                                <div class="tooltip" tooltip-text="Select Language">
-                                    <select name="language">
-                                        <option value="en">English</option>
-                                        <option value="cy">Welsh</option>
-                                        <option value="ga">Irish</option>
-                                        <option value="fr">French</option>
-                                        <option value="pl">Polish</option>
-                                    </select>
+                                <div v-if="response.transcript[0].text.length === 0">
+                                    <i>No transcript available</i>
                                 </div>
-                                <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
+                                <div v-else>
+                                    <div class="tooltip" tooltip-text="Select Language">
+                                        <select name="language">
+                                            <option value="en">English</option>
+                                            <option value="cy">Welsh</option>
+                                            <option value="ga">Irish</option>
+                                            <option value="fr">French</option>
+                                            <option value="pl">Polish</option>
+                                        </select>
+                                    </div>
+                                    <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
+                                </div>
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
@@ -378,26 +383,31 @@
                                 <h3 class="underlined">AI Feedback</h3>
                                 <h4 class="underlined">Good Points</h4>
                                 <ul>
-
+                                    <li v-for="tip in response.tips.goodPoints">{{tip}}</li>
                                 </ul>
 
                                 <h4 class="underlined">Areas for Improvement</h4>
                                 <ul>
-
+                                    <li v-for="tip in response.tips.improvementPoints">{{tip}}</li>
                                 </ul>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
-                                <div class="tooltip" tooltip-text="Select Language">
-                                    <select name="language">
-                                        <option value="en">English</option>
-                                        <option value="cy">Welsh</option>
-                                        <option value="ga">Irish</option>
-                                        <option value="fr">French</option>
-                                        <option value="pl">Polish</option>
-                                    </select>
+                                <div v-if="response.transcript[0].text.length === 0">
+                                    <i>No transcript available</i>
                                 </div>
-                                <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
+                                <div v-else>
+                                    <div class="tooltip" tooltip-text="Select Language">
+                                        <select name="language">
+                                            <option value="en">English</option>
+                                            <option value="cy">Welsh</option>
+                                            <option value="ga">Irish</option>
+                                            <option value="fr">French</option>
+                                            <option value="pl">Polish</option>
+                                        </select>
+                                    </div>
+                                    <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
+                                </div>
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
