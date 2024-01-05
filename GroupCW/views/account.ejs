@@ -3,106 +3,242 @@
 
 <%- include('header'); -%>
 
-<body>
-    <div id="account">
-        <%- include('navbar'); -%>
-
-<section class="account-page ">
-    <section class="your-account card rounded shadowed">
-        <h2 class="underlined">{{account}}</h2>
-        <ul>
-
-            <li>2 Responses to 1 Questions</li>
-            <li>Average response rating of 4.2<span
-                    class="material-symbols-rounded star-filled inline-adjusted">star_rate</span> </li>
-        </ul>
-        <br>
-        <br>
-        <button class="red-button">Delete Account</button>
-        <button onclick="window.location.href = '/set-new-password'">Reset Password</button>
-    </section>
-
-    <section class="your-responses card rounded shadowed">
-        <h2 class="underlined">Your Responses</h2>
-
-        <div class="response card rounded shadowed" v-for="(response, index) in interviews" :key="response.id">
-            <div class="response-meta">
-                <p class="username"><span class="material-symbols-rounded">person</span>{{response.username}}
-                </p>
-                <span class="timestamp">19/12/2023 at 13:45</span>
-            </div>
-
-            <h2 class="question-text">{{response.interviewQuestion}}</h2>
-
-            <div class="response-options">
-                <span class="avg-rating flex-center">4.2<span
-                        class="material-symbols-rounded star-filled">star_rate</span></span>
-                <input type="checkbox" :id="'visibility-toggle-' + index" class="toggle hidden">
-                <label :for="'visibility-toggle-' + index" class="toggle-label" title="Public visibility toggle">
-                    <span class="material-symbols-rounded toggle-on">visibility</span>
-                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
-                </label>
-
-                <input type="checkbox" :id="'transcript-toggle-' + index" class="toggle hidden" @change="toggleVisibility('response-transcript-' + index)" v-model="!visibleElements['response-transcript-' + index]">
-                <label :for="'transcript-toggle-' + index" class="toggle-label" title="Toggle transcript">
-                    <span class="material-symbols-rounded toggle-on">description</span>
-                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
-                </label>
-
-                <input type="checkbox" :id="'comments-toggle-' + index" class="toggle hidden" @change="toggleVisibility('response-comments-' + index)" v-model="!visibleElements['response-comments-' + index]">
-                <label :for="'comments-toggle-' + index" class="toggle-label" title="Toggle comments">
-                    <span class="material-symbols-rounded toggle-on">comment</span>
-                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
-                </label>
-                <button
-                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
-            </div>
-
-            <div class="response-timeline">
-                <hr>
-            </div>
-            <div class="response-controls">
-                <button class="material-symbols-rounded icon-button minimal-button">replay_10</button>
-                <button class="material-symbols-rounded icon-button minimal-button">play_arrow</button>
-                <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
-            </div>
-            <div :id="'response-transcript-' + index" class="response-transcript" :class="{ 'invisible': visibleElements['response-transcript-' + index] }">
-                <h3 class="underlined">Transcript</h3>
-                <p>{{response.transcript[0].text}}</p>
-            </div>
-            <div :id="'response-comments-' + index" class="response-comments" :class="{ 'invisible': visibleElements['response-comments-' + index] }">
-                <h3 class="underlined">Comments</h3>
-                <div class="comment rounded" v-for="comment in response.comments" :key="comment.id">
-                    <p class="comment-username"><span class="material-symbols-rounded">person</span>{{comment.username}}
-                    </p>
-                    <p class="comment-text">{{comment.comment}}</p>
-                    <div class="like-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button" :class="{ 'filled': isLiked(comment) }" @click="like(comment)">thumb_up</button>
-                        <span>{{comment.thumbs_up.length}}</span>
-                    </div>
-                    <div class="dislike-count rounded">
-                        <button class="icon-button material-symbols-rounded minimal-button minimal-red-button" :class="{ 'filled': isDisliked(comment) }" @click="dislike(comment)">thumb_down</button>
-                        <span>{{comment.thumbs_down.length}}</span>
-                    </div>
-                </div>
-                <div class="new-comment">
-                    <textarea class="input" placeholder="Add a comment..." v-model="response.commentText"></textarea>
-                    <button class="material-symbols-rounded icon-button" @click="submitComment(response)">chevron_right</button>
-                </div>
+    <body>
+        <div class="viewport-container">
+            <div class="notification-container" id="notification-container">
             </div>
         </div>
-    </section>
-</section>
+        <div id="account">
+            <%- include('navbar'); -%>
 
-</main>
-</div>
+                <section class="account-page ">
+                    <section class="your-account card rounded shadowed">
+                        <h2 class="underlined">{{account}}</h2>
+                        <ul>
 
-<script>const USER_ID = '<%= id %>';</script>
+                            <li>{{responses.length}} Responses to {{uniqueQs}} Questions</li>
+                            <li>Average response rating of {{overallRating.toFixed(1)}}<span
+                                    class="material-symbols-rounded star-filled inline-adjusted">star_rate</span> </li>
+                        </ul>
+                        <button class="red-button" v-if="user === account" style="margin-right: 1rem" @click="deleteAccount">Delete
+                            Account</button>
+                        <button onclick="window.location.href = '/set-new-password'" v-if="user === account">Reset
+                            Password</button>
+                    </section>
 
-<%- include('footer'); -%>
+                    <section class="your-responses card rounded shadowed">
+                        <div class="respones-header">
+                            <h2 class="underlined" v-if="user === account">My Responses</h2>
+                            <h2 class="underlined" v-else>{{account}}'s Responses</h2>
+                            <div>
+                                <div class="tooltip" tooltip-text="Filter by Industry">
+                                    <select name="industry" v-model="industryFilter">
+                                        <option>All Industries</option>
+                                        <option v-for="industry in industries">{{industry}}</option>
+                                    </select>
+                                </div>
+                                <div class="tooltip" tooltip-text="Sort By">
+                                    <select name="Sort by" v-model="sortBy">
+                                        <option>Top Rated</option>
+                                        <option>Lowest Rated</option>
+                                        <option>Newest First</option>
+                                        <option>Oldest First</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-<!-- Application Javascript -->
-<script defer src="/static/account.js"></script>
+                        <div v-if="userResponses.length === 0">
+                            <i>You have no responses</i>
+                        </div>
 
-</body>
+                        <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
+                            <div class="response-meta">
+                                <p class="username"><span
+                                        class="material-symbols-rounded">person</span>{{response.username}}
+                                </p>
+                                <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
+                            </div>
+
+                            <h2 class="question-text">{{response.interviewQuestion}}</h2>
+
+                            <div class="response-options">
+                                <span class="avg-rating flex-center tooltip" tooltip-text="Average Rating">
+                                    {{ response.average.toFixed(1) }}
+                                    <span class="material-symbols-rounded star-filled">star_rate</span>
+                                </span>
+
+                                <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.private" :true-value="false" :false-value="true"
+                                    v-if="user === account"
+                                    v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle Response Public/Private"
+                                    v-bind:for="'visibility-toggle-user-' + i" v-if="user === account"
+                                    title="Public visibility toggle">
+                                    <span class="material-symbols-rounded toggle-on">visibility</span>
+                                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
+                                </label>
+
+                                <input type="checkbox" v-bind:id="'gpt-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.showGPT">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle AI Feedback"
+                                    v-bind:for="'gpt-toggle-user-' + i">
+                                    <span class="material-symbols-rounded toggle-on">memory</span>
+                                    <span class="material-symbols-rounded toggle-off strikethrough">memory</span>
+                                </label>
+
+                                <input type="checkbox" v-bind:id="'transcript-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.showTranscript">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle Transcript" v-bind:for="'transcript-toggle-user-' + i"
+                                    title="Toggle transcript">
+                                    <span class="material-symbols-rounded toggle-on">description</span>
+                                    <span class="material-symbols-rounded toggle-off strikethrough">description</span>
+                                </label>
+
+                                <input type="checkbox" v-bind:id="'comments-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.showComments">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle Comments" v-bind:for="'comments-toggle-user-' + i"
+                                    title="Toggle comments">
+                                    <span class="material-symbols-rounded toggle-on">comment</span>
+                                    <span class="material-symbols-rounded toggle-off">comments_disabled</span>
+                                </label>
+                                <button @click="deleteResponse(response.questionId, response.id)"
+                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip"
+                                    tooltip-text="Delete Response"
+                                    v-if="user === account">delete</button>
+                            </div>
+
+                            <div class="response-timeline">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="timeline-wave"
+                                    v-if="!response.audio || response.audioPaused">
+                                    <path stroke="#cacbcf" fill="none" id="straight-line" d="M0 20 L10000 20" />
+                                </svg>
+                                <svg class="timeline-wave" v-else>
+                                    <defs>
+                                        <path stroke="#cacbcf" fill="none" id="sine-wave" d="M0 20
+                                        C 40 0, 60 0, 100 20 C 140 40, 160 40, 200 20
+                                        C 240 0, 260 0, 300 20 C 340 40, 360 40, 400 20
+                                        C 440 0, 460 0, 500 20 C 540 40, 560 40, 600 20
+                                        C 640 0, 660 0, 700 20 C 740 40, 760 40, 800 20
+                                        C 840 0, 860 0, 900 20 C 940 40, 960 40, 1000 20
+                                        C 1040 0, 1060 0, 1100 20 C 1140 40, 1160 40, 1200 20
+                                        C 1240 0, 1260 0, 1300 20 C 1340 40, 1360 40, 1400 20
+                                        C 1440 0, 1460 0, 1500 20 C 1540 40, 1560 40, 1600 20
+                                        C 1640 0, 1660 0, 1700 20 C 1740 40, 1760 40, 1800 20
+                                        C 1840 0, 1860 0, 1900 20 C 1940 40, 1960 40, 2000 20" />
+                                    </defs>
+                                    <use xlink:href="#sine-wave" x="0" y="0">
+                                        <animate attributeName="x" from="0" to="-200" dur="2.5s"
+                                            repeatCount="indefinite" />
+                                    </use>
+                                </svg>
+
+                            </div>
+                            <div class="response-controls">
+                                <button class="material-symbols-rounded icon-button minimal-button"
+                                    @click="seekAudio(response.id, -10)">replay_10</button>
+                                <button class="material-symbols-rounded icon-button minimal-button"
+                                    v-if="!response.audio || response.audioPaused"
+                                    @click="playAudio(response)">play_arrow</button>
+                                <button class="material-symbols-rounded icon-button minimal-button" v-else
+                                    @click="pauseAudio(response)">pause</button>
+                                <button class="material-symbols-rounded icon-button minimal-button"
+                                    @click="seekAudio(response.id, 10)">forward_10</button>
+                                <span class="response-timestamp">00:00</span>
+                            </div>
+                            <div class="response-container-idk">
+
+                                <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
+                                <div class="response-rating" v-if="user !== account">
+                                    <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 5)"
+                                        :class="[userRatings[response.id] >= 5 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 4)"
+                                        :class="[userRatings[response.id] >= 4 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 3)"
+                                        :class="[userRatings[response.id] >= 3 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 2)"
+                                        :class="[userRatings[response.id] >= 2 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 1)"
+                                        :class="[userRatings[response.id] >= 1 ? 'star-filled' : '']">star_rate</span>
+                                </div>
+                            </div>
+
+                            <div class="response-gpt-advice" v-if="response.showGPT">
+                                <h3 class="underlined">AI Feedback</h3>
+                                <h4 class="underlined">Good Points</h4>
+                                <ul>
+                                    <li v-for="tip in response.tips.goodPoints">{{tip}}</li>
+                                </ul>
+
+                                <h4 class="underlined">Areas for Improvement</h4>
+                                <ul>
+                                    <li v-for="tip in response.tips.improvementPoints">{{tip}}</li>
+                                </ul>
+                            </div>
+                            <div class="response-transcript" v-if="response.showTranscript">
+                                <h3 class="underlined">Transcript</h3>
+                                <div v-if="response.transcript[0].text.length === 0"></div>
+                                <i v-if="response.transcript[0].text.length === 0">No transcript available</i>
+                                <div class="tooltip" tooltip-text="Select Language" v-if="response.transcript[0].text.length !== 0">
+                                    <select name="language">
+                                        <option value="en">English</option>
+                                        <option value="cy">Welsh</option>
+                                        <option value="ga">Irish</option>
+                                        <option value="fr">French</option>
+                                        <option value="pl">Polish</option>
+                                    </select>
+                                </div>
+                                <p v-if="response.transcript[0].text.length !== 0">{{ response.transcript.find(x => x.to === "en").text }}</p>
+                            </div>
+                            <div class="response-comments" v-if="response.showComments">
+                                <h3 class="underlined">Comments</h3>
+                                <div v-if="response.comments.length === 0">
+                                    <i>There are no comments yet</i>
+                                </div>
+                                <div class="comment-container">
+                                    <div class="comment rounded" v-for="comment in response.comments">
+                                        <p class="comment-username" @click="goToAccount(comment.username)">
+                                            <span class="material-symbols-rounded">person</span>{{comment.username }}
+                                        </p>
+                                        <p class="comment-text">{{ comment.comment }}</p>
+                                        <div class="like-count rounded" v-if="comment.username !== user">
+                                            <button class="icon-button material-symbols-rounded minimal-button"
+                                                @click="rateComment(response.id, comment.id, 'like')"
+                                                :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
+                                            <span>{{ comment.thumbs_up.length }}</span>
+                                        </div>
+                                        <div class="dislike-count rounded" v-if="comment.username !== user">
+                                            <button
+                                                class="icon-button material-symbols-rounded minimal-button minimal-red-button"
+                                                @click="rateComment(response.id, comment.id, 'dislike')"
+                                                :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
+                                            <span>{{ comment.thumbs_down.length }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="new-comment">
+                                    <textarea class="input" placeholder="Add a comment..."
+                                        v-model="response.pending_comment"></textarea>
+                                    <button class="material-symbols-rounded icon-button tooltip"
+                                    tooltip-text="Post Comment"
+                                        @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                </main>
+        </div>
+
+        <script>const USER_ID = '<%= id %>';</script>
+
+        <%- include('footer'); -%>
+
+            <!-- Application Javascript -->
+            <script defer src="/static/account.js"></script>
+
+    </body>
+
 </html>
