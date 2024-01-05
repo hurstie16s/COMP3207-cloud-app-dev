@@ -254,13 +254,13 @@ var app = new Vue({
         .filter(response => response.username === this.user)
         .filter(response => this.userIndustryFilter === 'All Industries' || response.industry === this.userIndustryFilter);
       
-      if (this.communitySortBy === 'Newest First') {
+      if (this.userSortBy === 'Newest First') {
         responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      } else if (this.communitySortBy === 'Oldest First') {
+      } else if (this.userSortBy === 'Oldest First') {
         responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      } else if (this.communitySortBy === 'Top Rated') {
+      } else if (this.userSortBy === 'Top Rated') {
         responses.sort((a, b) => b.average - a.average);
-      } else if (this.communitySortBy === 'Lowest Rated') {
+      } else if (this.userSortBy === 'Lowest Rated') {
         responses.sort((a, b) => a.average - b.average);
       }
       if (responses.length > 0) {
@@ -279,7 +279,7 @@ var app = new Vue({
     communityResponses() {
       const responses = this.responses
         .filter(response => response.username !== this.user)
-        .filter(response => this.communityIndustryFilter === 'All Industries' || response.industry === this.communityIndustryFilter);;
+        .filter(response => this.communityIndustryFilter === 'All Industries' || response.industry === this.communityIndustryFilter);
       if (this.communitySortBy === 'Newest First') {
         responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       } else if (this.communitySortBy === 'Oldest First') {
