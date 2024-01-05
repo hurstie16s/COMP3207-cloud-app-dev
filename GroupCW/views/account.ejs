@@ -20,9 +20,7 @@
                             <li>Average response rating of {{overallRating.toFixed(1)}}<span
                                     class="material-symbols-rounded star-filled inline-adjusted">star_rate</span> </li>
                         </ul>
-                        <br>
-                        <br>
-                        <button class="red-button" v-if="user === account">Delete Account</button>
+                        <button class="red-button" v-if="user === account" style="margin-right: 1rem">Delete Account</button>
                         <button onclick="window.location.href = '/set-new-password'" v-if="user === account">Reset
                             Password</button>
                     </section>
