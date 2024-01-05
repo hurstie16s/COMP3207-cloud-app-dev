@@ -201,6 +201,7 @@ var app = new Vue({
     },
   
     async submitRecording() {
+      document.getElementById('response-submission-spinner').classList.toggle('hidden');
       const formData = new FormData();
       formData.append('username', this.user);
       formData.append('industry', this.industry); 
@@ -226,8 +227,8 @@ var app = new Vue({
       }
   
       await this.loadResponses(QUESTION_ID);
-      alert("upload success");
       app.awaitingSubmission = false;
+      document.getElementById('question-submission-spinner').classList.toggle('hidden');
     },
 
     calculateAverages() {

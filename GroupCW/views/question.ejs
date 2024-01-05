@@ -33,13 +33,19 @@
                                 class="material-symbols-rounded icon-button red-button" tooltip-text="Stop Recording"
                                 @click="stopRecording()">stop_circle</button>
                             <div v-else class="recording-submission">
-                                <button class="red-button" @click="deleteRecording()">Delete Recording</button>
-                                <div class="tooltip" tooltip-text="Select Industry">
-                                    <select name="industry" v-model="industry">
-                                        <option v-for="industry in industries">{{industry}}</option>
-                                    </select>
+                                <div>
+                                    <button class="red-button" @click="deleteRecording()">Delete Recording</button>
+                                    <div class="tooltip" tooltip-text="Select Industry">
+                                        <select name="industry" v-model="industry">
+                                            <option v-for="industry in industries">{{industry}}</option>
+                                        </select>
+                                    </div>
+                                    <button @click="submitRecording()">Submit Recording</button>
                                 </div>
-                                <button @click="submitRecording()">Submit Recording</button>
+                                
+                                <i id="response-submission-spinner" class="hidden">Submitting Response <span>
+                                    <span class="spinner material-symbols-rounded">cached</span>
+                                </span></i>
                             </div>
                         </div>
 

@@ -1033,12 +1033,27 @@ option {
 
 .recording-submission {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.recording-submission>div {
+    display: flex;
     gap: 2rem;
 }
 
 .tooltip {
     position: relative;
     width: max-content;
+}
+
+label.tooltip::before {
+    top: -110%;
+}
+
+label.tooltip::after {
+    top: -90%;
 }
 div.tooltip::before {
     top: -130%
