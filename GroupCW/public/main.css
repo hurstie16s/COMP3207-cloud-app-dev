@@ -83,7 +83,7 @@ body>div>main, body>main {
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--header-font);
     margin: 0;
-    /* margin-bottom: 0.6em; */
+    margin-bottom: 0.5em;
 
 }
 
