@@ -94,13 +94,15 @@
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
-                                <select name="language" class="tooltip" tooltip-text="Select Language">
-                                    <option value="en">English</option>
-                                    <option value="cy">Welsh</option>
-                                    <option value="ga">Irish</option>
-                                    <option value="fr">French</option>
-                                    <option value="pl">Polish</option>
-                                </select>
+                                <div class="tooltip" tooltip-text="Select Language">
+                                    <select name="language" >
+                                        <option value="en">English</option>
+                                        <option value="cy">Welsh</option>
+                                        <option value="ga">Irish</option>
+                                        <option value="fr">French</option>
+                                        <option value="pl">Polish</option>
+                                    </select>
+                                </div>
                                 <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
                             </div>
                             <div class="response-comments" v-if="response.showComments">
