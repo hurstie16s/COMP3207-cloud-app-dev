@@ -368,6 +368,10 @@ header>nav>a {
     font-style: italic;
 }
 
+#account .question-text {
+    font-weight: 500;
+}
+
 
 .flex-center {
     display: flex;
@@ -654,7 +658,7 @@ hr {
 .response>.response-meta {
     display: flex;
     flex-direction: column;
-    margin-right: 2rem;
+    margin-right: 4rem;
 }
 
 .response-meta>.username {

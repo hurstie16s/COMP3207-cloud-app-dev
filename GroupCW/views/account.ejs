@@ -23,7 +23,25 @@
                     </section>
 
                     <section class="your-responses card rounded shadowed">
-                        <h2 class="underlined">My Responses</h2>
+                        <div class="respones-header">
+                            <h2 class="underlined">My Responses</h2>
+                            <div>
+                                <div class="tooltip" tooltip-text="Filter by Industry">
+                                    <select name="industry">
+                                        <option>All Industries</option>
+                                        <option v-for="industry in industries">{{industry}}</option>
+                                    </select>
+                                </div>
+                                <div class="tooltip" tooltip-text="Sort By">
+                                    <select name="Sort by">
+                                        <option>Top Rated</option>
+                                        <option>Lowest Rated</option>
+                                        <option>Newest First</option>
+                                        <option>Oldest First</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="response card rounded shadowed" v-for="(response, i) in responses">
                             <div class="response-meta">
