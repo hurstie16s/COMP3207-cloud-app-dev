@@ -181,6 +181,9 @@ var app = new Vue({
     computed: {
       overallRating() {
         let res = 0.0;
+        if (this.responses.length === 0) {
+          return 0;
+        }
 
         this.responses.forEach(response => {
          res += response.average;
