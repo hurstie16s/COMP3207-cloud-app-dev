@@ -23,7 +23,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
       interview = items[0]
 
-      if interview.private and interview.username != username:
+      if interview['private'] and interview['username'] != username:
         return HttpResponse(json.dumps({"result": False, "msg": "You don't have permission to view this interview"}), status_code=403, mimetype="application/json")
 
       fileName = interview['audioUuid'] + ".webm"

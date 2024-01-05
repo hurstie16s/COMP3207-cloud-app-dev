@@ -40,7 +40,7 @@ var app = new Vue({
                 app.use = response.data.username;
                 window.location.href = '/set-new-password';
               } else {
-                alert(`${response.status}: ${response.statusText}`) //undefined error
+                addNotification(`An error occurred: ${res.status} ` + res.statusText);
               }
             })
             .catch(error => {
@@ -64,7 +64,7 @@ function handleError(error) {
   } else if (error === 'Invalid Login') {
     app.passwordError = error;
   } else {
-    alert(error);
+    addNotification(`An error occurred: ${error} `);
   }
 }
 

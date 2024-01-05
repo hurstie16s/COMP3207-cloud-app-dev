@@ -1,12 +1,13 @@
 <header>
-    <h1 class="logo">REHEARSAL</h1>
+    <h1 class="logo"><a href="/">REHEARSAL</a></h1>
     <nav v-if="user === null">
+        <a href="/">Home</a>
         <a href="/sign-in">Sign In</a>
     </nav>
     <nav v-else>
-        <a href="/">Home</a>
-        <a onclick="getAccount(this.innerText)">{{user}}</a>
-        <a onclick="logout()">Log Out</a>
+        <a href="/explore">Explore</a>
+        <a onclick="getMyAccount()">My Account</a>
+        <a onclick="logout()">Sign Out</a>
     </nav>
 </header>
 

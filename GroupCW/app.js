@@ -63,6 +63,10 @@ app.get('/account/:user', (req, res) => {
   res.render('account', Object.assign({id: req.params['user']}, options));
 });
 
+app.get('/404', (req, res) => {
+  res.render('404', options);
+})
+
 
 //Start server
 if (module === require.main) {

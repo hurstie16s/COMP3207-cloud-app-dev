@@ -42,12 +42,12 @@ var app = new Vue({
                 putHelper(data, '/password/change')
                 .then(response => {
                     if (response.status === 200) {
-                        window.location.href = '/explore'
-                        alert('Password Change Success')
+                        addNotification('Succesfully changed password');
+                        setTimeout(function() {window.location.href = '/explore'}, 1000);
                     } else if (response.status === 403) {
                         response.data.msg === 'AuthFail' ? app.oldPasswordError = 'Does not match old password' : app.newPassword2Error = 'Password does not match confirmation';
                     } else {
-                        alert(`${response.status}: ${response.statusText}`) //undefined error
+                        addNotification(`An error occurred: ${res.status} ` + res.statusText);
                     }
                 })
                 .catch(error => {
