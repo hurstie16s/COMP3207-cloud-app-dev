@@ -36,11 +36,7 @@
                                 <button class="red-button" @click="deleteRecording()">Delete Recording</button>
                                 <div class="tooltip" tooltip-text="Select Industry">
                                     <select name="industry" v-model="industry">
-                                        <option>Computer Science</option>
-                                        <option>Engineering</option>
-                                        <option>Finance</option>
-                                        <option>Law</option>
-                                        <option>Retail</option>
+                                        <option v-for="industry in industries">{{industry}}</option>
                                     </select>
                                 </div>
                                 <button @click="submitRecording()">Submit Recording</button>
@@ -67,10 +63,7 @@
                                 <div class="tooltip" tooltip-text="Filter by Industry">
                                     <select name="industry" v-model="userIndustryFilter">
                                         <option>All Industries</option>
-                                        <option
-                                            v-for="industry in [...new Set(this.userResponses.map(r => r.industry))]">
-                                            {{industry}}
-                                        </option>
+                                        <option v-for="industry in industries">{{industry}}</option>
                                     </select>
                                 </div>
                                 <div class="tooltip" tooltip-text="Sort By">
@@ -209,9 +202,7 @@
                                 <div class="tooltip" tooltip-text="Filter by Industry">
                                     <select name="industry"  v-model="communityIndustryFilter">
                                         <option>All Industries</option>
-                                        <option
-                                            v-for="industry in [...new Set(this.communityResponses.map(r => r.industry))]">
-                                            {{industry}}</option>
+                                        <option v-for="industry in industries">{{industry}}</option>
                                     </select>
                                 </div>
                                 <div class="tooltip" tooltip-text="Sort By">
