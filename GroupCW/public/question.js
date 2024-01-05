@@ -12,7 +12,7 @@ var app = new Vue({
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries',
     userSortBy: 'Newest First',
-    communitySortBy: 'Top Rated'
+    communitySortBy: 'Top Rated',
   },
   //On Awake methods here:
   mounted: function () {
@@ -274,6 +274,7 @@ var app = new Vue({
           this.$set(response, 'showTranscript', false);
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
+          this.$set(response, 'language', "English");
         });
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
@@ -300,6 +301,7 @@ var app = new Vue({
           this.$set(response, 'showTranscript', false);
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
+          this.$set(response, 'language', "English");
         });
       }
 
