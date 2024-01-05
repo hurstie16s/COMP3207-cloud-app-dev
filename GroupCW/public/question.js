@@ -7,6 +7,7 @@ var app = new Vue({
     responses: [],
     isRecording: false,
     awaitingSubmission: false,
+    industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries'
