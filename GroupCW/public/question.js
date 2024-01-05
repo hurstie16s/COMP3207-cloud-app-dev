@@ -16,7 +16,7 @@ var app = new Vue({
   },
   //On Awake methods here:
   mounted: function () {
-    updatePrivacy
+
   },
   //Js Methods here:
   methods: {
