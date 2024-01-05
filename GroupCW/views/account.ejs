@@ -138,12 +138,10 @@
                                     @click="seekAudio(response.id, 10)">forward_10</button>
                                 <span class="response-timestamp">00:00</span>
                             </div>
-
-                            <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
-
-                            <div class="response-container-idk" v-if="user !== account">
+                            <div class="response-container-idk" >
                                 
-                                <div class="response-rating">
+                                <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
+                                <div class="response-rating" v-if="user !== account">
                                     <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
                                     <span class="material-symbols-rounded star" @click="rateInterview(response.id, 5)"
                                         :class="[userRatings[response.id] >= 5 ? 'star-filled' : '']">star_rate</span>
