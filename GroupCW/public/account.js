@@ -45,7 +45,7 @@ var app = new Vue({
       const data = { private: isPrivate };
       const res = await axios.patch(`${BACKEND_URL}/interview/${questionId}/responses/${responseId}`, data);
       if (res.status !== 200) {
-        alert(`API returned non-200 status when updating privacy: ${res.status}`);
+        addNotification(`An error occured: ${res.status} `)
         return;
       }
 
@@ -62,7 +62,7 @@ var app = new Vue({
   
         const res = await axios.put(`${BACKEND_URL}/rate/interview`, data);
         if (res.status > 299) {
-          alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+          addNotification(`An error occurred: ${res.status} ` + (res.data ? ` ${res.data.msg}` : ''));
           return;
         }
         console.log(res.data);
@@ -80,7 +80,7 @@ var app = new Vue({
 
       const res = await axios.put(`${BACKEND_URL}/send/comments`, data);
       if (res.status > 299) {
-        alert(`API returned non-200 status when submitting comment: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+        addNotification(`An error occurred: ${res.status} ` + (res.data ? ` ${res.data.msg}` : ''));
         return;
       }
 
@@ -112,7 +112,7 @@ var app = new Vue({
     async deleteResponse(questionId, responseId) {
       const res = await axios.delete(`${BACKEND_URL}/interview/${questionId}/responses/${responseId}`);
       if (res.status !== 200) {
-        alert(`API returned non-200 status when deleting response: ${res.status}`);
+        addNotification(`An error occured: ${res.status} `)
         return;
       }
 
@@ -126,7 +126,7 @@ var app = new Vue({
       if (!response.audio) {
         const res = await axios.get(`${BACKEND_URL}/interview/${response.questionId}/responses/${response.id}/audio`, { responseType: 'blob' });
         if (res.status !== 200) {
-          alert(`API returned non-200 status when loading audio: ${res.status}`);
+          addNotification(`An error occured: ${res.status} `)
           return;
         }
 

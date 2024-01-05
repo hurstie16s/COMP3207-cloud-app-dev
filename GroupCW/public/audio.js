@@ -13,7 +13,7 @@ window.AudioRecorder = {
         recorder.ondataavailable = e => chunks.push(e.data);
       } catch (e) {
         console.error(e);
-        alert('Error capturing audio, check the console for more details');
+        addNotification('An error occured while capturing audio');
       }
     },
 

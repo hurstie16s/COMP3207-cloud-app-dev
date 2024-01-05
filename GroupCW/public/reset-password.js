@@ -20,7 +20,7 @@ var app = new Vue({
           if (app.email) {
             const res = await axios.put(`${BACKEND_URL}/password/reset`, {email: this.email});
             if (res.status > 299) {
-              alert(`API returned non-200 status when submitting comment: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+              addNotification(`An error occurred: ${res.status} ` + (res.data ? ` ${res.data.msg}` : ''));
               return;
             }
           } else {this.emailError = 'Email Required';}
