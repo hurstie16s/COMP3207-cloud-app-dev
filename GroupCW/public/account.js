@@ -173,13 +173,13 @@ var app = new Vue({
         const responses = this.responses
           .filter(response => this.industryFilter === 'All Industries' || response.industry === this.industryFilter);
         
-        if (this.userSortBy === 'Newest First') {
+        if (this.sortBy === 'Newest First') {
           responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        } else if (this.userSortBy === 'Oldest First') {
+        } else if (this.sortBy === 'Oldest First') {
           responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-        } else if (this.userSortBy === 'Top Rated') {
+        } else if (this.sortBy === 'Top Rated') {
           responses.sort((a, b) => b.average - a.average);
-        } else if (this.userSortBy === 'Lowest Rated') {
+        } else if (this.sortBy === 'Lowest Rated') {
           responses.sort((a, b) => a.average - b.average);
         }
         if (responses.length > 0) {
