@@ -10,7 +10,8 @@ var app = new Vue({
     industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
-    userIndustryFilter: 'All Industries'
+    userIndustryFilter: 'All Industries',
+    sortBy: 'Date'
   },
   //On Awake methods here:
   mounted: function () {
@@ -125,7 +126,7 @@ var app = new Vue({
         alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
         return;
       }
-
+      console.log(res.data);
       const response = this.responses.find(response => response.id === responseId);
       response.ratings = res.data.ratings;
     },
@@ -249,6 +250,12 @@ var app = new Vue({
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
       }
+      if (this.sortBy === 'Date') {
+        responses.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else {
+        //sort by rating
+      }
+
       return responses;
     },
     userRatings() {
@@ -260,7 +267,6 @@ var app = new Vue({
       return res;
     },
     averageRatings() {
-      const res = {};
       this.responses.forEach(response => {
         if (!response.ratings || response.ratings.length === 0) {
           res[response.id] = 0.0;
