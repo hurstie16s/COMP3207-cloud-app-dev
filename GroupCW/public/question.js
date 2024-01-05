@@ -145,6 +145,7 @@ var app = new Vue({
 
       const idx = this.responses.findIndex(response => response.id === responseId);
       this.responses.splice(idx, 1);
+      addNotification('Response deleted');
     },
 
     async playAudio(response) {

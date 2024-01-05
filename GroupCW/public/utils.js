@@ -86,27 +86,58 @@ function getMyAccount() {
 function mapDifficultyToInt(difficulty) {
   // Map difficulty string to corresponding integer value
   switch (difficulty) {
-      case 'Beginner':
-          return 0;
-      case 'Intermediate':
-          return 1;
-      case 'Advanced':
-          return 2;
-      default:
-          return 0; // Default or error case
+    case 'Beginner':
+      return 0;
+    case 'Intermediate':
+      return 1;
+    case 'Advanced':
+      return 2;
+    default:
+      return 0; // Default or error case
   }
 }
 
 function mapRegularityToInt(regularity) {
   // Map regularity string to corresponding integer value
   switch (regularity) {
-      case 'Standard':
-          return 0;
-      case 'Infrequent':
-          return 1;
-      case 'Unusual':
-          return 2;
-      default:
-          return 0; // Default or error case
+    case 'Standard':
+      return 0;
+    case 'Infrequent':
+      return 1;
+    case 'Unusual':
+      return 2;
+    default:
+      return 0; // Default or error case
   }
+}
+
+function addNotification(message) {
+  var notificationContainer = document.getElementById('notification-container');
+
+  var notification = document.createElement('div');
+  notification.className = 'notification card shadowed rounded bordered';
+
+   // Create the fixed icon span
+   var iconSpan = document.createElement('span');
+   iconSpan.className = 'icon material-symbols-rounded';
+   iconSpan.innerText = 'error';
+
+   // Create the message span
+   var messageSpan = document.createElement('span');
+   messageSpan.innerText = message;
+
+   // Append spans to the notification
+   notification.appendChild(iconSpan);
+   notification.appendChild(messageSpan);
+
+   // Append the notification to the container
+   notificationContainer.appendChild(notification);
+
+  setTimeout(function() {
+    notification.classList.add('fadeOut');
+
+    setTimeout(function() {
+        notificationContainer.removeChild(notification)
+    }, 200); 
+}, 3000); 
 }

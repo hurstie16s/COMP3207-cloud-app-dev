@@ -36,6 +36,7 @@ body {
     font-family: var(--body-font);
     background-color: rgb(var(--background));
     color: rgb(var(--text));
+    position: relative;
 }
 
 body>div>header, body>header {
@@ -1168,4 +1169,62 @@ i>span>.spinner {
 .response-timeline>svg {
     width: 100%;
     height: 40px;
+}
+
+.viewport-container {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.notification-container {
+    position: absolute;
+    pointer-events: none;
+    width: fit-content;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.notification {
+    
+    width: 400px;
+    height: fit-content;
+    /* background-color: white; */
+    
+    margin: 1rem;
+    z-index: 4;
+    padding: 0.5em 0.75em;
+    pointer-events: none;
+    animation: fadeIn var(--transition);
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeOut {
+    animation: fadeOut var(--transition);
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+
+.notification>span.material-symbols-rounded {
+    margin-right: 0.5em;
 }
