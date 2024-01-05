@@ -242,6 +242,10 @@ var app = new Vue({
         return 0.0;
       }
       return response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+    },
+
+    goToAccount(user){
+      getAccount(user);
     }
 
   },

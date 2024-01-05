@@ -173,8 +173,8 @@
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
                                 <div class="comment rounded" v-for="comment in response.comments">
-                                    <p class="comment-username"><span class="material-symbols-rounded">person</span>{{
-                                        comment.username }}</p>
+                                    <p class="comment-username" @click="goToAccount(comment.username)">
+                                        <span class="material-symbols-rounded">person</span>{{comment.username }}</p>
                                     <p class="comment-text">{{ comment.comment }}</p>
                                     <div class="like-count rounded">
                                         <button class="icon-button material-symbols-rounded minimal-button"
