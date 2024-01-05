@@ -38,7 +38,8 @@ def main(req: HttpRequest) -> HttpResponse:
         except Exception as e:
             logging.warning("Issue with ChatGPT service. " + e)
             output = {"result": False, "msg": "Error with ChatGPT Service."}
-            
+        
+        
         # Insert question into db
         data = {
             "interviewQuestion": question,

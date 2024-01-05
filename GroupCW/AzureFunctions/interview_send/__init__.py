@@ -17,6 +17,7 @@ import tempfile
 from shared_code import DBFunctions, auth
 from jwt.exceptions import InvalidTokenError
 import ast
+import re
 
 translation_params = {
     'api-version': '3.0',
@@ -65,7 +66,8 @@ def main(req: HttpRequest) -> HttpResponse:
     webm_file_name = temp_dir.name + os.sep + username + audioUuid + ".webm"
     wav_file_name = temp_dir.name + os.sep + username + audioUuid + ".wav"
 
-    try:        
+    try:
+        logging.info("creating audio files");       
         try:
             webmFile.save(webm_file_name)
             ffmpeg_tools.ffmpeg_extract_audio(webm_file_name, wav_file_name)
@@ -104,6 +106,7 @@ def main(req: HttpRequest) -> HttpResponse:
             speech_recognizer.session_stopped.connect(stop_cb)
             speech_recognizer.canceled.connect(stop_cb)
             
+            logging.info("starting transcription");  
             timeSpent = 0
             speech_recognizer.start_continuous_recognition()
             #infinite loop that may need fixing
@@ -119,46 +122,98 @@ def main(req: HttpRequest) -> HttpResponse:
                 transcription += text
             
             if transcription == "":
-                logging.warn("Transcription was empty")    
+                logging.warn("Transcription was empty")
+                raise 
                 
             with open(webm_file_name, "rb") as data:
                 bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)       
         except:
             raise
-
+        
+        logging.info("starting AI call");  
         # ChatGPT Part
         # Call function with question + transcript as parameters
         # Store the return value (interview feedback)
         try:
             output_feedback = send_interview_to_ai(question['interviewQuestion'], transcription)
             if(output_feedback == ""): raise
+            logging.info("AI response: " + output_feedback )
             tips = output_feedback.split('\n')
-            if(len(tips) == 3):
-                del tips[1]
-            tips[0] = ast.literal_eval(tips[0][len("Good Points: "):].strip())
-            tips[1] = ast.literal_eval(tips[1][len("Improvement Points: "):].strip())
-            # Extract the lists using ast.literal_eval
+            if(len(tips) == 7):
+                del tips[3]
             
-            
-            
-            # Need to sort out language part
-            language = 'en'
+        
         except:
             raise
 
-
-        #Translation
+        logging.info("Starting translation")
+        #Translation of transcript
         try:
             jsonText = [{
                 'text': transcription
             }]
             
-            request = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
-            response = request.json()[0]
+            requestInterview = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
+            responseInterview = requestInterview.json()[0]
         except:
-            logging.exception("Error performing translation: " + str(e), exc_info=True)
+            logging.exception("Error performing translation: ", exc_info=True)
             raise ExceptionWithTranslation
         
+        try:
+            jsonText = [{
+                'text': tips[1] + "\n"+ tips[2],
+            }]
+            
+            requestAIGood = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
+            responseAIGood = requestAIGood.json()[0]
+        except:
+            logging.exception("Error performing translation: ", exc_info=True)
+            raise ExceptionWithTranslation
+        logging.info("Test this: " + tips[5])
+        try:
+            jsonText = [{
+                'text': tips[4] + "\n" + tips[5],
+            }]
+            
+            requestAIImprovement = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
+            responseAIImprovement = requestAIImprovement.json()[0]
+        except:
+            logging.exception("Error performing translation: ", exc_info=True)
+            raise ExceptionWithTranslation
+        
+        logging.info("Finished translation")
+        
+        transcriptionTranslation = {}
+        for data in responseInterview['translations']:
+            country = ReturnLanguageOfLanguageCode(data["to"])
+            transcriptionTranslation[country] = data["text"]
+        
+        
+        tipsGood = {}
+        for data in responseAIGood['translations']:
+            country = ReturnLanguageOfLanguageCode(data["to"])
+            tipsGood[country] = []
+            arrayOfTranslatedTips = data["text"].split('\n')
+            for tip in arrayOfTranslatedTips:
+                if "- " in tip:
+                    tipsGood[country].append(tip.replace("- ", ""))
+                elif "-" in tip:
+                    tipsGood[country].append(tip.replace("-", ""))
+           
+            
+        tipsImprovement = {}  
+        for data in responseAIImprovement['translations']:
+            country = ReturnLanguageOfLanguageCode(data["to"])
+            tipsImprovement[country] = []
+            arrayOfTranslatedTips = data["text"].split('\n')
+            for tip in arrayOfTranslatedTips:
+                if "- " in tip:
+                    tipsImprovement[country].append(tip.replace("- ", ""))
+                elif "-" in tip:
+                    tipsImprovement[country].append(tip.replace("-", ""))
+            
+        
+        logging.info("Starting Json Into Cosmos")
         #Json data to store to cosmosDB
         jsonBody = {
                 "username": username,
@@ -168,17 +223,15 @@ def main(req: HttpRequest) -> HttpResponse:
                 "interviewQuestion": question['interviewQuestion'],
                 "interviewBlobURL": bob_client.url,
                 "audioUuid": audioUuid,
-                "interviewLanguage": response['detectedLanguage']["language"],
-                "transcript": response['translations'],
+                "interviewLanguage": responseInterview['detectedLanguage']["language"],
+                "transcript": transcriptionTranslation,
                 "comments": [],
                 "ratings": [],
-                "tips":  
+                "tips": 
                     {
-                        "language": language,
-                        "goodPoints": tips[0],
-                        "improvementPoints": tips[1]
-                    }
-                ,
+                        "goodTips": tipsGood,
+                        "improvementTips":  tipsImprovement
+                    },
                 "private": private,
                 "timestamp": datetime.datetime.now().isoformat()
             }
@@ -222,7 +275,19 @@ def main(req: HttpRequest) -> HttpResponse:
         except:
             pass
 
-
+def ReturnLanguageOfLanguageCode(languageCode):
+    if(languageCode == "en"):
+        return "English"
+    if(languageCode == "cy"):
+        return "Welsh"
+    if(languageCode == "ga"):
+        return "Irish"
+    if(languageCode == "fr"):
+        return "French"
+    if(languageCode == "pl"):
+        return "Polish"
+    
+    
 class ExceptionWithStoringToCosmosDB(Exception):
     pass
 
