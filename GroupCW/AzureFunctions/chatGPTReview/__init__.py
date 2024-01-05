@@ -11,8 +11,8 @@ client = OpenAI(
 # Prompt parts
 start_for_interview = "Based on this interview question: "
 evaluation_for_interview = "Evaluate this interview transcript for this question: "
-bullet_points_for_interview = "Give 2 bullet points about the good points and 2 points on what could be improved. Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets "
-format_for_bullet_points_for_interview = "Force this format please: Good Points: ['point 1', 'point 2']\\nImprovement Points: ['point 1', 'point 2'] "
+bullet_points_for_interview = "Give 2 bullet points about the good points and 2 points on what could be improved."
+format_for_bullet_points_for_interview = "Force this format please: Good Points: -'point 1' -'point 2' Improvement Points: -'point 1' -'point 2' "
 
 
 def send_interview_to_ai(question, transcript):
@@ -41,9 +41,9 @@ def send_interview_to_ai(question, transcript):
     # Returns None
     return
 
-start_for_question = "Give me a list of bullet point of general advice not specific to an industry on how to answer this interview question: "
+start_for_question = "Give me a list of 10 bullet points of general advice not specific to an industry on how to answer this interview question: "
 bullet_points_for_question = "Give it in a programmatic list format with each point in single quotes, seperated by commas and surrounded by square brackets "
-example_for_bullet_points_for_question = "e.g. ['advice 1', 'advice 2'] please don't add any \\n."
+example_for_bullet_points_for_question = "Force this format please: ['advice 1', 'advice 2'] please don't add any \\n."
 
 def send_question_to_ai(question):
     try:
