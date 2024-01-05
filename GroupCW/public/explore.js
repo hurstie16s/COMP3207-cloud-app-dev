@@ -34,6 +34,10 @@ var app = new Vue({
       },
 
       async submitQuestion(newQuestion, regularity, difficulty) {
+        if (newQuestion.trim().length === 0 ) {
+          addNotification('Can\'t submit an empty question');
+          return
+        }
         const data = {
           question: newQuestion,
           difficulty: mapDifficultyToInt(difficulty),
