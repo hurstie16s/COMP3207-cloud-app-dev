@@ -10,7 +10,9 @@ var app = new Vue({
     industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
-    userIndustryFilter: 'All Industries'
+    userIndustryFilter: 'All Industries',
+    userSortBy: 'Date',
+    communitySortBy: 'Date'
   },
   //On Awake methods here:
   mounted: function () {
@@ -60,7 +62,10 @@ var app = new Vue({
         return;
       }
 
-      return res.data;
+      this.responses = res.data;
+      if (this.responses.length > 0) {
+        this.calculateAverages();
+      }
     },
 
     async updatePrivacy(questionId, responseId, isPrivate) {
@@ -125,9 +130,10 @@ var app = new Vue({
         alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
         return;
       }
-
+      console.log(res.data);
       const response = this.responses.find(response => response.id === responseId);
       response.ratings = res.data.ratings;
+      response.average = this.calculateAverage(response);
     },
 
     async deleteResponse(questionId, responseId) {
@@ -223,6 +229,20 @@ var app = new Vue({
       alert("upload success");
       app.awaitingSubmission = false;
     },
+
+    calculateAverages() {
+      this.responses.forEach(response => {
+        this.$set(response, 'average', this.calculateAverage(response));
+      });
+    },
+
+    calculateAverage(response) {
+      if (!response.ratings || response.ratings.length === 0) {
+        return 0.0;
+      }
+      return response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+    }
+
   },
 
   
@@ -239,6 +259,11 @@ var app = new Vue({
         this.$set(firstResponse, 'showComments', true);
         this.$set(firstResponse, 'showGPT', true)
       }
+      if (this.userSortBy === 'Date') {
+        responses.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else {
+        responses.sort((a, b) => b.average - a.average);
+      }
       return responses;
     },
     communityResponses() {
@@ -251,6 +276,12 @@ var app = new Vue({
         this.$set(firstResponse, 'showComments', true);
         this.$set(firstResponse, 'showGPT', true);
       }
+      if (this.communitySortBy === 'Date') {
+        responses.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else {
+        responses.sort((a, b) => b.average - a.average);
+      }
+
       return responses;
     },
     userRatings() {
@@ -261,24 +292,12 @@ var app = new Vue({
       });
       return res;
     },
-    averageRatings() {
-      const res = {};
-      this.responses.forEach(response => {
-        if (!response.ratings || response.ratings.length === 0) {
-          res[response.id] = 0.0;
-          return;
-        }
-
-        res[response.id] = response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
-      });
-      return res;
-    }
   },
   async beforeMount() {
       forceLoggedIn();
     this.user = getLoggedInUsername();
     this.question = await this.loadQuestion(QUESTION_ID); // QUESTION_ID is defined via EJS in question.ejs
-    this.responses = await this.loadResponses(QUESTION_ID);
+    this.loadResponses(QUESTION_ID);
   }
 });
 
