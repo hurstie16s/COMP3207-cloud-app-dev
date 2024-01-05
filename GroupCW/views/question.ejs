@@ -250,10 +250,10 @@
                                     averageRatings[response.id].toFixed(1) }}<span
                                         class="material-symbols-rounded star-filled">star_rate</span></span>
 
-                                <input type="checkbox" v-bind:id="'gpt-toggle-user-' + i" class="toggle hidden"
+                                <input type="checkbox" v-bind:id="'gpt-toggle-community-' + i" class="toggle hidden"
                                     v-model="response.showGPT">
                                 <label class="toggle-label tooltip" tooltip-text="Toggle AI Feedback"
-                                    v-bind:for="'gpt-toggle-user-' + i">
+                                    v-bind:for="'gpt-toggle-community-' + i">
                                     <span class="material-symbols-rounded toggle-on">memory</span>
                                     <span class="material-symbols-rounded toggle-off strikethrough">memory</span>
                                 </label>

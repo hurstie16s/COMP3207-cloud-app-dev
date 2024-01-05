@@ -27,6 +27,7 @@ var app = new Vue({
             const firstResponse = this.responses[0];
             this.$set(firstResponse, 'showTranscript', true);
             this.$set(firstResponse, 'showComments', true);
+            this.$set(firstResponse, 'showGPT', true);
           }
         })
         .catch(error => {
