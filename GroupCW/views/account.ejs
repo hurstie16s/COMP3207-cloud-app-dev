@@ -20,7 +20,8 @@
                             <li>Average response rating of {{overallRating.toFixed(1)}}<span
                                     class="material-symbols-rounded star-filled inline-adjusted">star_rate</span> </li>
                         </ul>
-                        <button class="red-button" v-if="user === account" style="margin-right: 1rem">Delete Account</button>
+                        <button class="red-button" v-if="user === account" style="margin-right: 1rem">Delete
+                            Account</button>
                         <button onclick="window.location.href = '/set-new-password'" v-if="user === account">Reset
                             Password</button>
                     </section>
@@ -63,17 +64,16 @@
                                     <span class="material-symbols-rounded star-filled">star_rate</span>
                                 </span>
 
-                                <div v-if="user === account">
-                                    <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i"
-                                        class="toggle hidden" v-model="response.private" :true-value="false"
-                                        :false-value="true"
-                                        v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
-                                    <label class="toggle-label" v-bind:for="'visibility-toggle-user-' + i"
-                                        title="Public visibility toggle">
-                                        <span class="material-symbols-rounded toggle-on">visibility</span>
-                                        <span class="material-symbols-rounded toggle-off">visibility_off</span>
-                                    </label>
-                                </div>
+                                <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
+                                    v-model="response.private" :true-value="false" :false-value="true"
+                                    v-if="user === account"
+                                    v-on:change="updatePrivacy(response.questionId, response.id, response.private)">
+                                <label class="toggle-label tooltip" tooltip-text="Toggle Response Public/Private"
+                                    v-bind:for="'visibility-toggle-user-' + i" v-if="user === account"
+                                    title="Public visibility toggle">
+                                    <span class="material-symbols-rounded toggle-on">visibility</span>
+                                    <span class="material-symbols-rounded toggle-off">visibility_off</span>
+                                </label>
 
                                 <input type="checkbox" v-bind:id="'gpt-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.showGPT">
@@ -85,7 +85,7 @@
 
                                 <input type="checkbox" v-bind:id="'transcript-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.showTranscript">
-                                <label class="toggle-label" v-bind:for="'transcript-toggle-user-' + i"
+                                <label class="toggle-label tooltip" tooltip-text="Toggle Transcript" v-bind:for="'transcript-toggle-user-' + i"
                                     title="Toggle transcript">
                                     <span class="material-symbols-rounded toggle-on">description</span>
                                     <span class="material-symbols-rounded toggle-off strikethrough">description</span>
@@ -93,13 +93,14 @@
 
                                 <input type="checkbox" v-bind:id="'comments-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.showComments">
-                                <label class="toggle-label" v-bind:for="'comments-toggle-user-' + i"
+                                <label class="toggle-label tooltip" tooltip-text="Toggle Comments" v-bind:for="'comments-toggle-user-' + i"
                                     title="Toggle comments">
                                     <span class="material-symbols-rounded toggle-on">comment</span>
                                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                                 </label>
                                 <button @click="deleteResponse(response.questionId, response.id)"
-                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button"
+                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip"
+                                    tooltip-text="Delete Response"
                                     v-if="user === account">delete</button>
                             </div>
 
@@ -186,13 +187,13 @@
                                             <span class="material-symbols-rounded">person</span>{{comment.username }}
                                         </p>
                                         <p class="comment-text">{{ comment.comment }}</p>
-                                        <div class="like-count rounded"  v-if="comment.username !== user">
+                                        <div class="like-count rounded" v-if="comment.username !== user">
                                             <button class="icon-button material-symbols-rounded minimal-button"
                                                 @click="rateComment(response.id, comment.id, 'like')"
                                                 :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
                                             <span>{{ comment.thumbs_up.length }}</span>
                                         </div>
-                                        <div class="dislike-count rounded"  v-if="comment.username !== user">
+                                        <div class="dislike-count rounded" v-if="comment.username !== user">
                                             <button
                                                 class="icon-button material-symbols-rounded minimal-button minimal-red-button"
                                                 @click="rateComment(response.id, comment.id, 'dislike')"
@@ -204,7 +205,8 @@
                                 <div class="new-comment">
                                     <textarea class="input" placeholder="Add a comment..."
                                         v-model="response.pending_comment"></textarea>
-                                    <button class="material-symbols-rounded icon-button"
+                                    <button class="material-symbols-rounded icon-button tooltip"
+                                    tooltip-text="Post Comment"
                                         @click="submitComment(response.questionId, response.id, response.pending_comment)">chevron_right</button>
                                 </div>
                             </div>
