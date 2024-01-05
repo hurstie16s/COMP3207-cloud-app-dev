@@ -575,7 +575,7 @@ hr {
     grid-template-columns: 1fr 1fr;
 }
 
-.response-transcript>select {
+.response-transcript>div {
     justify-self: flex-end;
 }
 
@@ -1036,13 +1036,20 @@ option {
     position: relative;
     width: max-content;
 }
+div.tooltip::before {
+    top: -130%
+}
+
+div.tooltip::after {
+    top: -110%
+}
 
 span.tooltip::before {
-    top: -150%;
+    top: -155%;
 }
 
 span.tooltip::after {
-    top: -130%;
+    top: -135%;
 }
 
 .tooltip::before {

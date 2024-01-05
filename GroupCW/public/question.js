@@ -11,8 +11,8 @@ var app = new Vue({
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries',
-    userSortBy: 'Oldest first',
-    communitySortBy: 'Oldest first'
+    userSortBy: 'Newest First',
+    communitySortBy: 'Top Rated'
   },
   //On Awake methods here:
   mounted: function () {
@@ -253,13 +253,13 @@ var app = new Vue({
         .filter(response => response.username === this.user)
         .filter(response => this.userIndustryFilter === 'All Industries' || response.industry === this.userIndustryFilter);
       
-      if (this.communitySortBy === 'Newest first') {
+      if (this.communitySortBy === 'Newest First') {
         responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      } else if (this.communitySortBy === 'Oldest first') {
+      } else if (this.communitySortBy === 'Oldest First') {
         responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      } else if (this.communitySortBy === 'Top rated') {
+      } else if (this.communitySortBy === 'Top Rated') {
         responses.sort((a, b) => b.average - a.average);
-      } else if (this.communitySortBy === 'Worst rated') {
+      } else if (this.communitySortBy === 'Lowest Rated') {
         responses.sort((a, b) => a.average - b.average);
       }
       if (responses.length > 0) {
@@ -279,13 +279,13 @@ var app = new Vue({
       const responses = this.responses
         .filter(response => response.username !== this.user)
         .filter(response => this.communityIndustryFilter === 'All Industries' || response.industry === this.communityIndustryFilter);;
-      if (this.communitySortBy === 'Newest first') {
+      if (this.communitySortBy === 'Newest First') {
         responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      } else if (this.communitySortBy === 'Oldest first') {
+      } else if (this.communitySortBy === 'Oldest First') {
         responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      } else if (this.communitySortBy === 'Top rated') {
+      } else if (this.communitySortBy === 'Top Rated') {
         responses.sort((a, b) => b.average - a.average);
-      } else if (this.communitySortBy === 'Worst rated') {
+      } else if (this.communitySortBy === 'Lowest Rated') {
         responses.sort((a, b) => a.average - b.average);
       }
       if (responses.length > 0) {
