@@ -11,7 +11,8 @@ var app = new Vue({
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries',
-    sortBy: 'Date'
+    userSortBy: 'Date',
+    communitySortBy: 'Date'
   },
   //On Awake methods here:
   mounted: function () {
@@ -61,7 +62,10 @@ var app = new Vue({
         return;
       }
 
-      return res.data;
+      this.responses = res.data;
+      if (this.responses.length > 0) {
+        this.calculateAverages();
+      }
     },
 
     async updatePrivacy(questionId, responseId, isPrivate) {
@@ -129,6 +133,7 @@ var app = new Vue({
       console.log(res.data);
       const response = this.responses.find(response => response.id === responseId);
       response.ratings = res.data.ratings;
+      response.average = this.calculateAverage(response);
     },
 
     async deleteResponse(questionId, responseId) {
@@ -224,6 +229,20 @@ var app = new Vue({
       alert("upload success");
       app.awaitingSubmission = false;
     },
+
+    calculateAverages() {
+      this.responses.forEach(response => {
+        this.$set(response, 'average', this.calculateAverage(response));
+      });
+    },
+
+    calculateAverage(response) {
+      if (!response.ratings || response.ratings.length === 0) {
+        return 0.0;
+      }
+      return response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+    }
+
   },
 
   
@@ -239,6 +258,11 @@ var app = new Vue({
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
       }
+      if (this.userSortBy === 'Date') {
+        responses.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else {
+        responses.sort((a, b) => b.average - a.average);
+      }
       return responses;
     },
     communityResponses() {
@@ -250,10 +274,10 @@ var app = new Vue({
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
       }
-      if (this.sortBy === 'Date') {
+      if (this.communitySortBy === 'Date') {
         responses.sort((a, b) => new Date(a.date) - new Date(b.date));
       } else {
-        //sort by rating
+        responses.sort((a, b) => b.average - a.average);
       }
 
       return responses;
@@ -266,24 +290,12 @@ var app = new Vue({
       });
       return res;
     },
-    averageRatings() {
-      res = {};
-      this.responses.forEach(response => {
-        if (!response.ratings || response.ratings.length === 0) {
-          res[response.id] = 0.0;
-          return;
-        }
-
-        res[response.id] = response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
-      });
-      return res;
-    }
   },
   async beforeMount() {
       forceLoggedIn();
     this.user = getLoggedInUsername();
     this.question = await this.loadQuestion(QUESTION_ID); // QUESTION_ID is defined via EJS in question.ejs
-    this.responses = await this.loadResponses(QUESTION_ID);
+    this.loadResponses(QUESTION_ID);
   }
 });
 

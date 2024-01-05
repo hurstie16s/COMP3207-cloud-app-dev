@@ -67,7 +67,7 @@
                                     </select>
                                 </div>
                                 <div class="tooltip" tooltip-text="Sort By">
-                                    <select name="industry">
+                                    <select name="Sort by" v-model="userSortBy">
                                         <option>Top Rated</option>
                                         <option>Date</option>
                                     </select>
@@ -88,7 +88,7 @@
 
                             <div class="response-options">
                                 <span class="avg-rating flex-center tooltip" tooltip-text="Average Rating">{{
-                                    averageRatings[response.id].toFixed(1) }}<span
+                                    response.average.toFixed(1) }}<span
                                         class="material-symbols-rounded star-filled">star_rate</span></span>
                                 <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.private" :true-value="false" :false-value="true"
@@ -206,7 +206,7 @@
                                     </select>
                                 </div>
                                 <div class="tooltip" tooltip-text="Sort By">
-                                    <select name="Sort by" v-model="sortBy">
+                                    <select name="Sort by" v-model="communitySortBy">
                                         <option>Top Rated</option>
                                         <option>Date</option>
                                     </select>
@@ -227,7 +227,7 @@
 
                             <div class="response-options">
                                 <span class="avg-rating flex-center tooltip" tooltip-text="Average Rating">{{
-                                    averageRatings[response.id].toFixed(1) }}<span
+                                    response.average.toFixed(1) }}<span
                                         class="material-symbols-rounded star-filled">star_rate</span></span>
                                 <input type="checkbox" v-bind:id="'transcript-toggle-community-' + i"
                                     class="toggle hidden" v-model="response.showTranscript">
