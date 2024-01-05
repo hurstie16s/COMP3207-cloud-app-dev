@@ -6,6 +6,9 @@ var app = new Vue({
       account: null,
 
       responses: [],
+      sortBy: 'Oldest First',
+      industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
+      industryFilter: 'All Industries'
     },
     //On Awake methods here:
     mounted: function() {
@@ -24,10 +27,7 @@ var app = new Vue({
         .then(response => {
           this.responses = response.data;
           if (this.responses.length > 0) {
-            const firstResponse = this.responses[0];
-            this.$set(firstResponse, 'showTranscript', true);
-            this.$set(firstResponse, 'showComments', true);
-            this.$set(firstResponse, 'showGPT', true);
+            this.calculateAverages();
           }
         })
         .catch(error => {
@@ -139,30 +139,27 @@ var app = new Vue({
         response.audio.currentTime += seconds;
       },
 
+      calculateAverages() {
+        this.responses.forEach(response => {
+          this.$set(response, 'average', this.calculateAverage(response));
+        });
+      },
+  
+      calculateAverage(response) {
+        if (!response.ratings || response.ratings.length === 0) {
+          return 0.0;
+        }
+        return response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+      }
+
     },
     //FrontEnd methods here:
     computed: {
-      averageRatings() {
-        const res = {};
-        this.responses.forEach(response => {
-          if (!response.ratings) {
-            res[response.id] = 0.0;
-            return;
-          }
-          
-          res[response.id] = response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
-        });
-        return res;
-      },
-
       overallRating() {
         let res = 0.0;
 
         this.responses.forEach(response => {
-          if (!response.ratings) {
-            return;
-          }
-          res += response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+         res += response.average;
         });
         return res/this.responses.length;
       },
@@ -170,6 +167,33 @@ var app = new Vue({
       uniqueQs() {
         const uniques = new Set(this.responses.map(obj => obj.questionId));
         return uniques.size;
+      },
+
+      userResponses() {
+        const responses = this.responses
+          .filter(response => this.industryFilter === 'All Industries' || response.industry === this.industryFilter);
+        
+        if (this.userSortBy === 'Newest First') {
+          responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } else if (this.userSortBy === 'Oldest First') {
+          responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        } else if (this.userSortBy === 'Top Rated') {
+          responses.sort((a, b) => b.average - a.average);
+        } else if (this.userSortBy === 'Lowest Rated') {
+          responses.sort((a, b) => a.average - b.average);
+        }
+        if (responses.length > 0) {
+          responses.forEach(response => {
+            this.$set(response, 'showTranscript', false);
+            this.$set(response, 'showComments', false);
+            this.$set(response, 'showGPT', false);
+          });
+          const firstResponse = responses[0];
+          this.$set(firstResponse, 'showTranscript', true);
+          this.$set(firstResponse, 'showComments', true);
+          this.$set(firstResponse, 'showGPT', true);
+        }
+        return responses;
       }
     },
 

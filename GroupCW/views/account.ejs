@@ -33,7 +33,7 @@
                                     </select>
                                 </div>
                                 <div class="tooltip" tooltip-text="Sort By">
-                                    <select name="Sort by">
+                                    <select name="Sort by" v-model="sortBy">
                                         <option>Top Rated</option>
                                         <option>Lowest Rated</option>
                                         <option>Newest First</option>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
 
-                        <div class="response card rounded shadowed" v-for="(response, i) in responses">
+                        <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
                             <div class="response-meta">
                                 <p class="username"><span
                                         class="material-symbols-rounded">person</span>{{response.username}}
@@ -54,8 +54,10 @@
                             <h2 class="question-text">{{response.interviewQuestion}}</h2>
 
                             <div class="response-options">
-                                <span class="avg-rating flex-center">{{ averageRatings[response.id].toFixed(1) }}<span
-                                        class="material-symbols-rounded star-filled">star_rate</span></span>
+                                <span class="avg-rating flex-center tooltip" tooltip-text="Average Rating">
+                                    {{ response.average.toFixed(1) }}
+                                    <span class="material-symbols-rounded star-filled">star_rate</span>
+                                </span>
 
                                 <input type="checkbox" v-bind:id="'visibility-toggle-user-' + i" class="toggle hidden"
                                     v-model="response.private" :true-value="false" :false-value="true"
