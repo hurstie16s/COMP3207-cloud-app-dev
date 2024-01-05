@@ -220,29 +220,32 @@
                                 <div v-if="response.comments.length === 0">
                                     <i>There are no comments yet</i>
                                 </div>
-                                <div class="comment rounded" v-for="comment in response.comments">
-                                    <div class="response-meta">
-                                        <p class="comment-username" @click="goToAccount(comment.username)"><span
-                                                class="material-symbols-rounded">person</span>{{ comment.username }}
-                                        </p>
-                                        <span class="timestamp">{{formatDate(comment.timestamp)}}</span>
-                                    </div>
+                                <div class="comment-container">
+                                    <div class="comment rounded" v-for="comment in response.comments">
+                                        <div class="response-meta">
+                                            <p class="comment-username" @click="goToAccount(comment.username)"><span
+                                                    class="material-symbols-rounded">person</span>{{ comment.username }}
+                                            </p>
+                                            <span class="timestamp">{{formatDate(comment.timestamp)}}</span>
+                                        </div>
 
-                                    <p class="comment-text">{{ comment.comment }}</p>
-                                    <div class="like-count rounded" v-if="comment.username !== user">
-                                        <button class="icon-button material-symbols-rounded minimal-button"
-                                            @click="rateComment(response.id, comment.id, 'like')"
-                                            :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
-                                        <span>{{ comment.thumbs_up.length }}</span>
-                                    </div>
-                                    <div class="dislike-count rounded" v-if="comment.username !== user">
-                                        <button
-                                            class="icon-button material-symbols-rounded minimal-button minimal-red-button"
-                                            @click="rateComment(response.id, comment.id, 'dislike')"
-                                            :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
-                                        <span>{{ comment.thumbs_down.length }}</span>
+                                        <p class="comment-text">{{ comment.comment }}</p>
+                                        <div class="like-count rounded" v-if="comment.username !== user">
+                                            <button class="icon-button material-symbols-rounded minimal-button"
+                                                @click="rateComment(response.id, comment.id, 'like')"
+                                                :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
+                                            <span>{{ comment.thumbs_up.length }}</span>
+                                        </div>
+                                        <div class="dislike-count rounded" v-if="comment.username !== user">
+                                            <button
+                                                class="icon-button material-symbols-rounded minimal-button minimal-red-button"
+                                                @click="rateComment(response.id, comment.id, 'dislike')"
+                                                :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
+                                            <span>{{ comment.thumbs_down.length }}</span>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="new-comment">
                                     <textarea class="input" placeholder="Add a comment..."
                                         v-model="response.pending_comment"></textarea>
@@ -401,26 +404,28 @@
                                 <div v-if="response.comments.length === 0">
                                     <i>There are no comments yet</i>
                                 </div>
-                                <div class="comment rounded" v-for="comment in response.comments">
-                                    <div class="response-meta">
-                                        <p class="comment-username" @click="goToAccount(comment.username)"><span
-                                                class="material-symbols-rounded">person</span>{{ comment.username }}
-                                        </p>
-                                        <span class="timestamp">{{formatDate(comment.timestamp)}}</span>
-                                    </div>
-                                    <p class="comment-text">{{ comment.comment }}</p>
-                                    <div class="like-count rounded" v-if="comment.username !== user">
-                                        <button class="icon-button material-symbols-rounded minimal-button"
-                                            @click="rateComment(response.id, comment.id, 'like')"
-                                            :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
-                                        <span>{{ comment.thumbs_up.length }}</span>
-                                    </div>
-                                    <div class="dislike-count rounded" v-if="comment.username !== user">
-                                        <button
-                                            class="icon-button material-symbols-rounded minimal-button minimal-red-button"
-                                            @click="rateComment(response.id, comment.id, 'dislike')"
-                                            :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
-                                        <span>{{ comment.thumbs_down.length }}</span>
+                                <div class="comment-container">
+                                    <div class="comment rounded" v-for="comment in response.comments">
+                                        <div class="response-meta">
+                                            <p class="comment-username" @click="goToAccount(comment.username)"><span
+                                                    class="material-symbols-rounded">person</span>{{ comment.username }}
+                                            </p>
+                                            <span class="timestamp">{{formatDate(comment.timestamp)}}</span>
+                                        </div>
+                                        <p class="comment-text">{{ comment.comment }}</p>
+                                        <div class="like-count rounded" v-if="comment.username !== user">
+                                            <button class="icon-button material-symbols-rounded minimal-button"
+                                                @click="rateComment(response.id, comment.id, 'like')"
+                                                :class="[comment.thumbs_up.includes(user) ? 'liked' : '']">thumb_up</button>
+                                            <span>{{ comment.thumbs_up.length }}</span>
+                                        </div>
+                                        <div class="dislike-count rounded" v-if="comment.username !== user">
+                                            <button
+                                                class="icon-button material-symbols-rounded minimal-button minimal-red-button"
+                                                @click="rateComment(response.id, comment.id, 'dislike')"
+                                                :class="[comment.thumbs_down.includes(user) ? 'disliked' : '']">thumb_down</button>
+                                            <span>{{ comment.thumbs_down.length }}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="new-comment">
