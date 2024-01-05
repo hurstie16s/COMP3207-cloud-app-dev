@@ -46,6 +46,7 @@ var app = new Vue({
           return;
         }
         document.getElementById('question-submission-spinner').classList.toggle('hidden');
+        addNotification('Question Submitted')
         this.newQuestion.text = '';
         this.loadQuestions();
       },

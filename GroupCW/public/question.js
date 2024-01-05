@@ -230,6 +230,7 @@ var app = new Vue({
       await this.loadResponses(QUESTION_ID);
       app.awaitingSubmission = false;
       document.getElementById('question-submission-spinner').classList.toggle('hidden');
+      addNotification('Response Uploaded');
     },
 
     calculateAverages() {
