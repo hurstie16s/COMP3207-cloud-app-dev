@@ -217,12 +217,14 @@ var app = new Vue({
       });
 
       if (res.status !== 200) {
-        addNotification(`An error occured: ${res.status} `)
+        addNotification(`An error occured: ${res.status} `);
+        document.getElementById('response-submission-spinner').classList.toggle('hidden');
         return;
       }
 
       if (res.data.result !== true) {
-        addNotification(`An error occured: ${res.data.msg} `)
+        addNotification(`An error occured: ${res.data.msg} `);
+        document.getElementById('response-submission-spinner').classList.toggle('hidden');
         return;
       }
       addNotification('Response Uploaded');
