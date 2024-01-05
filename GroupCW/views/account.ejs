@@ -18,16 +18,17 @@
                         </ul>
                         <br>
                         <br>
-                        <button class="red-button">Delete Account</button>
-                        <button onclick="window.location.href = '/set-new-password'">Reset Password</button>
+                        <button class="red-button" v-if="user === account">Delete Account</button>
+                        <button onclick="window.location.href = '/set-new-password'" v-if="user === account">Reset Password</button>
                     </section>
 
                     <section class="your-responses card rounded shadowed">
                         <div class="respones-header">
-                            <h2 class="underlined">My Responses</h2>
+                            <h2 class="underlined" v-if="user === account">My Responses</h2>
+                            <h2 class="underlined" v-else>{{account}}'s Responses</h2>
                             <div>
                                 <div class="tooltip" tooltip-text="Filter by Industry">
-                                    <select name="industry">
+                                    <select name="industry" v-model="industryFilter">
                                         <option>All Industries</option>
                                         <option v-for="industry in industries">{{industry}}</option>
                                     </select>
@@ -92,7 +93,7 @@
                                     <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                                 </label>
                                 <button @click="deleteResponse(response.questionId, response.id)"
-                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button">delete</button>
+                                    class="material-symbols-rounded icon-button minimal-button minimal-red-button" v-if="user === account">delete</button>
                             </div>
 
                             <div class="response-timeline">
@@ -133,6 +134,26 @@
                                     @click="seekAudio(response.id, 10)">forward_10</button>
                                 <span class="response-timestamp">00:00</span>
                             </div>
+
+                            <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
+
+                            <div class="response-container-idk" v-if="user !== account">
+                                
+                                <div class="response-rating">
+                                    <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 5)"
+                                        :class="[userRatings[response.id] >= 5 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 4)"
+                                        :class="[userRatings[response.id] >= 4 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 3)"
+                                        :class="[userRatings[response.id] >= 3 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 2)"
+                                        :class="[userRatings[response.id] >= 2 ? 'star-filled' : '']">star_rate</span>
+                                    <span class="material-symbols-rounded star" @click="rateInterview(response.id, 1)"
+                                        :class="[userRatings[response.id] >= 1 ? 'star-filled' : '']">star_rate</span>
+                                </div>
+                            </div>
+
                             <div class="response-gpt-advice" v-if="response.showGPT">
                                 <h3 class="underlined">AI Feedback</h3>
                             </div>

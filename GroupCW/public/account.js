@@ -53,6 +53,24 @@ var app = new Vue({
         response.private = isPrivate;
       },
 
+      async rateInterview(responseId, rating) {
+        const data = {
+          id: responseId,
+          username: this.user,
+          rating: rating
+        };
+  
+        const res = await axios.put(`${BACKEND_URL}/rate/interview`, data);
+        if (res.status > 299) {
+          alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+          return;
+        }
+        console.log(res.data);
+        const response = this.responses.find(response => response.id === responseId);
+        response.ratings = res.data.ratings;
+        response.average = this.calculateAverage(response);
+      },
+
       async submitComment(questionId, responseId, comment) {
         const data = {
           id: responseId,
@@ -194,7 +212,16 @@ var app = new Vue({
           this.$set(firstResponse, 'showGPT', true);
         }
         return responses;
-      }
+      },
+
+      userRatings() {
+        const res = {};
+        this.responses.filter(r => r.ratings).forEach(response => {
+          const rating = response.ratings.find(rating => rating.username === this.user);
+          if (rating !== undefined) res[response.id] = rating.rating;
+        });
+        return res;
+      },
     },
 
     beforeMount() {
