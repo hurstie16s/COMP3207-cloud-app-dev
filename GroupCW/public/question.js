@@ -44,8 +44,7 @@ var app = new Vue({
     async loadQuestion(questionId) {
       const res = await axios.get(`${BACKEND_URL}/interview/question/receive?id=${questionId}`);
       if (res.status === 404) {
-        alert("An error occurred: Question not found");
-        location.href = '/explore';
+        location.href = '/404';
         return;
       } else if (res.status !== 200) {
         addNotification(`An error occured: ${res.status} `)
