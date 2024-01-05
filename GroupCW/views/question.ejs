@@ -204,21 +204,17 @@
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
-                                <div v-if="response.transcript[0].text.length === 0">
-                                    <i>No transcript available</i>
+                                <i v-if="response.transcript[0].text.length === 0">No transcript available</i>
+                                <div class="tooltip" tooltip-text="Select Language" v-if="response.transcript[0].text.length !== 0">
+                                    <select name="language">
+                                        <option value="en">English</option>
+                                        <option value="cy">Welsh</option>
+                                        <option value="ga">Irish</option>
+                                        <option value="fr">French</option>
+                                        <option value="pl">Polish</option>
+                                    </select>
                                 </div>
-                                <div v-else>
-                                    <div class="tooltip" tooltip-text="Select Language">
-                                        <select name="language">
-                                            <option value="en">English</option>
-                                            <option value="cy">Welsh</option>
-                                            <option value="ga">Irish</option>
-                                            <option value="fr">French</option>
-                                            <option value="pl">Polish</option>
-                                        </select>
-                                    </div>
-                                    <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
-                                </div>
+                                <p v-if="response.transcript[0].text.length !== 0">{{ response.transcript.find(x => x.to === "en").text }}</p>
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
@@ -393,21 +389,17 @@
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
                                 <h3 class="underlined">Transcript</h3>
-                                <div v-if="response.transcript[0].text.length === 0">
-                                    <i>No transcript available</i>
+                                <i v-if="response.transcript[0].text.length === 0">No transcript available</i>
+                                <div class="tooltip" tooltip-text="Select Language" v-if="response.transcript[0].text.length !== 0">
+                                    <select name="language">
+                                        <option value="en">English</option>
+                                        <option value="cy">Welsh</option>
+                                        <option value="ga">Irish</option>
+                                        <option value="fr">French</option>
+                                        <option value="pl">Polish</option>
+                                    </select>
                                 </div>
-                                <div v-else>
-                                    <div class="tooltip" tooltip-text="Select Language">
-                                        <select name="language">
-                                            <option value="en">English</option>
-                                            <option value="cy">Welsh</option>
-                                            <option value="ga">Irish</option>
-                                            <option value="fr">French</option>
-                                            <option value="pl">Polish</option>
-                                        </select>
-                                    </div>
-                                    <p>{{ response.transcript.find(x => x.to === "en").text }}</p>
-                                </div>
+                                <p v-if="response.transcript[0].text.length !== 0">{{ response.transcript.find(x => x.to === "en").text }}</p>
                             </div>
                             <div class="response-comments" v-if="response.showComments">
                                 <h3 class="underlined">Comments</h3>
