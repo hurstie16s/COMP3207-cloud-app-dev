@@ -93,7 +93,7 @@
 
                         <div class="response card rounded shadowed" v-for="(response, i) in userResponses">
                             <div class="response-meta">
-                                <p class="username"><span class="material-symbols-rounded">person</span>
+                                <p class="username" @click="goToAccount(response.username)"><span class="material-symbols-rounded">person</span>
                                     {{ response.username }}</p>
                                 <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
                             </div>
@@ -199,7 +199,7 @@
                                 <h3 class="underlined">Comments</h3>
                                 <div class="comment rounded" v-for="comment in response.comments">
                                     <div class="response-meta">
-                                        <p class="comment-username"><span
+                                        <p class="comment-username" @click="goToAccount(comment.username)"><span
                                                 class="material-symbols-rounded">person</span>{{ comment.username }}
                                         </p>
                                         <span class="timestamp">{{formatDate(comment.timestamp)}}</span>
@@ -256,7 +256,7 @@
 
                         <div class="response card rounded shadowed" v-for="(response, i) in communityResponses">
                             <div class="response-meta">
-                                <p class="username"><span class="material-symbols-rounded">person</span>
+                                <p class="username" @click="goToAccount(response.username)"><span class="material-symbols-rounded">person</span>
                                     {{ response.username }}</p>
                                 <span class="timestamp">{{ formatDate(response.timestamp) }}</span>
                             </div>
@@ -366,7 +366,7 @@
                                 <h3 class="underlined">Comments</h3>
                                 <div class="comment rounded" v-for="comment in response.comments">
                                     <div class="response-meta">
-                                        <p class="comment-username"><span
+                                        <p class="comment-username" @click="goToAccount(comment.username)"><span
                                                 class="material-symbols-rounded">person</span>{{ comment.username }}
                                         </p>
                                         <span class="timestamp">{{formatDate(comment.timestamp)}}</span>

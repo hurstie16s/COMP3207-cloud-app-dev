@@ -5,29 +5,29 @@ var app = new Vue({
     user: null,
     account: null,
 
-    responses: [],
-  },
-  //On Awake methods here:
-  mounted: function () {
-
-  },
-  //Js Methods here:
-  methods: {
-
-    async loadResponses() {
-      const data = {
-        username: this.account,
-        interviewQuestion: ""
-      }
+      responses: [],
+      sortBy: 'Oldest First',
+      industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
+      industryFilter: 'All Industries'
+    },
+    //On Awake methods here:
+    mounted: function() {
+      
+    },
+    //Js Methods here:
+    methods: {
+      
+      async loadResponses() {
+        const data = {
+          username: this.account,
+          interviewQuestion: ""  
+        }
 
       postHelper(data, '/interview/data/search')
         .then(response => {
           this.responses = response.data;
           if (this.responses.length > 0) {
-            const firstResponse = this.responses[0];
-            this.$set(firstResponse, 'showTranscript', true);
-            this.$set(firstResponse, 'showComments', true);
-            this.$set(firstResponse, 'showGPT', true);
+            this.calculateAverages();
           }
         })
         .catch(error => {
@@ -49,9 +49,27 @@ var app = new Vue({
         return;
       }
 
-      const response = this.responses.find(response => response.id === responseId);
-      response.private = isPrivate;
-    },
+        const response = this.responses.find(response => response.id === responseId);
+        response.private = isPrivate;
+      },
+
+      async rateInterview(responseId, rating) {
+        const data = {
+          id: responseId,
+          username: this.user,
+          rating: rating
+        };
+  
+        const res = await axios.put(`${BACKEND_URL}/rate/interview`, data);
+        if (res.status > 299) {
+          alert(`API returned non-200 status when submitting rating: ${res.status}` + (res.data ? `: ${res.data.msg}` : ''));
+          return;
+        }
+        console.log(res.data);
+        const response = this.responses.find(response => response.id === responseId);
+        response.ratings = res.data.ratings;
+        response.average = this.calculateAverage(response);
+      },
 
     async submitComment(questionId, responseId, comment) {
       const data = {
@@ -141,39 +159,76 @@ var app = new Vue({
       response.audio.currentTime += seconds;
     },
 
-  },
-  //FrontEnd methods here:
-  computed: {
-    averageRatings() {
-      const res = {};
-      this.responses.forEach(response => {
-        if (!response.ratings) {
-          res[response.id] = 0.0;
-          return;
+      calculateAverages() {
+        this.responses.forEach(response => {
+          this.$set(response, 'average', this.calculateAverage(response));
+        });
+      },
+  
+      calculateAverage(response) {
+        if (!response.ratings || response.ratings.length === 0) {
+          return 0.0;
         }
+        return response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
+      },
+      
+      goToAccount(user){
+        getAccount(user);
+      }
 
-        res[response.id] = response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
-      });
-      return res;
     },
+    //FrontEnd methods here:
+    computed: {
+      overallRating() {
+        let res = 0.0;
 
-    overallRating() {
-      let res = 0.0;
+        this.responses.forEach(response => {
+         res += response.average;
+        });
+        return res/this.responses.length;
+      },
 
-      this.responses.forEach(response => {
-        if (!response.ratings) {
-          return;
+      uniqueQs() {
+        const uniques = new Set(this.responses.map(obj => obj.questionId));
+        return uniques.size;
+      },
+
+      userResponses() {
+        const responses = this.responses
+          .filter(response => this.industryFilter === 'All Industries' || response.industry === this.industryFilter);
+        
+        if (this.sortBy === 'Newest First') {
+          responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } else if (this.sortBy === 'Oldest First') {
+          responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        } else if (this.sortBy === 'Top Rated') {
+          responses.sort((a, b) => b.average - a.average);
+        } else if (this.sortBy === 'Lowest Rated') {
+          responses.sort((a, b) => a.average - b.average);
         }
-        res += response.ratings.map(rating => rating.rating).reduce((a, b) => a + b, 0) / response.ratings.length;
-      });
-      return res / this.responses.length;
-    },
+        if (responses.length > 0) {
+          responses.forEach(response => {
+            this.$set(response, 'showTranscript', false);
+            this.$set(response, 'showComments', false);
+            this.$set(response, 'showGPT', false);
+          });
+          const firstResponse = responses[0];
+          this.$set(firstResponse, 'showTranscript', true);
+          this.$set(firstResponse, 'showComments', true);
+          this.$set(firstResponse, 'showGPT', true);
+        }
+        return responses;
+      },
 
-    uniqueQs() {
-      const uniques = new Set(this.responses.map(obj => obj.questionId));
-      return uniques.size;
-    }
-  },
+      userRatings() {
+        const res = {};
+        this.responses.filter(r => r.ratings).forEach(response => {
+          const rating = response.ratings.find(rating => rating.username === this.user);
+          if (rating !== undefined) res[response.id] = rating.rating;
+        });
+        return res;
+      },
+    },
 
   beforeMount() {
     forceLoggedIn();
