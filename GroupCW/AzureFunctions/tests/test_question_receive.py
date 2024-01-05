@@ -11,34 +11,33 @@ import uuid
 class TestLoginUserFunction(unittest.TestCase):  
     
     #TBD
-    TEST_URL="http://localhost:7071/interview/data/search"
-
+    TEST_URL="http://localhost:7071/interview/question/receive"
+    
+    SETUP_URL = "http://localhost:7071/interview/question/submit"
+    def setUp(self):
         
-    def test_searching_by_username_and_question(self):
+        jsonData = json.dumps({"question": "Why did you choose this company?", "difficulty" : 2, "regularity": 1})
+        response = requests.post(self.TEST_URL, data=jsonData)
+    
+    def test_question_receive(self):
         
-            jsonData = json.dumps({"username": "Test", "interviewQuestion" : "Test"})
-        
+            jsonData = json.dumps({"id": ""})
             response = requests.get(self.TEST_URL, data=jsonData)
-        
+           
+            print(response.content)
             self.assertEqual(200, response.status_code)
             
     
-    def test_searching_by_question(self):
+    def test_question_not_able_to_receive(self):
         
-            jsonData = json.dumps({"username": "", "interviewQuestion" : "Test"})
+            jsonData = json.dumps({"id": "dasdsad"})
         
             response = requests.get(self.TEST_URL, data=jsonData)
 
 
             self.assertEqual(200, response.status_code)
             
-    
-    def test_searching_by_username(self):
-        
-            jsonData = json.dumps({"username": "Test", "interviewQuestion" : ""})
-            response = requests.get(self.TEST_URL, data=jsonData)
-        
-            self.assertEqual(200, response.status_code)
+
 
 
     def tearDown(self):

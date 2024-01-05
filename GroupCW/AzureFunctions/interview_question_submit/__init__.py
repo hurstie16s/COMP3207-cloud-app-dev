@@ -6,6 +6,11 @@ from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
 from shared_code import DBFunctions, FaultCheckers
 import AzureData
+<<<<<<< Updated upstream
+=======
+from chatGPTReview.__init__ import send_question_to_ai
+import ast
+>>>>>>> Stashed changes
 
 def main(req: HttpRequest) -> HttpResponse:
     
@@ -29,7 +34,11 @@ def main(req: HttpRequest) -> HttpResponse:
             "interviewQuestion": question,
             "difficulty": difficulty,
             "regularity": regularity,
+<<<<<<< Updated upstream
             "numberOfResponses": 0
+=======
+            "tips": ast.literal_eval(tips),
+>>>>>>> Stashed changes
         }
         DBFunctions.create_item(
             data=data,

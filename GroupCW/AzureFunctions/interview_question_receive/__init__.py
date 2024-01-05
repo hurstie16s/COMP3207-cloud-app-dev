@@ -67,7 +67,12 @@ def getAllQuestions() -> (dict,int):
             "question" : question.get("interviewQuestion"),
             "difficulty": question.get("difficulty"),
             "regularity": question.get("regularity"),
+<<<<<<< Updated upstream
             "numberOfResponses": question.get("numberOfResponses")
+=======
+            "numberOfResponses": responseCounts.get(question.get("id")) or 0,
+            "tips": question.get("tips")
+>>>>>>> Stashed changes
         }
         questions.append(questionDict)
 
