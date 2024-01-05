@@ -11,8 +11,8 @@ var app = new Vue({
     industry: 'Computer Science',
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries',
-    userSortBy: 'Date',
-    communitySortBy: 'Date'
+    userSortBy: 'Oldest first',
+    communitySortBy: 'Oldest first'
   },
   //On Awake methods here:
   mounted: function () {
@@ -253,16 +253,25 @@ var app = new Vue({
         .filter(response => response.username === this.user)
         .filter(response => this.userIndustryFilter === 'All Industries' || response.industry === this.userIndustryFilter);
       
+      if (this.communitySortBy === 'Newest first') {
+        responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else if (this.communitySortBy === 'Oldest first') {
+        responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      } else if (this.communitySortBy === 'Top rated') {
+        responses.sort((a, b) => b.average - a.average);
+      } else if (this.communitySortBy === 'Worst rated') {
+        responses.sort((a, b) => a.average - b.average);
+      }
       if (responses.length > 0) {
+        responses.forEach(response => {
+          this.$set(response, 'showTranscript', false);
+          this.$set(response, 'showComments', false);
+          this.$set(response, 'showGPT', false);
+        });
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
-        this.$set(firstResponse, 'showGPT', true)
-      }
-      if (this.userSortBy === 'Date') {
-        responses.sort((a, b) => new Date(a.date) - new Date(b.date));
-      } else {
-        responses.sort((a, b) => b.average - a.average);
+        this.$set(firstResponse, 'showGPT', true);
       }
       return responses;
     },
@@ -270,16 +279,25 @@ var app = new Vue({
       const responses = this.responses
         .filter(response => response.username !== this.user)
         .filter(response => this.communityIndustryFilter === 'All Industries' || response.industry === this.communityIndustryFilter);;
+      if (this.communitySortBy === 'Newest first') {
+        responses.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      } else if (this.communitySortBy === 'Oldest first') {
+        responses.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+      } else if (this.communitySortBy === 'Top rated') {
+        responses.sort((a, b) => b.average - a.average);
+      } else if (this.communitySortBy === 'Worst rated') {
+        responses.sort((a, b) => a.average - b.average);
+      }
       if (responses.length > 0) {
+        responses.forEach(response => {
+          this.$set(response, 'showTranscript', false);
+          this.$set(response, 'showComments', false);
+          this.$set(response, 'showGPT', false);
+        });
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
         this.$set(firstResponse, 'showComments', true);
         this.$set(firstResponse, 'showGPT', true);
-      }
-      if (this.communitySortBy === 'Date') {
-        responses.sort((a, b) => new Date(a.date) - new Date(b.date));
-      } else {
-        responses.sort((a, b) => b.average - a.average);
       }
 
       return responses;
