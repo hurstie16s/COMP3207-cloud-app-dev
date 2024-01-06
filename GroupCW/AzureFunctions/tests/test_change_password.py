@@ -89,5 +89,6 @@ class TestAddUserFunction(unittest.TestCase):
 
         response = requests.post(url=self.TEST_URL_LOGIN, data=data)
 
-        #self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, b'{"result": true, "msg": "AuthSuccess"}')
+        self.assertEqual(response.status_code, 200)
+        #self.assertEqual(response.content, b'{"result": true, "msg": "AuthSuccess"}')
+        self.assertEqual(response.json(), json.dumps({"result": True, "msg": "AuthSuccess"}))
