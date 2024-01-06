@@ -5,8 +5,10 @@ import uuid
 from azure.functions import HttpRequest, HttpResponse
 # Code base Imports
 import AzureData
-from shared_code.PasswordFunctions import hash_password
+from shared_code.PasswordFunctions import hash_password, validate_password
+from shared_code import auth
 import re
+import json
 
 # Helper function to check if the email is unique
 async def is_email_unique(email):
@@ -28,19 +30,6 @@ async def is_username_unique(username):
 def is_valid_email(email):
     pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
     return re.match(pattern, email) is not None
-
-# Helper function to validate password strength and provide reasons for invalidity
-def validate_password(password):
-    reasons = []
-    if len(password) < 8:
-        reasons.append("Password must be at least 8 characters long.")
-    if not re.search("[0-9]", password):
-        reasons.append("Password must contain at least one number.")
-    if not re.search("[A-Za-z]", password):
-        reasons.append("Password must contain at least one letter.")
-    if not re.search("[!@#$%^&*(),.?\":{}|<>]", password):
-        reasons.append("Password must contain at least one special character.")
-    return reasons
 
 def main(req: HttpRequest) -> HttpResponse:
     try:
@@ -75,6 +64,7 @@ def main(req: HttpRequest) -> HttpResponse:
     
     try:
         AzureData.containerUsers.create_item(body=new_user)
-        return HttpResponse("User registered successfully", status_code=201)
+        token = auth.signJwt(username)
+        return HttpResponse(json.dumps({"result": True, "token": token, "username": username}), status_code=201)
     except Exception as e:
-        return HttpResponse(f"Failed to create user: {str(e)}", status_code=500)
+        return HttpResponse(json.dumps({"result": False, "msg": f"Failed to create user: {str(e)}"}), status_code=500)

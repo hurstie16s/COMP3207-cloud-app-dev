@@ -36,9 +36,11 @@
                 </div>
                 <h2 class="question-text">Tell me about yourself</h2>
                 <div class="recording">
-                    <button class="material-symbols-rounded icon-button red-button tooltip" tooltip-text="Start Recording">mic</button>
+                    <button class="material-symbols-rounded icon-button red-button tooltip"
+                        tooltip-text="Start Recording">mic</button>
                     <!-- Display stop_circle when mic is clicked -->
-                    <button class="material-symbols-rounded icon-button red-button hidden"  tooltip-text="Stop Recording">stop_circle</button>
+                    <button class="material-symbols-rounded icon-button red-button hidden"
+                        tooltip-text="Stop Recording">stop_circle</button>
                     <!-- Display options to submit recording when stop_circle is clicked -->
                     <div class="hidden recording-submission">
                         <button class="red-button">Delete Recording</button>
@@ -108,7 +110,6 @@
                             </select>
                         </div>
                     </div>
-                    
                 </div>
                 <div class="response card rounded shadowed">
                     <div class="response-meta">
@@ -122,7 +123,8 @@
                         <span class="avg-rating flex-center">4.2<span
                                 class="material-symbols-rounded star-filled">star_rate</span></span>
                         <input type="checkbox" id="visibility-toggle-1" class="toggle hidden">
-                        <label class="toggle-label tooltip" for="visibility-toggle-1" tooltip-text="Toggle Response Public/Private">
+                        <label class="toggle-label tooltip" tooltip-text="Toggle Response Public/Private" for="visibility-toggle-1"
+                            >
                             <span class="material-symbols-rounded toggle-on">visibility</span>
                             <span class="material-symbols-rounded toggle-off">visibility_off</span>
                         </label>
@@ -136,8 +138,8 @@
                             <span class="material-symbols-rounded toggle-on">comment</span>
                             <span class="material-symbols-rounded toggle-off">comments_disabled</span>
                         </label>
-                        <button
-                            class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip" tooltip-text="Delete Response">delete</button>
+                        <button class="material-symbols-rounded icon-button minimal-button minimal-red-button tooltip"
+                            tooltip-text="Delete Response">delete</button>
                     </div>
 
                     <div class="response-timeline">
@@ -149,14 +151,19 @@
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
                         <span class="response-timestamp">00:00</span>
                     </div>
-                    <div class="response-rating hidden">
-                        <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
+                    <div class="response-container-idk">
+                        <span class="chip tooltip" tooltip-text="Industry">Computer Science</span>
+                        <!-- Can't rate your own responses -->
+                        <div class="response-rating hidden">
+                            <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                        </div>
                     </div>
+
                     <div class="response-transcript">
                         <h3 class="underlined">Transcript</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis tellus ac congue
@@ -230,7 +237,8 @@
                         </div>
                         <div class="new-comment">
                             <textarea class="input" placeholder="Add a comment..."></textarea>
-                            <button class="material-symbols-rounded icon-button tooltip" tooltip-text="Post Comment">chevron_right</button>
+                            <button class="material-symbols-rounded icon-button tooltip"
+                                tooltip-text="Post Comment">chevron_right</button>
                         </div>
                     </div>
                 </div>
@@ -273,13 +281,16 @@
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
                         <span class="response-timestamp">00:00</span>
                     </div>
-                    <div class="response-rating hidden">
-                        <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
+                    <div class="response-container-idk">
+                        <span class="chip tooltip" tooltip-text="Industry">Engineering</span>
+                        <div class="response-rating hidden">
+                            <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -304,7 +315,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div class="filters">
@@ -342,13 +353,16 @@
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
                         <span class="response-timestamp">00:00</span>
                     </div>
-                    <div class="response-rating">
-                        <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
+                    <div class="response-container-idk">
+                        <span class="chip tooltip" tooltip-text="Industry">Law</span>
+                        <div class="response-rating">
+                            <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                        </div>
                     </div>
                 </div>
 
@@ -383,13 +397,16 @@
                         <button class="material-symbols-rounded icon-button minimal-button">forward_10</button>
                         <span class="response-timestamp">00:00</span>
                     </div>
-                    <div class="response-rating">
-                        <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
-                        <span class="material-symbols-rounded star">star_rate</span>
+                    <div class="response-container-idk">
+                        <span class="chip tooltip" tooltip-text="Industry">Finance</span>
+                        <div class="response-rating">
+                            <!-- STAR RATINGS ARE REVERSED i.e. if the user clicks the first star, its a 5 star rating -->
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                            <span class="material-symbols-rounded star">star_rate</span>
+                        </div>
                     </div>
                 </div>
             </section>

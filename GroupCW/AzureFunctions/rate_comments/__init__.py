@@ -9,9 +9,13 @@ def main(req: HttpRequest) -> HttpResponse:
     logging.info('Python HTTP trigger function processed a request to rate a comment.')
 
     try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
+
+    try:
         req_body = req.get_json()
         comment_id = req_body.get('comment_id')
-        username = req_body.get('username')  
         rate_action = req_body.get('rate_action')  # 'like' for thumbs up, 'dislike' for thumbs down
 
         # Define the query with a parameter placeholder
@@ -70,7 +74,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
         DBFunctions.upsert_item(data=interview_data, container=AzureData.containerInterviewData)
 
-        return HttpResponse(json.dumps({"result": True, "msg": "Comment rated successfully"}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Comment rated successfully", "comment": comment_to_rate}), status_code=200, mimetype="application/json")
     
     except ValueError:
         return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")

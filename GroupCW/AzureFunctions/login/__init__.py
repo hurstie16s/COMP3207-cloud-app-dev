@@ -4,7 +4,7 @@ import json
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
-from shared_code import PasswordFunctions, DBFunctions, FaultCheckers
+from shared_code import PasswordFunctions, DBFunctions, FaultCheckers, auth
 import AzureData
 
 # TODO: Check how requests should come in and how they should be sent out
@@ -51,29 +51,26 @@ def main(req: HttpRequest) -> HttpResponse:
         container=AzureData.containerUsers
     )
 
-    if (len(result) == 0):
+    if len(result) == 0:
         # Email or Username incorrect
         # Auth Fail
         output = {"result": False, "msg": "User not found"}
-        code = 401
-        
+        code = 401 
     else:
         # Verify Password
         verified = PasswordFunctions.verify(password, result[0].get("hashed_password"))
 
-        if (verified):
-            # AuthSuccess
-            output = {"result": True, "msg": "AuthSuccess"}
-            code = 200
-        elif (result[0].get("change_password")):
-            output = {"result": True, "msg": "Redirect to Change Password"}
+        if result[0].get("change_password"):
+            token = auth.signJwt(result[0].get("username"))
+            output = {"result": True, "msg": "Redirect to Change Password", "token": token, "username": result[0].get("username")}
             code = 300
+        elif verified:
+            token = auth.signJwt(result[0].get("username"))
+            output = {"result": True, "msg": "AuthSuccess", "token": token, "username": result[0].get("username")}
+            code = 200
         else :
             # AuthFail
             output = {"result": False, "msg": "Invalid Login"}
             code = 401
 
-    # Return HttpResponse
-    logging.info(output)
-    logging.info(code)
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
