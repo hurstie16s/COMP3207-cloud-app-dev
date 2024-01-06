@@ -305,7 +305,7 @@ a {
     margin: 1em 0;
 }
 
-.reset-password>.item5, .new-password>.item6 {
+.reset-password>.item5, .new-password>.item7 {
     grid-column: span 2;
 }
 
