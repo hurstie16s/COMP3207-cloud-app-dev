@@ -22,6 +22,7 @@ var app = new Vue({
         const res = await axios.put(`${BACKEND_URL}/password/reset`, { email: this.email });
         if (res.status > 299) {
           addNotification(`An error occurred: ${res.status} ` + (res.data ? ` ${res.data.msg}` : ''));
+          this.sending = false;
           return;
         } else {
           this.submitted = true;
