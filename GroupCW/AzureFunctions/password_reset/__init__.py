@@ -28,6 +28,10 @@ def main(req: HttpRequest) -> HttpResponse:
         return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
     userInfo = getUserData(email)
+    if userInfo is None:
+        output = {"result": False, "msg": "User not Found"}
+        code = 401
+        return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
     # Create random password
     randomPassword = generateRandomPassword()
@@ -68,6 +72,9 @@ def getUserData(email: str):
         parameters=params,
         container=AzureData.containerUsers
     )
+
+    if len(result) == 0:
+        return None
 
     return result[0]
 
