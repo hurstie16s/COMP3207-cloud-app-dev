@@ -46,7 +46,7 @@ def main(req: HttpRequest) -> HttpResponse:
     # Verify password
     if not PasswordFunctions.verify(currentPassword, userInfo.get("hashed_password")):
         # Set JSON output
-        output = {"result": False, "msg": "AuthFail"}
+        output = {"result": False, "msg": "Current password does not match"}
         code = 403
     elif newPassword != newPasswordConfirm :
         # Set JSON output
