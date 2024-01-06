@@ -52,10 +52,11 @@ def main(req: HttpRequest) -> HttpResponse:
     DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
 
     # Send Email
-    asyncio.run(sendEmail(userInfo, randomPassword, ref))
+    result = asyncio.run(sendEmail(userInfo, randomPassword, ref))
+    logging.info(result)
 
     # Return HttpResponse
-    output = {"result": True, "msg": "Password Reset", "ref": ref}
+    output = {"result": True, "msg": "Password Reset", "ref": ref, "status": result.get("status")}
     code = 203
     return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
 
