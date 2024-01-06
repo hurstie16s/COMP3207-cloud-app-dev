@@ -28,3 +28,4 @@ AzureFunctions/_requirements.txt
 AzureFunctions/AzureData
 AzureFunctions/Scripts
 
+venv
