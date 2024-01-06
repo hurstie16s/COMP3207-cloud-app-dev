@@ -9,11 +9,9 @@ import uuid
 from azure.functions import HttpRequest, HttpResponse
 from azure.communication.email import EmailClient
 from azure.identity import DefaultAzureCredential
-#Code base imports
+# Code base imports
 from shared_code import PasswordFunctions, DBFunctions, FaultCheckers
 import AzureData
-
-# TODO: Check how requests should come in and how they should be sent out
 
 def main(req: HttpRequest) -> HttpResponse:
     
@@ -21,9 +19,14 @@ def main(req: HttpRequest) -> HttpResponse:
 
     # Get data from JSON doc
     input = req.get_json()
-    username = input.get("username")
+    email = input.get("email")
 
-    userInfo = getUserData(username)
+    if FaultCheckers.checkParams([email]):
+        output = {"result": False, "msg": "Bad Request"}
+        code = 400
+        return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+
+    userInfo = getUserData(email)
 
     # Create random password
     randomPassword = generateRandomPassword()
@@ -55,10 +58,10 @@ def main(req: HttpRequest) -> HttpResponse:
 
 
 
-def getUserData(username: str):
+def getUserData(email: str):
     # Get User Data
-    query = "SELECT * FROM User WHERE User.username = @username"
-    params = [{"name": "@username", "value": username}]
+    query = "SELECT * FROM User WHERE User.email = @email"
+    params = [{"name": "@email", "value": email}]
     result = DBFunctions.query_items(
         query=query,
         parameters=params,
