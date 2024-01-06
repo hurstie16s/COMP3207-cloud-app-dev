@@ -7,7 +7,7 @@ import json
 #Azure Imports
 #Code base Imports
 import AzureData
-from shared_code import DBFunctions, PasswordFunctions
+from shared_code import DBFunctions, PasswordFunctions, auth
 
 class TestAddUserFunction(unittest.TestCase):
     TEST_URL_PASSWORD_CHANGE = "http://localhost:7071/password/change"
@@ -16,6 +16,7 @@ class TestAddUserFunction(unittest.TestCase):
     def setUp(self):
         # Create Dummy Credentials
         self.testUsername = str(uuid.uuid1().hex)
+        self.jwt = auth.signJwt(self.testUsername)
         self.testEmail = self.testUsername+"@test.co.uk"
         self.testPassword = self.testUsername
 
@@ -32,20 +33,17 @@ class TestAddUserFunction(unittest.TestCase):
 
     # Test when the current password is incorrect
     def test_current_password_incorrect(self):
-        
         falsePassword = str(time.time_ns())
 
-        data= json.dumps({
+        data = json.dumps({
             "username": self.testUsername,
             "currentPassword": falsePassword,
             "newPassword": falsePassword,
             "newPasswordConfirm": falsePassword
         })
 
-        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data)
-
+        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data, headers={"Authorization": self.jwt})
         self.assertEqual(response.content, b'{"result": false, "msg": "AuthFail"}')
-
         self.assertEqual(response.status_code, 403)
 
     # Test when the new password does not match the confirmation
@@ -62,6 +60,7 @@ class TestAddUserFunction(unittest.TestCase):
         })
 
         response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data)
+        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data, headers={"Authorization": self.jwt})
 
         self.assertEqual(response.content, b'{"result": false, "msg": "Password does not match confirmation"}')
 
@@ -69,7 +68,6 @@ class TestAddUserFunction(unittest.TestCase):
 
     # Test a successful password change
     def test_password_change_success(self):
-        
         newPassword = "newPassword"
 
         data= json.dumps({
@@ -79,10 +77,8 @@ class TestAddUserFunction(unittest.TestCase):
             "newPasswordConfirm": newPassword
         })
 
-        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data)
-
+        response = requests.put(url=self.TEST_URL_PASSWORD_CHANGE, data=data, headers={"Authorization": self.jwt})
         self.assertEqual(response.content, b'{"result": true, "msg": "Password Changed"}')
-
         self.assertEqual(response.status_code, 200)
 
         # Test that password has changed

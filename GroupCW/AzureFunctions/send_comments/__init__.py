@@ -3,17 +3,22 @@ import logging
 import json
 import uuid
 from azure.functions import HttpRequest, HttpResponse
-from shared_code import DBFunctions
-import AzureData 
+from shared_code import DBFunctions, auth
+import AzureData
+from jwt.exceptions import InvalidTokenError
 
 def main(req: HttpRequest) -> HttpResponse:
     logging.info('send_comment function processing a request.')
 
     try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
+
+    try:
         # Extract data from the received JSON
         req_body = req.get_json()
         interview_id = req_body.get('id')
-        username = req_body.get('username')
         comment_text = req_body.get('comment')
 
         query = "SELECT * FROM c WHERE c.id = @id"
@@ -38,7 +43,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
         # Update the interview data in the database
         DBFunctions.upsert_item(interview_data, AzureData.containerInterviewData)
-        return HttpResponse(json.dumps({"result": True, "msg": "Comment added successfully"}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Comment added successfully", "data": comment_data}), status_code=200, mimetype="application/json")
 
     except Exception as e:
         logging.error(f"Error occurred: {str(e)}")

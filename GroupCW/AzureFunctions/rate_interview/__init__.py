@@ -2,17 +2,19 @@ import logging
 import json
 import uuid
 from azure.functions import HttpRequest, HttpResponse
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
 import AzureData
-
+from jwt.exceptions import InvalidTokenError
 
 def main(req: HttpRequest) -> HttpResponse:
-    logging.info('rate_interview function processing a request.')
+    try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     try:
         req_body = req.get_json()
         interview_id = req_body.get('id')
-        username = req_body.get('username')
         rating = req_body.get('rating')
 
         # Validate the rating
@@ -48,14 +50,11 @@ def main(req: HttpRequest) -> HttpResponse:
         else:
             ratings.append({"username": username, "rating": rating})
 
-        # Calculate the new average rating
-        total_ratings = sum(r['rating'] for r in ratings)
-        average_rating = round(total_ratings / len(ratings), 1)
         interview_data['ratings'] = ratings
 
         # Update the interview data in the database
         AzureData.containerInterviewData.upsert_item(interview_data)
-        return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "average_rating": average_rating}), status_code=200, mimetype="application/json")
+        return HttpResponse(json.dumps({"result": True, "msg": "Rating added successfully", "ratings": interview_data["ratings"]}), status_code=200, mimetype="application/json")
 
     except ValueError:
         return HttpResponse(json.dumps({"result": False, "msg": "Invalid request body"}), status_code=400, mimetype="application/json")
