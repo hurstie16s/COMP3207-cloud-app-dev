@@ -60,14 +60,14 @@ def main(req: HttpRequest) -> HttpResponse:
         # Verify Password
         verified = PasswordFunctions.verify(password, result[0].get("hashed_password"))
 
-        if verified:
-            token = auth.signJwt(result[0].get("username"))
-            output = {"result": True, "msg": "AuthSuccess", "token": token, "username": result[0].get("username")}
-            code = 200
-        elif result[0].get("change_password"):
+        if result[0].get("change_password"):
             token = auth.signJwt(result[0].get("username"))
             output = {"result": True, "msg": "Redirect to Change Password", "token": token, "username": result[0].get("username")}
             code = 300
+        elif verified:
+            token = auth.signJwt(result[0].get("username"))
+            output = {"result": True, "msg": "AuthSuccess", "token": token, "username": result[0].get("username")}
+            code = 200
         else :
             # AuthFail
             output = {"result": False, "msg": "Invalid Login"}
