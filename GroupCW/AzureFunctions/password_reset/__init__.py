@@ -85,7 +85,7 @@ async def sendEmail(userInfo, randomPassword, ref):
 
     client = EmailClient(AzureData.emailEndpoint, AzureData.emailCredential)    
 
-    text = "Tempoary Password: {}".format(randomPassword)
+    text = "Your password has been reset to: {}\n Please sign in and follow instructions".format(randomPassword)
 
     message = {
         "senderAddress": AzureData.emailDomainName,
