@@ -5,16 +5,20 @@ import asyncio
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 #Code base imports
-from shared_code import FaultCheckers, DBFunctions, PasswordFunctions
+from shared_code import FaultCheckers, DBFunctions, PasswordFunctions, auth
+from jwt.exceptions import InvalidTokenError
 import AzureData
 
 def main(req: HttpRequest) -> HttpResponse:
-    
     logging.info('Python HTTP trigger function processed a request.')
+
+    try:
+        username = auth.verifyJwt(req.headers.get('Authorization'))
+    except InvalidTokenError:
+        return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     #Get data from JSON doc
     input = req.get_json()
-    username = input.get("username")
     currentPassword = input.get("currentPassword")
     newPassword = input.get("newPassword")
     newPasswordConfirm = input.get("newPasswordConfirm")
@@ -37,7 +41,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
     userInfo = result[0]
 
-    logging.info("Old Hashed Password: {}".format(str(userInfo.get("hashed_password"))))
+    password_issues = PasswordFunctions.validate_password(newPassword)
 
     # Verify password
     if not PasswordFunctions.verify(currentPassword, userInfo.get("hashed_password")):
@@ -48,11 +52,16 @@ def main(req: HttpRequest) -> HttpResponse:
         # Set JSON output
         output = {"result": False, "msg": "Password does not match confirmation"}
         code = 403
+    elif password_issues:
+        #Set JSON output
+        output = {
+            "result": False, 
+            "msg": f"Password is invalid for the following reason(s): {'; '.join(password_issues)}"
+        }
+        code = 403
     else:
         # Hash new password
         newPasswordHash = PasswordFunctions.hash_password(password=newPassword)
-
-        logging.info("New Hashed Password: {}".format(str(newPasswordHash)))
 
         newDict = {
             "hashed_password": newPasswordHash,

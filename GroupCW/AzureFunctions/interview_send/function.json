@@ -2,14 +2,12 @@
     "scriptFile": "__init__.py",
     "bindings": [
       {
-        "authLevel": "function",
+        "authLevel": "anonymous",
         "type": "httpTrigger",
         "direction": "in",
         "name": "req",
-        "methods": [
-          "post"
-        ],
-        "route": "interview/data/send"
+        "methods": ["post"],
+        "route": "interview/{id}/responses"
       },
       {
         "type": "http",

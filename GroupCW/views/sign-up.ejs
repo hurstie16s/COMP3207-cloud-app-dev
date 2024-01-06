@@ -3,63 +3,68 @@
 
 <%- include('header'); -%>
 
-<body>
-    <div id="register">
-        <%- include('navbar'); -%>
-
-<section class="sign-up rounded shadowed bordered card">
-    <span class="item1 logo">REHEARSAL</span>
-    <h2 class="item2 left-aligned">Sign Up</h2>
-    <p class="item3 right-aligned">or <a href="/sign-in">sign in</a></p>
-    <div class="item4">
-        <div class="input">
-            <span class="label">Email</span>
-            <div>
-                <span class="material-symbols-rounded">email</span>
-                <input type="text" v-model="email">
+    <body>
+        <div class="viewport-container">
+            <div class="notification-container" id="notification-container">
             </div>
         </div>
-        <p v-if="emailError" class="input-error error">
-            <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-email-error">{{emailError}}</span>
-        </p>
-    </div>
-    <div class="item5">
-        <div class="input">
-            <span class="label">Username</span>
-            <div>
-                <span class="material-symbols-rounded">person</span>
-                <input type="text" v-model="username">
-            </div>
+        <div id="register">
+            <%- include('navbar'); -%>
+
+                <section class="sign-up rounded shadowed bordered card">
+                    <span class="item1 logo">REHEARSAL</span>
+                    <h2 class="item2 left-aligned">Sign Up</h2>
+                    <p class="item3 right-aligned">or <a href="/sign-in">sign in</a></p>
+                    <div class="item4">
+                        <div class="input">
+                            <span class="label">Email</span>
+                            <div>
+                                <span class="material-symbols-rounded">email</span>
+                                <input type="text" v-model="email">
+                            </div>
+                        </div>
+                        <p v-if="emailError" class="input-error error">
+                            <span class="material-symbols-rounded">error</span>
+                            <span id="sign-up-email-error">{{emailError}}</span>
+                        </p>
+                    </div>
+                    <div class="item5">
+                        <div class="input">
+                            <span class="label">Username</span>
+                            <div>
+                                <span class="material-symbols-rounded">person</span>
+                                <input type="text" v-model="username">
+                            </div>
+                        </div>
+                        <p v-if="usernameError" class="input-error error">
+                            <span class="material-symbols-rounded">error</span>
+                            <span id="sign-up-username-error">{{usernameError}}</span>
+                        </p>
+                    </div>
+                    <div class="item6">
+                        <div class="input">
+                            <span class="label">Password</span>
+                            <div>
+                                <span class="material-symbols-rounded">lock</span>
+                                <input type="password" v-model="password">
+                            </div>
+                        </div>
+                        <p v-if="passwordError" class="input-error error">
+                            <span class="material-symbols-rounded">error</span>
+                            <span id="sign-up-password-error">{{passwordError}}</span>
+                        </p>
+                    </div>
+                    <button class="item7 right-aligned" @click="register">Sign Up</button>
+                </section>
+
+                </main>
         </div>
-        <p v-if="usernameError" class="input-error error">
-            <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-username-error">{{usernameError}}</span>
-        </p>
-    </div>
-    <div class="item6">
-        <div class="input">
-            <span class="label">Password</span>
-            <div>
-                <span class="material-symbols-rounded">lock</span>
-                <input type="text" v-model="password">
-            </div>
-        </div>
-        <p v-if="passwordError" class="input-error error">
-            <span class="material-symbols-rounded">error</span>
-            <span id="sign-up-password-error">{{passwordError}}</span>
-        </p>
-    </div>
-    <button class="item7 right-aligned" @click="register">Sign Up</button>
-</section>
 
-</main>
-</div>
-<!-- VueJS -->
-<script defer src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <%- include('footer'); -%>
 
-<!-- Application Javascript -->
-<script defer src="/static/sign-up.js"></script>
+            <!-- Application Javascript -->
+            <script defer src="/static/sign-up.js"></script>
 
-</body>
+    </body>
+
 </html>

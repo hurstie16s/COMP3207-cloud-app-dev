@@ -3,6 +3,7 @@ import logging
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient 
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+from azure.core.credentials import AzureKeyCredential
 import json
 import os
 import uuid
@@ -77,5 +78,11 @@ translation_headers = {
     'X-ClientTraceId': str(uuid.uuid4())
 }
 
+global JWT_SIGNING_KEY
+JWT_SIGNING_KEY = "2GKiZVZoOJsPvPIKxeClIEO0gCrG4gQ5"
 
-# TODO: return functions
+# Email Stuff
+emailEndpoint = "https://interviewcomms.uk.communication.azure.com/"
+emailCredential = AzureKeyCredential("1ZWHYKI1BelCPIkMojN6zhHoXlvOmwNvNNk5Mh1zcrLIMBzAJKU7HQ7FbU3+siibHOwvRKNVTyn+U8QOqPSNMQ==")
+emailConnectionString = ""
+emailDomainName = "DoNotReply@8ef34718-9bb3-4c6a-a00a-f4b645dbd079.azurecomm.net"
