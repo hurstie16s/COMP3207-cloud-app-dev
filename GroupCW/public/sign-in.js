@@ -37,7 +37,7 @@ var app = new Vue({
                 handleError(response.data.msg);
               } else if (response.status === 300) {
                 setSessionData(response.data.username, response.data.token);
-                app.use = response.data.username;
+                app.user = response.data.username;
                 window.location.href = '/set-new-password';
               } else {
                 addNotification(`An error occurred: ${res.status} ` + res.statusText);

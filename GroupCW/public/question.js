@@ -12,7 +12,7 @@ var app = new Vue({
     communityIndustryFilter: 'All Industries',
     userIndustryFilter: 'All Industries',
     userSortBy: 'Newest First',
-    communitySortBy: 'Top Rated'
+    communitySortBy: 'Top Rated',
   },
   //On Awake methods here:
   mounted: function () {
@@ -217,12 +217,14 @@ var app = new Vue({
       });
 
       if (res.status !== 200) {
-        addNotification(`An error occured: ${res.status} `)
+        addNotification(`An error occured: ${res.status} `);
+        document.getElementById('response-submission-spinner').classList.toggle('hidden');
         return;
       }
 
       if (res.data.result !== true) {
-        addNotification(`An error occured: ${res.data.msg} `)
+        addNotification(`An error occured: ${res.data.msg} `);
+        document.getElementById('response-submission-spinner').classList.toggle('hidden');
         return;
       }
       addNotification('Response Uploaded');
@@ -274,6 +276,7 @@ var app = new Vue({
           this.$set(response, 'showTranscript', false);
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
+          this.$set(response, 'language', "English");
         });
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
@@ -300,6 +303,7 @@ var app = new Vue({
           this.$set(response, 'showTranscript', false);
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
+          this.$set(response, 'language', "English");
         });
       }
 
