@@ -5,15 +5,14 @@ import secrets
 import random
 import string
 import uuid
+import asyncio
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 from azure.communication.email import EmailClient
 from azure.identity import DefaultAzureCredential
-#Code base imports
+# Code base imports
 from shared_code import PasswordFunctions, DBFunctions, FaultCheckers
 import AzureData
-
-# TODO: Check how requests should come in and how they should be sent out
 
 def main(req: HttpRequest) -> HttpResponse:
     
@@ -21,9 +20,14 @@ def main(req: HttpRequest) -> HttpResponse:
 
     # Get data from JSON doc
     input = req.get_json()
-    username = input.get("username")
+    email = input.get("email")
 
-    userInfo = getUserData(username)
+    if FaultCheckers.checkParams([email]):
+        output = {"result": False, "msg": "Bad Request"}
+        code = 400
+        return HttpResponse(body=json.dumps(output),mimetype='application/json',status_code=code)
+
+    userInfo = getUserData(email)
 
     # Create random password
     randomPassword = generateRandomPassword()
@@ -44,7 +48,7 @@ def main(req: HttpRequest) -> HttpResponse:
     DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
 
     # Send Email
-    sendEmail(userInfo, randomPassword, ref)
+    asyncio.run(sendEmail(userInfo, randomPassword, ref))
 
     # Return HttpResponse
     output = {"result": True, "msg": "Password Reset", "ref": ref}
@@ -55,10 +59,10 @@ def main(req: HttpRequest) -> HttpResponse:
 
 
 
-def getUserData(username: str):
+def getUserData(email: str):
     # Get User Data
-    query = "SELECT * FROM User WHERE User.username = @username"
-    params = [{"name": "@username", "value": username}]
+    query = "SELECT * FROM User WHERE User.email = @email"
+    params = [{"name": "@email", "value": email}]
     result = DBFunctions.query_items(
         query=query,
         parameters=params,
@@ -77,25 +81,15 @@ def generateRandomPassword():
 
     return password
 
-def sendEmail(userInfo, randomPassword, ref):
+async def sendEmail(userInfo, randomPassword, ref):
 
-    # To use Azure Active Directory Authentication (DefaultAzureCredential) make sure to have AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET as env variables.
-    endpoint = "https://<resource-name>.communication.azure.com"
-    client = EmailClient(endpoint, DefaultAzureCredential())
+    client = EmailClient(AzureData.emailEndpoint, AzureData.emailCredential)    
 
-    text = """
-Hello {}
-
-Here your temporary password: {}
-Login in with it and follow instructions
-""".format(userInfo.get("username"), randomPassword)
+    text = "Your password has been reset to: {}\n Please sign in and follow instructions".format(randomPassword)
 
     message = {
-        "content": {
-            "subject": "Password Rest, Reference:{}".format(ref),
-            "plaintext": text
-        },
-        "recepients": {
+        "senderAddress": AzureData.emailDomainName,
+        "recipients": {
             "to": [
                 {
                     "address": userInfo.get("email"),
@@ -103,8 +97,12 @@ Login in with it and follow instructions
                 }
             ]
         },
-        "senderAddress": "sender@sending.send"
+        "content": {
+            "subject": "Password Reset, Reference:{}".format(ref),
+            "plainText": text
+        }
     }
 
+    #poller = EmailClient.begin_send(client, message)
     poller = client.begin_send(message)
     return poller.result()
