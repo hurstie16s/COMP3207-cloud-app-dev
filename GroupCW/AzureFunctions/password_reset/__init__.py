@@ -5,6 +5,7 @@ import secrets
 import random
 import string
 import uuid
+import asyncio
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
 from azure.communication.email import EmailClient
@@ -47,7 +48,7 @@ def main(req: HttpRequest) -> HttpResponse:
     DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
 
     # Send Email
-    sendEmail(userInfo, randomPassword, ref)
+    asyncio.run(sendEmail(userInfo, randomPassword, ref))
 
     # Return HttpResponse
     output = {"result": True, "msg": "Password Reset", "ref": ref}
@@ -80,7 +81,7 @@ def generateRandomPassword():
 
     return password
 
-def sendEmail(userInfo, randomPassword, ref):
+async def sendEmail(userInfo, randomPassword, ref):
 
     client = EmailClient(AzureData.emailEndpoint, AzureData.emailCredential)    
 
