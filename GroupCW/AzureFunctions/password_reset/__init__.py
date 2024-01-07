@@ -8,7 +8,6 @@ import uuid
 import asyncio
 # Azure Imports
 from azure.functions import HttpRequest, HttpResponse
-from azure.communication.email import EmailClient
 # Code base imports
 from shared_code import PasswordFunctions, DBFunctions, FaultCheckers, EmailFunctions
 import AzureData
