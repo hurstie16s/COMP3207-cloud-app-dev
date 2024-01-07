@@ -24,3 +24,13 @@ def validate_password(password):
     if not re.search("[!@#$%^&*(),.?\":{}|<>]", password):
         reasons.append("Password must contain at least one special character.")
     return reasons
+
+def generateRandomPassword():
+
+    length = random.randint(12,20)
+
+    password = ""
+    for i in range(length):
+        password += secrets.choice(string.ascii_letters+string.digits)
+
+    return password
