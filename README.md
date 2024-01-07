@@ -18,6 +18,7 @@ func start
 Frontend:
 ```
 # From GroupCW
+npm i
 npm start
 ```
 
