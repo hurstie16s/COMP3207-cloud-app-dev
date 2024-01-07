@@ -3,6 +3,7 @@ import logging
 from azure.functions import HttpRequest, HttpResponse
 from azure.cosmos import CosmosClient 
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+from azure.communication.email import EmailClient
 from azure.core.credentials import AzureKeyCredential
 import json
 import os
@@ -86,3 +87,4 @@ emailEndpoint = "https://interviewcomms.uk.communication.azure.com/"
 emailCredential = AzureKeyCredential("1ZWHYKI1BelCPIkMojN6zhHoXlvOmwNvNNk5Mh1zcrLIMBzAJKU7HQ7FbU3+siibHOwvRKNVTyn+U8QOqPSNMQ==")
 emailConnectionString = ""
 emailDomainName = "DoNotReply@8ef34718-9bb3-4c6a-a00a-f4b645dbd079.azurecomm.net"
+emailClient = EmailClient(emailEndpoint, emailCredential)
