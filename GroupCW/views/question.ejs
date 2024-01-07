@@ -185,7 +185,7 @@
                                     @click="pauseAudio(response)">pause</button>
                                 <button class="material-symbols-rounded icon-button minimal-button"
                                     @click="seekAudio(response.id, 10)">forward_10</button>
-                                <span class="response-timestamp">00:00</span>
+                                <span class="response-timestamp">{{formatAudioTimestamp(response.audioCurrentTime || 0)}}</span>
                             </div>
                             <div class="response-container-idk">
                                 <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
@@ -356,7 +356,7 @@
                                     @click="pauseAudio(response)">pause</button>
                                 <button class="material-symbols-rounded icon-button minimal-button"
                                     @click="seekAudio(response.id, 10)">forward_10</button>
-                                <span class="response-timestamp">00:00</span>
+                                <span class="response-timestamp">{{formatAudioTimestamp(response.audioCurrentTime || 0)}}</span>
                             </div>
                             <div class="response-container-idk">
                                 <span class="chip tooltip" tooltip-text="Industry">{{response.industry}}</span>
