@@ -10,8 +10,8 @@ Backend:
 ```bash
 cd AzureFunctions
 python3 -m venv .
-pip3 install -r requirements.txt
 source bin/activate
+pip3 install -r requirements.txt
 func start
 ```
 
