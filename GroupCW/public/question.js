@@ -158,9 +158,11 @@ var app = new Vue({
         const blob = res.data;
         const url = URL.createObjectURL(blob);
         const audio = new Audio(url);
+        audio.ontimeupdate = () => { response.audioCurrentTime = audio.currentTime };
         audio.onended = () => { response.audioPaused = true };
 
         Vue.set(response, 'audio', audio); // Vue can't detect nested new properties without this
+        Vue.set(response, 'audioCurrentTime', 0); // Vue can't detect nested new properties without this
         Vue.set(response, 'audioPaused', true); // Vue can't detect nested new properties without this
       }
 
@@ -250,8 +252,13 @@ var app = new Vue({
 
     goToAccount(user) {
       getAccount(user);
-    }
+    },
 
+    formatAudioTimestamp(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
   },
 
 
