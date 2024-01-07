@@ -2,6 +2,9 @@
 import bcrypt
 import base64
 import re
+import random
+import secrets
+import string
 
 def hash_password(password):
     salt = bcrypt.gensalt()
@@ -31,6 +34,6 @@ def generateRandomPassword():
 
     password = ""
     for i in range(length):
-        password += secrets.choice(string.ascii_letters+string.digits)
+        password += secrets.choice(string.ascii_letters+string.digits+"!£$%^&*()-=_+[]#{}~;':@,./<>")
 
     return password
