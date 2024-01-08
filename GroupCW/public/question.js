@@ -50,7 +50,7 @@ var app = new Vue({
         addNotification(`An error occured: ${res.status} `)
         return;
       }
-      console.log(res);
+
       return res.data.question;
     },
 
@@ -284,6 +284,7 @@ var app = new Vue({
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
           this.$set(response, 'language', "English");
+          this.$set(response, 'pending_comment', '');
         });
         const firstResponse = responses[0];
         this.$set(firstResponse, 'showTranscript', true);
@@ -311,6 +312,7 @@ var app = new Vue({
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
           this.$set(response, 'language', "English");
+          this.$set(response, 'pending_comment', '');
         });
       }
 

@@ -232,6 +232,7 @@ var app = new Vue({
             this.$set(response, 'showComments', false);
             this.$set(response, 'showGPT', false);
             this.$set(response, 'language', "English");
+            this.$set(response, 'pending_comment', '');
           });
           const firstResponse = responses[0];
           this.$set(firstResponse, 'showTranscript', true);
