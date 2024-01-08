@@ -233,6 +233,9 @@ var app = new Vue({
             this.$set(response, 'showGPT', false);
             this.$set(response, 'language', "English");
             this.$set(response, 'pending_comment', '');
+            this.$set(response, 'audio', null); 
+            this.$set(response, 'audioCurrentTime', 0);
+            this.$set(response, 'audioPaused', true);
           });
           const firstResponse = responses[0];
           this.$set(firstResponse, 'showTranscript', true);
