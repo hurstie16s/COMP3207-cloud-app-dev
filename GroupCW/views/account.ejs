@@ -144,7 +144,7 @@
                                     @click="pauseAudio(response)">pause</button>
                                 <button class="material-symbols-rounded icon-button minimal-button"
                                     @click="seekAudio(response.id, 10)">forward_10</button>
-                                <span class="response-timestamp">00:00</span>
+                                <span class="response-timestamp">{{formatAudioTimestamp(response.audioCurrentTime || 0)}}</span>
                             </div>
                             <div class="response-container-idk">
 
@@ -168,12 +168,12 @@
                                 <h3 class="underlined">AI Feedback</h3>
                                 <h4 class="underlined">Good Points</h4>
                                 <ul>
-                                    <li v-for="tip in response.tips.goodPoints">{{tip}}</li>
+                                    <li v-for="tip in response.tips.goodTips['English']">{{tip}}</li>
                                 </ul>
 
                                 <h4 class="underlined">Areas for Improvement</h4>
                                 <ul>
-                                    <li v-for="tip in response.tips.improvementPoints">{{tip}}</li>
+                                    <li v-for="tip in response.tips.improvementTips['English']">{{tip}}</li>
                                 </ul>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">

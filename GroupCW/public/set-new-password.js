@@ -22,7 +22,7 @@ var app = new Vue({
             logout(); //utils.logout
         },
 
-        setNewPassword() {
+        async setNewPassword() {
             app.oldPasswordError = '';
             app.newPassword1Error = '';
             app.newPassword2Error = '';
@@ -31,7 +31,6 @@ var app = new Vue({
             if (!this.newPassword1) {app.newPassword1Error = 'Password Required';}
             if (!this.newPassword2) {app.newPassword2Error = 'Password Required';}
 
-
             if (this.oldPassword && this.newPassword1 && this.newPassword2) {
                 const data = {
                     username: app.user,
@@ -39,20 +38,15 @@ var app = new Vue({
                     newPassword: this.newPassword1,
                     newPasswordConfirm: this.newPassword2
                 }
-                putHelper(data, '/password/change')
-                .then(response => {
-                    if (response.status === 200) {
-                        addNotification('Succesfully changed password');
-                        setTimeout(function() {window.location.href = '/explore'}, 1000);
-                    } else if (response.status === 403) {
-                        response.data.msg === 'AuthFail' ? app.oldPasswordError = 'Does not match old password' : app.newPassword2Error = 'Password does not match confirmation';
-                    } else {
-                        addNotification(`An error occurred: ${res.status} ` + res.statusText);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
+                const response = await axios.put(`${BACKEND_URL}/password/change`, data);
+                if (response.status ===200) {
+                    addNotification('Succesfully changed password');
+                    setTimeout(function() {window.location.href = '/explore'}, 1000);
+                } else if (response.status === 403) {
+                    this.newPassword2Error = response.data.msg.replace(/:/g, ':\n \u2022 ').replace(/;/g, '\n \u2022 ');
+                } else {
+                    addNotification(`An error occurred: ${response.status} ` + response.statusText);
+                }
             }
 
         },
