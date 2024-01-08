@@ -29,11 +29,14 @@ def main(req: HttpRequest) -> HttpResponse:
         storage_name = parsed_url.netloc.split('.')[0]
         print(storage_name)
         
-        if storage_name != "interviewstorage":
-            return HttpResponse("Wrong storage name.", status_code=400)
-
         blob_name = parsed_url.path.strip('/')
-        print("blob name :", blob_name)
+        print("Blob name and file name:", blob_name)
+
+        blob_part = blob_name.split("/")[0]
+        print("Blob part:", blob_part)
+
+        if storage_name != "interviewstorage":
+            return HttpResponse("Wrong storage name", status_code=400)
 
         file_name = blob_name.split('/')[-1]
 
