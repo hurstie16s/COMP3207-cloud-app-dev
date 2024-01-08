@@ -1,8 +1,9 @@
 import logging
 import json
 import AzureData
-from shared_code import DBFunctions
+from shared_code import DBFunctions, auth
 from azure.functions import HttpRequest, HttpResponse
+from jwt.exceptions import InvalidTokenError
 
 
 def main(req: HttpRequest) -> HttpResponse:

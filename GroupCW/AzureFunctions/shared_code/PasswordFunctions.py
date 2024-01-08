@@ -2,6 +2,9 @@
 import bcrypt
 import base64
 import re
+import random
+import secrets
+import string
 
 def hash_password(password):
     salt = bcrypt.gensalt()
@@ -24,3 +27,13 @@ def validate_password(password):
     if not re.search("[!@#$%^&*(),.?\":{}|<>]", password):
         reasons.append("Password must contain at least one special character.")
     return reasons
+
+def generateRandomPassword():
+
+    length = random.randint(12,20)
+
+    password = ""
+    for i in range(length):
+        password += secrets.choice(string.ascii_letters+string.digits+"!£$%^&*()-=_+[]#{}~;':@,./<>")
+
+    return password
