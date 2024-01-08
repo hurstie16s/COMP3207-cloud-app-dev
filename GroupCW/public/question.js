@@ -13,6 +13,7 @@ var app = new Vue({
     userIndustryFilter: 'All Industries',
     userSortBy: 'Newest First',
     communitySortBy: 'Top Rated',
+    spokenLanguage: "English"
   },
   //On Awake methods here:
   mounted: function () {
@@ -211,6 +212,7 @@ var app = new Vue({
       formData.append('interviewTitle', this.question.question);
       formData.append('private', false); // TODO: Private?
       formData.append('webmFile', this.blob);
+      formData.append('language', this.spokenLanguage)
 
       const res = await axios({
         method: 'post',

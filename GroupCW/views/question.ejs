@@ -44,13 +44,15 @@
                                             <option v-for="industry in industries">{{industry}}</option>
                                         </select>
                                     </div>
-                                    <div class="tooltip hidden" tooltip-text="Select Language">
-                                        <select name="language">
-                                            <option value="en">English</option>
-                                            <option value="cy">Welsh</option>
-                                            <option value="ga">Irish</option>
-                                            <option value="fr">French</option>
-                                            <option value="pl">Polish</option>
+                                    <div class="tooltip" tooltip-text="Select Language">
+                                        <select name="language" v-model="spokenLanguage">
+                                            <option>English</option>
+                                            <option>Welsh</option>
+                                            <option>Irish</option>
+                                            <option>French</option>
+                                            <option>Spanish</option>
+                                            <option>Polish</option>
+                                            <option>Mandarin</option>
                                         </select>
                                     </div>
                                     <button @click="submitRecording()">Submit Recording</button>
