@@ -83,17 +83,17 @@ def main(req: HttpRequest) -> HttpResponse:
             elif(interviewLanguage == "Polish"): languageCode = 'pl-PL'
             elif(interviewLanguage == "Spanish"): languageCode = 'es-ES'
             elif(interviewLanguage == "Mandarin"): languageCode = 'zh-CN'
+            logging.warn('Language Code used: ' + languageCode)
             
-            
-            
-            source_language_config = speechsdk.languageconfig.SourceLanguageConfig(languageCode) 
+            logging.warn("Test: 321")
             #Azure Speech SDK
-            speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, source_language_config=source_language_config, region=AzureData.region)
+            speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
+            speech_config.speech_recognition_language = languageCode
             
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
             speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
-
+            logging.warn("Test: 123");
             done = False
             transcriptions = []
         
@@ -124,7 +124,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 logging.info("Done:" + str(done))
                 time.sleep(.5)
                 timeSpent += 0.5
-                if(timeSpent > 300): raise
+                if(timeSpent > 300): raise Exception("Timeout")
             speech_recognizer.stop_continuous_recognition()
             
             transcription = ""
@@ -132,9 +132,9 @@ def main(req: HttpRequest) -> HttpResponse:
                 transcription += text
             
             if transcription == "":
-                logging.warn("Transcription was empty")
-                raise 
-                
+                logging.warn("Transcription is empty")
+                raise Exception("Transcription error: could be the audio file does not have any speech.")
+            
             with open(webm_file_name, "rb") as data:
                 bob_client = AzureData.blob_container.upload_blob(name=f"{audioUuid}.webm", data=data)       
         except:
@@ -165,6 +165,7 @@ def main(req: HttpRequest) -> HttpResponse:
             
             requestInterview = requests.post(AzureData.translationPath, params=translation_params, headers=translation_headers, json=jsonText)
             responseInterview = requestInterview.json()[0]
+            logging.warn(f"Translations: {responseInterview}")
         except:
             logging.exception("Error performing translation: ", exc_info=True)
             raise ExceptionWithTranslation
@@ -295,6 +296,10 @@ def ReturnLanguageOfLanguageCode(languageCode):
         return "French"
     if(languageCode == "pl"):
         return "Polish"
+    if(languageCode == "es"):
+        return "Spanish"
+    if(languageCode == "zh-Hans"):
+        return "Chinese-Simplified"
     
     
 class ExceptionWithStoringToCosmosDB(Exception):

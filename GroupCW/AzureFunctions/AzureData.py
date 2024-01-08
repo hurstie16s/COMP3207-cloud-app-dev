@@ -64,7 +64,7 @@ translationPath = translation_url + path
 region = "uksouth"
 
 #extra data for translation
-supportedLanguages = ['en', 'cy', 'ga', 'fr', 'pl']
+supportedLanguages = ['en', 'cy', 'ga', 'fr', 'pl', 'es', 'zh-Hans']
 
 translation_params = {
     'api-version': '3.0',
