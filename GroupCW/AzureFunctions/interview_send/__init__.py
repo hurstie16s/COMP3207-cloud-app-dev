@@ -57,7 +57,7 @@ def main(req: HttpRequest) -> HttpResponse:
     
     #Json inputs from body
     industry = req.form.get("industry")
-    interviewTitle = req.form.get("interviewTitle") #input("what do you want your prompt to be? : ") req.params.get('text')
+    interviewLanguage = req.form.get("language")
     private = req.form.get("private") == "true" # Form data is always a string, so convert to bool
     webmFile = req.files["webmFile"]
     #setting up the file names
@@ -76,9 +76,19 @@ def main(req: HttpRequest) -> HttpResponse:
             raise ExceptionWithCreatingFiles
         
         try:
-           
+            languageCode = 'en-GB'
+            if(interviewLanguage == "Welsh"): languageCode = 'cy-GB'
+            elif(interviewLanguage == "Irish"): languageCode = 'ga-IE'
+            elif(interviewLanguage == "French"): languageCode = 'fr-FR'
+            elif(interviewLanguage == "Polish"): languageCode = 'pl-PL'
+            elif(interviewLanguage == "Spanish"): languageCode = 'es-ES'
+            elif(interviewLanguage == "Mandarin"): languageCode = 'zh-CN'
+            
+            
+            
+            source_language_config = speechsdk.languageconfig.SourceLanguageConfig(languageCode) 
             #Azure Speech SDK
-            speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, region=AzureData.region)
+            speech_config = speechsdk.SpeechConfig(subscription=AzureData.speech_key, source_language_config=source_language_config, region=AzureData.region)
             
             audio_config = speechsdk.audio.AudioConfig(filename=wav_file_name)
 
@@ -219,11 +229,10 @@ def main(req: HttpRequest) -> HttpResponse:
                 "username": username,
                 "industry": industry,
                 "questionId": question['id'],
-                "interviewTitle": interviewTitle,
                 "interviewQuestion": question['interviewQuestion'],
                 "interviewBlobURL": bob_client.url,
                 "audioUuid": audioUuid,
-                "interviewLanguage": responseInterview['detectedLanguage']["language"],
+                "interviewLanguage": interviewLanguage,
                 "transcript": transcriptionTranslation,
                 "comments": [],
                 "ratings": [],
