@@ -12,22 +12,40 @@ def main(req: HttpRequest) -> HttpResponse:
         return HttpResponse(body=json.dumps({"result": False, "msg": "Invalid token"}), mimetype='application/json', status_code=401)
 
     try:
-        JsonInput = req.get_json()
-        username = JsonInput.get('username')
-        interviewQuestion = JsonInput.get('interviewQuestion')
-        searchByVariables = ""
-        if(interviewQuestion != ""): 
-            searchByVariables += "where interviewData.interviewQuestion = " + "'" + interviewQuestion + "'"
-        
-        if(username != ""):
-            if(searchByVariables == ""):
-                searchByVariables += "where interviewData.username = " + "'" + username + "'"
-            else:
-                searchByVariables += " AND interviewData.username = " + "'" + username + "'"
-        
-        query = "SELECT * from interviewData " + searchByVariables
+        body = req.get_json()
+        username = body.get('username')
+        interviewQuestion = body.get('interviewQuestion')
+
+        if username is not None and username == "":
+            username = None
+
+        if interviewQuestion is not None and interviewQuestion == "":
+            interviewQuestion = None
+
+        query = ""
+        parameters = []
+        if interviewQuestion is None and username is None:
+            query = "SELECT * from c"
+        elif interviewQuestion is None:
+            query = "SELECT * from c where c.username = @username"
+            parameters=[
+                {"name": "@username", "value": username}
+            ]
+        elif username is None:
+            query = "SELECT * from c where c.interviewQuestion = @interviewQuestion"
+            parameters=[
+                {"name": "@interviewQuestion", "value": interviewQuestion}
+            ]
+        else:
+            query = "SELECT * from c where c.interviewQuestion = @interviewQuestion AND c.username = @username"
+            parameters=[
+                {"name": "@username", "value": username},
+                {"name": "@interviewQuestion", "value": interviewQuestion}
+            ]
+
         logging.info("query to be passed: " + query)
-        allInterviews = list(AzureData.containerInterviewData.query_items(query=query, enable_cross_partition_query=True))
+
+        allInterviews = list(AzureData.containerInterviewData.query_items(query=query, parameters=parameters, enable_cross_partition_query=True))
         allInterviews = list(filter(lambda x: x.get("private") == False or x.get("username") == selfUsername, allInterviews))
         return HttpResponse(body=json.dumps(allInterviews),mimetype="application/json")
     except Exception as e:
