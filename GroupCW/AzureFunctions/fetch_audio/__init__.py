@@ -32,6 +32,11 @@ def main(req: HttpRequest) -> HttpResponse:
       downloader = blobClient.download_blob(max_concurrency=1)
       audioBytes = downloader.readall()
 
-      return HttpResponse(body=audioBytes, mimetype="audio/webm", status_code=200)
+      mimetype = "audio/webm"
+      storedMimetype = interview.get("mimetype")
+      if storedMimetype is not None and storedMimetype != "":
+        mimetype = storedMimetype
+
+      return HttpResponse(body=audioBytes, mimetype=mimetype, status_code=200)
     except Exception as e:
       return HttpResponse(json.dumps({"result": False, "msg": f"Failed to get interview id: {str(e)}"}), status_code=500, mimetype="application/json")
