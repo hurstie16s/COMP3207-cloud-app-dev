@@ -66,7 +66,7 @@ var app = new Vue({
       if (this.responses.length > 0) {
         this.calculateAverages();
       }
-      
+
     },
 
     async updatePrivacy(questionId, responseId, isPrivate) {
@@ -236,7 +236,7 @@ var app = new Vue({
       document.getElementById('response-submission-spinner').classList.toggle('hidden');
       app.awaitingSubmission = false;
 
-        await this.loadResponses(QUESTION_ID);
+      await this.loadResponses(QUESTION_ID);
 
     },
 
@@ -287,8 +287,9 @@ var app = new Vue({
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
           this.$set(response, 'language', "English");
+          this.$set(response, 'tipsLanguage', "English");
           this.$set(response, 'pending_comment', '');
-          this.$set(response, 'audio', null); 
+          this.$set(response, 'audio', null);
           this.$set(response, 'audioCurrentTime', 0);
           this.$set(response, 'audioPaused', true);
         });
@@ -318,8 +319,9 @@ var app = new Vue({
           this.$set(response, 'showComments', false);
           this.$set(response, 'showGPT', false);
           this.$set(response, 'language', "English");
+          this.$set(response, 'tipsLanguage', "English");
           this.$set(response, 'pending_comment', '');
-          this.$set(response, 'audio', null); 
+          this.$set(response, 'audio', null);
           this.$set(response, 'audioCurrentTime', 0);
           this.$set(response, 'audioPaused', true);
         });
