@@ -194,14 +194,19 @@
                             </div>
                             <div class="response-gpt-advice" v-if="response.showGPT">
                                 <h3 class="underlined">AI Feedback</h3>
+                                <div class="tooltip" tooltip-text="Select Language">
+                                    <select name="language" v-model="response.tipsLanguage">
+                                        <option v-for="lang in Object.keys(response.tips.goodTips)">{{lang}}</option>
+                                    </select>
+                                </div>
                                 <h4 class="underlined">Good Points</h4>
                                 <ul>
-                                    <li v-for="tip in response.tips.goodTips['English']">{{tip}}</li>
+                                    <li v-for="tip in response.tips.goodTips[response.tipsLanguage]">{{tip}}</li>
                                 </ul>
 
                                 <h4 class="underlined">Areas for Improvement</h4>
                                 <ul>
-                                    <li v-for="tip in response.tips.improvementTips['English']">{{tip}}</li>
+                                    <li v-for="tip in response.tips.improvementTips[response.tipsLanguage]">{{tip}}</li>
                                 </ul>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">
@@ -378,14 +383,19 @@
                             </div>
                             <div class="response-gpt-advice" v-if="response.showGPT">
                                 <h3 class="underlined">AI Feedback</h3>
+                                <div class="tooltip" tooltip-text="Select Language">
+                                    <select name="language" v-model="response.tipsLanguage">
+                                        <option v-for="lang in Object.keys(response.tips.goodTips)">{{lang}}</option>
+                                    </select>
+                                </div>
                                 <h4 class="underlined">Good Points</h4>
                                 <ul>
-                                    <li v-for="tip in response.tips.goodTips['English']">{{tip}}</li>
+                                    <li v-for="tip in response.tips.goodTips[response.tipsLanguage]">{{tip}}</li>
                                 </ul>
 
                                 <h4 class="underlined">Areas for Improvement</h4>
                                 <ul>
-                                    <li v-for="tip in response.tips.improvementTips['English']">{{tip}}</li>
+                                    <li v-for="tip in response.tips.improvementTips[response.tipsLanguage]">{{tip}}</li>
                                 </ul>
                             </div>
                             <div class="response-transcript" v-if="response.showTranscript">

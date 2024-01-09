@@ -594,6 +594,19 @@ hr {
     margin-top: 2.5em;
 }
 
+.response-gpt-advice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.response-gpt-advice>h4, .response-gpt-advice>ul {
+    grid-column: span 2;
+}
+
+.response-gpt-advice>div {
+    justify-self: flex-end;
+}
+
 .response-transcript {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -604,7 +617,7 @@ hr {
 }
 
 .response-transcript>p {
-    grid-row: span 2;
+    grid-column: span 2;
 }
 
 .star {
