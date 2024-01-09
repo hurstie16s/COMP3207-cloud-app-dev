@@ -27,7 +27,7 @@ The frontend will be accessible at http://localhost:8080
 ### Cloud Deployment
 As our GCP credits have expired, we chose to deploy both the frontend and the backend to Microsoft Azure.
 
-I have written a Bash script that is capable of deploying the frontend and the backend automatically: [scripts/deploy.sh](GroupCW/scripts/deploy.sh). Simply run with `./GroupCW/scripts/deploy.sh` and answer the prompts. The script is dependent on `jq` being installed, and `az` being installed and the Azure account being logged in (`az login`).
+We have written a Bash script that is capable of deploying the frontend and the backend automatically: [scripts/deploy.sh](GroupCW/scripts/deploy.sh). Simply run with `./GroupCW/scripts/deploy.sh` and answer the prompts. The script is dependent on `jq` being installed, and `az` being installed and the Azure account being logged in (`az login`).
 
 Before you run the script, you must have **already** created:
 - An Azure resource group ([link](https://portal.azure.com/#view/HubsExtension/BrowseResourceGroups))
