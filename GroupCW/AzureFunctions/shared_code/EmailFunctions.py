@@ -1,9 +1,7 @@
 # Code Base Imports
 import AzureData
 
-async def sendEmail(userInfo, randomPassword, ref):   
-
-    text = "Your password has been reset to: {}\n Please sign in and follow instructions".format(randomPassword)
+async def sendEmail(userInfo, text, ref):   
 
     message = {
         "senderAddress": AzureData.emailDomainName,

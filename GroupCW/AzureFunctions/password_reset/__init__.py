@@ -47,7 +47,8 @@ def main(req: HttpRequest) -> HttpResponse:
     DBFunctions.upsert_item(data=userInfo, container=AzureData.containerUsers)
 
     # Send Email
-    asyncio.run(EmailFunctions.sendEmail(userInfo, randomPassword, ref))
+    text = "Your password has been reset to: {}\n Please sign in and follow instructions".format(randomPassword)
+    asyncio.run(EmailFunctions.sendEmail(userInfo, text, ref))
 
     # Return HttpResponse
     output = {"result": True, "msg": "Password Reset", "ref": ref}
