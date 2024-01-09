@@ -37,9 +37,9 @@ if [[ $shouldDeployBackend =~ ^(y| ) ]] || [[ -z $shouldDeployBackend ]]; then
   echo -e $GRAY
   set -x
   backendResourceGroup=$(az functionapp list --query "[?name=='${funcappid}'].resourceGroup" | jq .[0] -r)
-  corsSetup=$(az functionapp cors show --resource-group $backendResourceGroup --name $funcappid | jq '.allowedOrigins | index("*") // empty')
+  corsSetup=$(az functionapp cors show --resource-group $backendResourceGroup --name $funcappid | jq '.allowedOrigins | index("*")')
   set +x
-  if [[ ! -z "$corsSetup" ]]; then
+  if [[ $corsSetup = null ]]; then
     # It is safe to use * because we are not using cookies
     echo -e "${GREEN}Setting up CORS...${RESET}"
     echo -e $GRAY
