@@ -66,6 +66,12 @@ if [[ $shouldDeployFrontend =~ ^(y| ) ]] || [[ -z $shouldDeployFrontend ]]; then
   echo -e "\n${GREEN}Deploying frontend...${RESET}"
   cd $root
 
+  if ! command -v npm &> /dev/null
+  then
+    echo -e "${RED}npm${GREEN} is not installed: please install it and try again${RESET}"
+    exit 1
+  fi
+
   echo -n -e "${YELLOW}Enter the Azure resource group name (this *must* already exist): ${RESET}"
   read resourceGroup
 
@@ -91,6 +97,14 @@ if [[ $shouldDeployFrontend =~ ^(y| ) ]] || [[ -z $shouldDeployFrontend ]]; then
   fi
 
   trap deleteOnExit EXIT
+
+  echo -e "${GREEN}Installing npm dependencies...${RESET}"
+  echo -e $GRAY
+  set -x
+  npm install
+  set +x
+
+  echo -e "${GREEN}Deploying webapp...${RESET}"
 
   echo -e $GRAY
   set -x

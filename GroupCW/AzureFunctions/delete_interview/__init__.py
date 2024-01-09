@@ -28,6 +28,14 @@ def main(req: HttpRequest) -> HttpResponse:
       if interview["username"] != username:
         return HttpResponse(json.dumps({"result": False, "msg": "You don't have permission to delete this interview"}), status_code=403, mimetype="application/json")
 
+      # Delete audio file
+      try:
+        fileName = interview['audioUuid'] + ".webm"
+        containerClient = AzureData.blob_service_client.get_container_client(AzureData.container_name)
+        containerClient.delete_blob(blob=fileName)
+      except Exception as e:
+        logging.error(f"Failed to delete audio file (perhaps it never existed?): {str(e)}")
+
       DBFunctions.delete_item(responseId, AzureData.containerInterviewData)
       return HttpResponse(json.dumps({"result": True}), status_code=200, mimetype="application/json")
     except Exception as e:
