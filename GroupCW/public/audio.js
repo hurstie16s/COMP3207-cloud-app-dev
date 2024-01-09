@@ -5,8 +5,14 @@ let chunks = [];
 window.AudioRecorder = {
     start: async function () {
       try {
+        // Prefer webm if supported, but Safari only supports mp4
+        const opts = {};
+        if (MediaRecorder.isTypeSupported('audio/webm')) {
+          opts.mimeType = 'audio/webm';
+        }
+
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        recorder = new MediaRecorder(stream, opts);
         recorder.start();
 
         chunks = [];

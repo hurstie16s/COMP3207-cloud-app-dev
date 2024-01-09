@@ -207,11 +207,11 @@ var app = new Vue({
     async submitRecording() {
       document.getElementById('response-submission-spinner').classList.toggle('hidden');
       const formData = new FormData();
-      formData.append('username', this.user);
       formData.append('industry', this.industry);
       formData.append('interviewTitle', this.question.question);
       formData.append('private', false); // TODO: Private?
       formData.append('webmFile', this.blob);
+      formData.append('mimetype', this.blob.type);
       formData.append('language', this.spokenLanguage)
 
       const res = await axios({

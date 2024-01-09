@@ -59,6 +59,7 @@ def main(req: HttpRequest) -> HttpResponse:
     industry = req.form.get("industry")
     interviewLanguage = req.form.get("language")
     private = req.form.get("private") == "true" # Form data is always a string, so convert to bool
+    mimetype = req.form.get("mimetype")
     webmFile = req.files["webmFile"]
     #setting up the file names
     temp_dir = tempfile.TemporaryDirectory()
@@ -233,6 +234,7 @@ def main(req: HttpRequest) -> HttpResponse:
                 "interviewQuestion": question['interviewQuestion'],
                 "interviewBlobURL": bob_client.url,
                 "audioUuid": audioUuid,
+                "mimetype": mimetype,
                 "interviewLanguage": interviewLanguage,
                 "transcript": transcriptionTranslation,
                 "comments": [],
