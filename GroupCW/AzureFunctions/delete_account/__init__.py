@@ -29,7 +29,7 @@ def main(req: HttpRequest) -> HttpResponse:
 
       user = items[0]
 
-      AzureData.containerUsers.delete_item(item=user, partition_key=user.get("username")
+      AzureData.containerUsers.delete_item(item=user, partition_key=user.get("username"))
       return HttpResponse(json.dumps({"result": True}), status_code=200, mimetype="application/json")
     except Exception as e:
       return HttpResponse(json.dumps({"result": False, "msg": f"Failed to delete user: {str(e)}"}), status_code=500, mimetype="application/json")
