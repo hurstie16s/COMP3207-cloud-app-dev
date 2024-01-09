@@ -17,6 +17,11 @@ format_for_bullet_points_for_interview = "Force this format please: Good Points:
 
 def send_interview_to_ai(question, transcript):
     try:
+        if not question:
+            raise ValueError("Question cannot be empty.")
+        if not transcript:
+            raise ValueError("Transcript cannot be empty.")
+
         chat_completion = client.with_options(max_retries=0).chat.completions.create(
             messages=[
                 {
