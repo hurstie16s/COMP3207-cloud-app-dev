@@ -1,6 +1,5 @@
 var app = new Vue({
     el: '#register',
-    //All data here
     data: {
       user: null,
 
@@ -12,7 +11,6 @@ var app = new Vue({
       emailError: '',
       
     },
-    //Js Methods here:
     methods: {
         register() {
           app.usernameError = '';
@@ -47,7 +45,6 @@ var app = new Vue({
         },
 
     },
-    //FrontEnd methods here:
     computed: {
         
       }

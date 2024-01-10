@@ -1,6 +1,5 @@
 var app = new Vue({
     el: '#login',
-    //All data here
     data: {
       user: null,
 
@@ -11,7 +10,6 @@ var app = new Vue({
 
       
     },
-    //Js Methods here:
     methods: {
         async login() {
           app.usernameError = '';
@@ -52,7 +50,6 @@ var app = new Vue({
 
 
     },
-    //FrontEnd methods here:
     computed: {
         
       }

@@ -1,6 +1,5 @@
 var app = new Vue({
   el: '#question',
-  //All data here
   data: {
     user: null,
     question: {},
@@ -15,11 +14,6 @@ var app = new Vue({
     communitySortBy: 'Top Rated',
     spokenLanguage: "English"
   },
-  //On Awake methods here:
-  mounted: function () {
-
-  },
-  //Js Methods here:
   methods: {
 
     async loadQuestion(questionId) {
@@ -264,8 +258,6 @@ var app = new Vue({
     }
   },
 
-
-  //FrontEnd methods here:
   computed: {
     userResponses() {
       const responses = this.responses

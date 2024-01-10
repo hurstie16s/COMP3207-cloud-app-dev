@@ -1,6 +1,5 @@
 var app = new Vue({
     el: '#explore',
-    //All data here
     data: {
       user: null,
       search: '',
@@ -9,11 +8,6 @@ var app = new Vue({
       questions: [],
       newQuestion: {text: "", difficulty: "Beginner", regularity: "Standard"}
     },
-    //On Awake methods here:
-    mounted: function() {
-      
-    },
-    //Js Methods here:
     methods: {
       async loadQuestions() {
         console.log("retrieving Qs")
@@ -55,7 +49,6 @@ var app = new Vue({
         this.loadQuestions();
       },
     },
-    //FrontEnd methods here:
     computed: {
       filteredQuestions() {
         const questions = this.questions

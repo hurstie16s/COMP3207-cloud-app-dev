@@ -98,7 +98,6 @@ function mapDifficultyToInt(difficulty) {
 }
 
 function mapRegularityToInt(regularity) {
-  // Map regularity string to corresponding integer value
   switch (regularity) {
     case 'Standard':
       return 0;
@@ -107,7 +106,7 @@ function mapRegularityToInt(regularity) {
     case 'Unusual':
       return 2;
     default:
-      return 0; // Default or error case
+      return 0;
   }
 }
 

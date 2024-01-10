@@ -1,6 +1,5 @@
 var app = new Vue({
   el: '#account',
-  //All data here
   data: {
     user: null,
     account: null,
@@ -10,11 +9,6 @@ var app = new Vue({
       industries: ['Computer Science','Engineering', 'Finance', 'Law', 'Retail'],
       industryFilter: 'All Industries'
     },
-    //On Awake methods here:
-    mounted: function() {
-      
-    },
-    //Js Methods here:
     methods: {
       
       async loadResponses() {
@@ -194,7 +188,6 @@ var app = new Vue({
         return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
       }
     },
-    //FrontEnd methods here:
     computed: {
       overallRating() {
         let res = 0.0;

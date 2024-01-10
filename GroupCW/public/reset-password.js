@@ -1,6 +1,5 @@
 var app = new Vue({
   el: '#reset-password',
-  //All data here
   data: {
     user: null,
 
@@ -9,11 +8,6 @@ var app = new Vue({
     submitted: false,
     sending: false
   },
-  //On Awake methods here:
-  mounted: function () {
-
-  },
-  //Js Methods here:
   methods: {
     async resetPassword() {
       app.emailError = '';

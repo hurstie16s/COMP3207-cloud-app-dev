@@ -1,6 +1,5 @@
 var app = new Vue({
     el: '#set-new-password',
-    //All data here
     data: {
       user: null,
 
@@ -12,11 +11,6 @@ var app = new Vue({
       newPassword2Error: ''
       
     },
-    //On Awake methods here:
-    mounted: function() {
-
-    },
-    //Js Methods here:
     methods: {
         logout() {
             logout(); //utils.logout
@@ -52,7 +46,6 @@ var app = new Vue({
         },
 
     },
-    //FrontEnd methods here:
     computed: {
         
     },
