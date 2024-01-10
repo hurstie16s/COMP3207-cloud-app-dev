@@ -832,7 +832,6 @@ i {
     padding: 0.7em;
     border: 2px solid rgb(var(--background-lighter-15));
     min-height: 3.1em;
-    ;
     font-family: var(--body-font);
 }
 
