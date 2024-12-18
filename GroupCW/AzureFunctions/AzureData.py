@@ -10,8 +10,8 @@ import os
 import uuid
 
 
-URL = 'https://interviewsystem-cosmosdb.documents.azure.com:443'
-KEY = 'BXNLFntJdiwBLmWL25zDXmj6NINyLt88BHkbENeSL4Yf04pXMKsFphnubDNjHojUmvl4t6WZ5sOZACDb2GSpzA=='
+URL = os.environ.get('URL', 'your_url_here')
+KEY = os.environ.get('KEY', 'your_key_here')
 DATABASE = 'InterviewDB'
 CONTAINER_InterviewQuestions = 'InterviewQuestions'
 CONTAINER_Users = 'Users'
@@ -33,10 +33,10 @@ containerInterviewData = database.get_container_client(CONTAINER_InterviewData)
 
 #DataStorage (blop) container
 # Replace these values with your actual account details
-account_name = "interviewstorage"
-account_key = "5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ=="
-connection_string = "DefaultEndpointsProtocol=https;AccountName=interviewstorage;AccountKey=5KoTFTeA+9Y4rTAhL3Xc21NlwmLjkjXC1dE2pUfG4JXAfJ9iFxMcntHN70XMqAXyuXtBZVnAqgn7+AStmQ1SIQ==;EndpointSuffix=core.windows.net"
-container_name = "interview-blop"
+account_name = os.environ.get('account_name')
+account_key = os.environ.get('account_key')
+connection_string = os.environ.get('connection_string')
+container_name = os.environ.get('container_name')
 
 # Create a BlobServiceClient
 blob_service_client = BlobServiceClient(account_url=f"https://{account_name}.blob.core.windows.net", credential=account_key)
@@ -48,13 +48,13 @@ blob_container = blob_service_client.get_container_client(container_name)
 #Extra services
 
 #Speech
-speech_url = 'https://uksouth.api.cognitive.microsoft.com/'
-speech_key= '1c275238685a4c0da6063fc8b65652da'
+speech_url = os.environ.get('speech_url')
+speech_key= os.environ.get('speech_key')
 speechPath = speech_url + speech_key
 
 #translation
-translation_url = 'https://api.cognitive.microsofttranslator.com/'
-translation_key = 'c350c6f6ba1345c0a24699cdf8a22338'
+translation_url = os.environ.get('translation_url')
+translation_key = os.environ.get('translation_key')
 path = '/translate'
 translationPath = translation_url + path
 
