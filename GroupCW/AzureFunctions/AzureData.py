@@ -80,11 +80,11 @@ translation_headers = {
 }
 
 global JWT_SIGNING_KEY
-JWT_SIGNING_KEY = "2GKiZVZoOJsPvPIKxeClIEO0gCrG4gQ5"
+JWT_SIGNING_KEY = os.environ.get("jwt_key")
 
 # Email Stuff
-emailEndpoint = "https://interviewcomms.uk.communication.azure.com/"
-emailCredential = AzureKeyCredential("1ZWHYKI1BelCPIkMojN6zhHoXlvOmwNvNNk5Mh1zcrLIMBzAJKU7HQ7FbU3+siibHOwvRKNVTyn+U8QOqPSNMQ==")
+emailEndpoint = os.environ.get("email_endpoint")
+emailCredential = AzureKeyCredential(os.environ.get("email_credential"))
 emailConnectionString = ""
-emailDomainName = "DoNotReply@8ef34718-9bb3-4c6a-a00a-f4b645dbd079.azurecomm.net"
+emailDomainName = os.environ.get("email_domain_name")
 emailClient = EmailClient(emailEndpoint, emailCredential)
